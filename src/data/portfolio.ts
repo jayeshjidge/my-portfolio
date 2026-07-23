@@ -43,6 +43,19 @@ export const portfolio = {
   companyShort: "Jio Platforms",
   tagline: "Building scalable web experiences that feel effortless.",
   bio: "I build scalable web experiences — from micro frontends to mobile apps. Passionate about clean architecture, fast interfaces, and thoughtful design. Currently crafting at",
+  bioParts: [
+    { text: "I build ", emphasis: false },
+    { text: "scalable web experiences", emphasis: true },
+    {
+      text: " — from micro frontends to mobile apps. Passionate about ",
+      emphasis: false,
+    },
+    { text: "clean architecture", emphasis: true },
+    {
+      text: ", fast interfaces, and thoughtful design. Currently crafting at ",
+      emphasis: false,
+    },
+  ],
   contact: {
     email: "jayeshjidge@gmail.com",
     phone: "+91 9167851784",

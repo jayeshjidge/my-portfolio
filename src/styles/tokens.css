@@ -33,18 +33,23 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  --bg: #1a2332;
-  --photo-filter: blur(18px) saturate(1.08) brightness(1.05);
+  --bg: #eef2f8;
+  --photo-filter: blur(42px) saturate(0.85) brightness(1.12) contrast(0.92);
   --veil: linear-gradient(
       160deg,
-      rgba(255, 255, 255, 0.42) 0%,
-      rgba(210, 225, 240, 0.28) 45%,
-      rgba(180, 200, 220, 0.35) 100%
+      rgba(255, 255, 255, 0.62) 0%,
+      rgba(232, 236, 246, 0.58) 45%,
+      rgba(214, 222, 236, 0.62) 100%
     ),
     radial-gradient(
-      ellipse 70% 50% at 60% 30%,
-      rgba(255, 255, 255, 0.35),
-      transparent 60%
+      ellipse 75% 55% at 60% 25%,
+      rgba(255, 255, 255, 0.55),
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 60% 60% at 20% 90%,
+      rgba(233, 220, 245, 0.35),
+      transparent 70%
     );
 
   --text-strong: #0f172a;
@@ -81,9 +86,15 @@
   --success-soft: rgba(22, 163, 74, 0.14);
 
   /* Name palette — white fill + coral outline */
-  --name-solid: #ffffff;
+  --name-solid: #0f172a;
   --name-outline: #ef6a5f;
   --ring-tint: rgba(15, 23, 42, 0.14);
+
+  /* Apple-style hero copy: dark navy body + solid emphasis */
+  --hero-kicker-color: #0f172a;
+  --hero-fade: rgba(15, 23, 42, 0.62);
+  --hero-emphasis: #0f172a;
+  --hero-name-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* ---------------- DARK (photo + smoky glass) ---------------- */
@@ -141,4 +152,10 @@
   --name-solid: #ffffff;
   --name-outline: #ff8a80;
   --ring-tint: rgba(255, 255, 255, 0.22);
+
+  /* Apple-style hero copy */
+  --hero-kicker-color: #ffffff;
+  --hero-fade: rgba(255, 255, 255, 0.52);
+  --hero-emphasis: #ffffff;
+  --hero-name-shadow: 0 2px 18px rgba(15, 23, 42, 0.28);
 }

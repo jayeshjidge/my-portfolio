@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { portfolio } from "@/data/portfolio";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 
@@ -15,7 +14,14 @@ export function Hero() {
           Full-stack <span className="role-accent">Software Engineer</span>
         </p>
         <p className="hero-bio">
-          {portfolio.bio} <strong>{portfolio.companyShort}</strong>.
+          {portfolio.bioParts.map((part, i) =>
+            part.emphasis ? (
+              <strong key={i}>{part.text}</strong>
+            ) : (
+              <span key={i}>{part.text}</span>
+            )
+          )}
+          <strong>{portfolio.companyShort}</strong>.
         </p>
         <SocialLinks links={[...portfolio.socials]} className="hero-socials" />
         <div className="hero-actions">
@@ -44,16 +50,22 @@ export function Hero() {
           <span className="ring ring-1" />
           <span className="ring ring-2" />
           <span className="ring ring-3" />
-          <span className="portrait-glow" />
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="portrait-halo"
+            src={portfolio.images.portrait}
+            alt=""
+            aria-hidden="true"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             className="portrait-cutout"
             src={portfolio.images.portrait}
             alt="Portrait of Jayesh Jidge"
-            width={693}
-            height={1200}
-            priority
+            width={925}
+            height={1600}
+            decoding="async"
           />
-          <span className="portrait-shadow" />
         </div>
       </div>
     </section>

@@ -22,9 +22,9 @@ body {
   object-fit: cover;
 }
 
-.portrait-cutout {
-  position: relative !important;
-  width: auto !important;
-  height: 100% !important;
-  max-height: 100%;
+.portrait-cutout,
+.portrait-stage,
+.hero-visual {
+  background: transparent !important;
+  box-shadow: none;
 }
