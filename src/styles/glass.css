@@ -1,8 +1,8 @@
 /* ======================= HEADER (script brand + pill tabs) ======================= */
 .topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
   gap: 14px;
   padding: 12px 6px;
   margin: 0 auto 40px;
@@ -10,6 +10,16 @@
   position: sticky;
   top: 10px;
   z-index: 50;
+}
+
+.topbar > .nav-pill {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.topbar > .theme-toggle {
+  grid-column: 3;
+  justify-self: end;
 }
 
 .brand-script {
