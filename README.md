@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Jayesh Jidge — Glass Portfolio (Next.js)
 
-## Getting Started
+Production-ready Next.js portfolio with glassmorphism UI, light/dark theme, and a clean component structure.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 16** (App Router)
+- **React 19** + TypeScript
+- Custom CSS (tokens / base / glass) — no Tailwind required
+- Deployable to Vercel, Netlify, Cloudflare Pages, or static hosts
+
+## Project structure
+
+```
+src/
+  app/                  # App Router entry (layout + page)
+  components/
+    layout/             # Header, Footer, Atmosphere, ThemeProvider
+    sections/           # Hero, WorkSection, ImpactPanel
+    ui/                 # ThemeToggle, SocialLinks
+  data/portfolio.ts     # All resume copy — edit here
+  styles/               # Design tokens + glass UI CSS
+public/
+  images/               # Put photos / cutouts here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd ~/Desktop/Repository/jayesh-glass-portfolio
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Learn More
+## Edit content
 
-To learn more about Next.js, take a look at the following resources:
+Update copy, links, and image paths in:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`src/data/portfolio.ts`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Images live in `public/images/` and are referenced as `/images/filename.ext`.
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Vercel (recommended)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npx vercel
+```
+
+Or connect the GitHub repo at [vercel.com/new](https://vercel.com/new) — zero config.
+
+### Netlify
+
+```bash
+npx netlify deploy --build --prod
+```
+
+Build command: `npm run build`  
+Publish directory: `.next` (or use `@netlify/plugin-nextjs`)
+
+### Static export (GitHub Pages / S3 / any CDN)
+
+1. In `next.config.ts`, uncomment:
+
+```ts
+output: "export",
+images: { unoptimized: true },
+```
+
+2. Build:
+
+```bash
+npm run build
+```
+
+3. Upload the `out/` folder.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve production build |
+| `npm run lint` | ESLint |
