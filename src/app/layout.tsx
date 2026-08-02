@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
+import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/glass.css";
@@ -31,7 +32,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sacramento&family=Space+Grotesk:wght@500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sacramento&family=Space+Grotesk:wght@500;600;700&display=swap"
           rel="stylesheet"
         />
         {/* Prevent theme flash before React hydrates */}
@@ -42,7 +43,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <SmoothScroll>{children}</SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );

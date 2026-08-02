@@ -28,6 +28,30 @@ export type PathItem = {
   body: string;
 };
 
+export type ExperienceItem = {
+  company: string;
+  role: string;
+  location: string;
+  when: string;
+  logo: string;
+  badgeId: string;
+  accent: string;
+  photo: string;
+  photoPos: string;
+  photoScale: number;
+  /** Zoom origin, in the *rendered box's own* coordinates (not the source
+   * image's) — where the extra CSS scale() zooms toward, separate from
+   * photoPos which only controls the object-fit: cover crop. */
+  photoOrigin: string;
+  glow: string;
+  roleFrom: string;
+  roleTo: string;
+  summary: string;
+  highlights: { value: string; label: string }[];
+  bullets: string[];
+  stack: string[];
+};
+
 export type Project = {
   title: string;
   body: string;
@@ -122,6 +146,64 @@ export const portfolio = {
       body: "Four responsive client pages — 20% faster loads.",
     },
   ] as PathItem[],
+  experience: [
+    {
+      company: "Jio Platforms Limited",
+      role: "Software Development Engineer",
+      location: "Mumbai, IN",
+      when: "2022 — Present",
+      logo: "/images/logo-jio.svg",
+      badgeId: "00110",
+      accent: "#0A2885",
+      photo: "/images/IMG_8331.JPG",
+      photoPos: "50% 20%",
+      photoScale: 2,
+      photoOrigin: "50% 48%",
+      glow: "#c7d2fe",
+      roleFrom: "#7c9dff",
+      roleTo: "#c98bff",
+      summary:
+        "Building micro frontends and mobile apps that scale to thousands of daily users.",
+      highlights: [
+        { value: "2K+", label: "Daily users" },
+        { value: "40%", label: "Fewer network calls" },
+        { value: "90%", label: "Test coverage" },
+      ],
+      bullets: [
+        "Migrated JioFinance Credit Score to React Native — 2,000+ daily users, 20% fewer crashes.",
+        "Architected Jio Business Cloud dashboards with React Query + GraphQL/REST — 40% fewer network calls.",
+        "Ship-ready quality bar: ESLint, Jest, CI/CD pipelines, 90% test coverage.",
+      ],
+      stack: ["React", "Next.js", "React Native", "Redux", "GraphQL"],
+    },
+    {
+      company: "Dquip",
+      role: "Full Stack Developer Intern",
+      location: "Remote",
+      when: "2021 — 2022",
+      logo: "/images/logo-dquip.png",
+      badgeId: "00082",
+      accent: "#2b8fd4",
+      photo: "/images/IMG_8990.jpg",
+      photoPos: "50% 42%",
+      photoScale: 1.2,
+      photoOrigin: "50% 42%",
+      glow: "#bae6fd",
+      roleFrom: "#3fb9d4",
+      roleTo: "#7c9dff",
+      summary:
+        "Owned a no-code Form Builder and the IMEX CRM on a Laravel stack.",
+      highlights: [
+        { value: "80%", label: "Faster form creation" },
+        { value: "E2E", label: "Feature ownership" },
+      ],
+      bullets: [
+        "Cut form-creation time by 80% with a drag-and-drop builder used across the team.",
+        "Shipped end-to-end features from schema to UI — auth, exports, dashboards.",
+      ],
+      stack: ["Laravel", "PHP", "MySQL", "jQuery"],
+    },
+  ] as ExperienceItem[],
   projects: [
     {
       title: "Print Shop Artwork Forum",

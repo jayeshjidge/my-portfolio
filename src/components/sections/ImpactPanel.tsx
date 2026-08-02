@@ -61,7 +61,7 @@ function Stat({ stat }: { stat: ImpactStat }) {
 
 export function ImpactPanel({ stats }: { stats: ImpactStat[] }) {
   return (
-    <article className="panel span-5 row-2">
+    <article className="panel">
       <div className="panel-head">
         <div>
           <p className="panel-label">Impact · Current</p>

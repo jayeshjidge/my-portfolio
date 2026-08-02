@@ -1,8 +1,8 @@
 import { Atmosphere } from "@/components/layout/Atmosphere";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
-import { WorkSection } from "@/components/sections/WorkSection";
 
 export default function HomePage() {
   return (
@@ -12,7 +12,7 @@ export default function HomePage() {
         <Header />
         <main>
           <Hero />
-          <WorkSection />
+          <Experience />
           <Footer />
         </main>
       </div>
