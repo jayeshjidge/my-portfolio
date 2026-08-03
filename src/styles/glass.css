@@ -512,18 +512,20 @@
 .exp-chapter-inner {
   position: relative;
   z-index: 1;
-  width: min(1240px, 94vw);
+  width: min(1440px, 96vw);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: clamp(40px, 6vw, 96px);
+  gap: clamp(56px, 8vw, 150px);
 }
 
 /* ——— Lanyard pendulum (draggable badge on a metal clasp) ——— */
 .exp-lanyard-rig {
   position: relative;
+  z-index: 5; /* keep the card above the copy when it swings over it */
   display: flex;
   justify-content: center;
+  perspective: 1300px;
 }
 
 .exp-lanyard-swing {
@@ -532,11 +534,19 @@
   flex-direction: column;
   align-items: center;
   transform-origin: top center;
+  transform-style: preserve-3d;
   will-change: transform;
   cursor: grab;
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
+}
+
+/* card face — turns in 3D toward the drag */
+.exp-badge-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .exp-lanyard-swing.is-grabbing {
@@ -582,7 +592,7 @@
 /* Copy column */
 .exp-chapter-copy {
   min-width: 0;
-  max-width: 640px;
+  max-width: 720px;
   will-change: transform;
 }
 

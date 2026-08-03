@@ -17,7 +17,7 @@ import {
 import { portfolio, type ExperienceItem } from "@/data/portfolio";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-const REST_ANGLE = -3; // the card hangs with a slight, natural left tilt
+const REST_ANGLE = 0; // the card hangs naturally straight at rest
 
 /** One-time entrance orchestration for a chapter's content. */
 const copyContainer: Variants = {
@@ -90,8 +90,7 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
     target: sectionRef,
     offset: ["start end", "start start"],
   });
-  const enterY = useTransform(enter, [0, 1], [70, 0]);
-  const enterScale = useTransform(enter, [0, 1], [0.965, 1]);
+  const enterY = useTransform(enter, [0, 1], [64, 0]);
 
   // One-time staggered content reveal, gated on the approach scroll. We wait a
   // beat after mount (`ready`) so the hero image's load-time layout shift can't
@@ -118,10 +117,7 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
       style={{ height: `${(total + 1) * 100}vh` }}
     >
       <div className="exp-stage">
-        <motion.div
-          className="exp-stage-inner"
-          style={{ y: enterY, scale: enterScale }}
-        >
+        <motion.div className="exp-stage-inner" style={{ y: enterY }}>
           <div className="exp-stage-label" aria-hidden="true">
             <span className="exp-stage-title">Experience</span>
           </div>
@@ -201,7 +197,7 @@ function Chapter({
       />
 
       <div className="exp-chapter-inner">
-        <Lanyard item={item} opacity={opacity} inView={inView} />
+        <Lanyard item={item} index={index} inView={inView} />
 
         <motion.div
           className="exp-chapter-copy"
@@ -295,14 +291,15 @@ function Chapter({
    ============================================================ */
 function Lanyard({
   item,
-  opacity,
+  index,
   inView,
 }: {
   item: ExperienceItem;
-  opacity: MotionValue<number>;
+  index: number;
   inView: boolean;
 }) {
-  const rotate = useMotionValue(REST_ANGLE);
+  const rotateZ = useMotionValue(REST_ANGLE); // pendulum swing
+  const rotateY = useMotionValue(0); // 3D turn toward the drag
   const dropY = useMotionValue(0);
   const rigRef = useRef<HTMLDivElement | null>(null);
   const dragging = useRef(false);
@@ -310,41 +307,32 @@ function Lanyard({
   const entered = useRef(false);
   const [grabbing, setGrabbing] = useState(false);
 
-  // Drop-from-top + settle-swing whenever this chapter becomes visible.
+  // Only the FIRST chapter's badge drops in from the top, and only once.
+  // Later chapters just cross-fade in (no drop → no glitchy re-entry).
   useEffect(() => {
-    const play = (visible: boolean) => {
-      if (inView && visible && !entered.current) {
-        entered.current = true;
-        dropY.set(-Math.min(520, window.innerHeight * 0.6));
-        rotate.set(9);
-        animate(dropY, 0, {
-          type: "spring",
-          stiffness: 90,
-          damping: 13,
-          mass: 1,
-        });
-        animate(rotate, REST_ANGLE, {
-          type: "spring",
-          stiffness: 42,
-          damping: 5,
-          mass: 1,
-        });
-      } else if (!visible) {
-        entered.current = false;
-      }
-    };
-    play(opacity.get() > 0.5);
-    const unsub = opacity.on("change", (v) => play(v > 0.5));
-    return () => unsub();
-  }, [inView, opacity, rotate, dropY]);
+    if (index !== 0 || !inView || entered.current) return;
+    entered.current = true;
+    dropY.set(-Math.min(460, window.innerHeight * 0.55));
+    rotateZ.set(7);
+    animate(dropY, 0, { type: "spring", stiffness: 92, damping: 14, mass: 1 });
+    animate(rotateZ, REST_ANGLE, {
+      type: "spring",
+      stiffness: 48,
+      damping: 6.5,
+      mass: 1,
+    });
+  }, [index, inView, dropY, rotateZ]);
 
   const onDown = (e: PointerEvent<HTMLDivElement>) => {
     const rig = rigRef.current?.getBoundingClientRect();
     if (!rig) return;
+    // Pivot = top-centre of the rig (where the strap hangs from).
     pivot.current = { x: rig.left + rig.width / 2, y: rig.top };
     dragging.current = true;
     setGrabbing(true);
-    rotate.stop();
+    rotateZ.stop();
+    rotateY.stop();
+    dropY.stop();
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
     } catch {
@@ -354,10 +342,13 @@ function Lanyard({
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
     if (!dragging.current) return;
     const dx = e.clientX - pivot.current.x;
-    const dy = Math.max(30, e.clientY - pivot.current.y);
-    let ang = (Math.atan2(dx, dy) * 180) / Math.PI;
-    ang = Math.max(-48, Math.min(48, ang));
-    rotate.set(ang);
+    const dy = Math.max(40, e.clientY - pivot.current.y);
+    // Negated: a top-pivot rotation is clockwise-positive, so we flip the sign
+    // to make the card lean *toward* the pointer.
+    let z = -((Math.atan2(dx, dy) * 180) / Math.PI);
+    z = Math.max(-52, Math.min(52, z));
+    rotateZ.set(z);
+    rotateY.set(Math.max(-22, Math.min(22, dx * 0.05)));
   };
   const onUp = (e: PointerEvent<HTMLDivElement>) => {
     if (!dragging.current) return;
@@ -369,19 +360,20 @@ function Lanyard({
       /* ignore */
     }
     // Underdamped spring → the badge swings a few times before resting.
-    animate(rotate, REST_ANGLE, {
+    animate(rotateZ, REST_ANGLE, {
       type: "spring",
-      stiffness: 55,
-      damping: 5.5,
+      stiffness: 60,
+      damping: 6,
       mass: 1,
     });
+    animate(rotateY, 0, { type: "spring", stiffness: 90, damping: 12, mass: 1 });
   };
 
   return (
     <div className="exp-lanyard-rig" ref={rigRef}>
       <motion.div
         className={`exp-lanyard-swing${grabbing ? " is-grabbing" : ""}`}
-        style={{ rotate, y: dropY }}
+        style={{ rotate: rotateZ, y: dropY }}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -399,7 +391,9 @@ function Lanyard({
           </span>
         </div>
         <MetalClasp id={item.badgeId} />
-        <CineBadgeCard item={item} />
+        <motion.div className="exp-badge-3d" style={{ rotateY }}>
+          <CineBadgeCard item={item} />
+        </motion.div>
       </motion.div>
     </div>
   );
