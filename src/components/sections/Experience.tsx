@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent } from "react";
 import Image from "next/image";
 import {
+  animate,
   motion,
+  useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
@@ -15,6 +17,7 @@ import {
 import { portfolio, type ExperienceItem } from "@/data/portfolio";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+const REST_ANGLE = -3; // the card hangs with a slight, natural left tilt
 
 /** One-time entrance orchestration for a chapter's content. */
 const copyContainer: Variants = {
@@ -28,15 +31,6 @@ const copyItem: Variants = {
     y: 0,
     filter: "blur(0px)",
     transition: { duration: 0.75, ease: EASE },
-  },
-};
-const badgeEnter: Variants = {
-  hidden: { opacity: 0, y: -80, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 110, damping: 14, delay: 0.05 },
   },
 };
 
@@ -78,7 +72,6 @@ export function Experience() {
    ============================================================ */
 function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const stageRef = useRef<HTMLDivElement | null>(null);
   const total = items.length;
 
   const { scrollYProgress } = useScroll({
@@ -110,7 +103,6 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
     return () => window.clearTimeout(id);
   }, []);
   useEffect(() => {
-    // Covers the deep-link case (loaded already inside the section).
     if (ready && enter.get() > 0.4) setRevealed(true);
   }, [ready, enter]);
   useMotionValueEvent(enter, "change", (v) => {
@@ -125,20 +117,15 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
       aria-label="Professional experience"
       style={{ height: `${(total + 1) * 100}vh` }}
     >
-      <div className="exp-stage" ref={stageRef}>
+      <div className="exp-stage">
         <motion.div
           className="exp-stage-inner"
           style={{ y: enterY, scale: enterScale }}
         >
-          {/* corner label */}
           <div className="exp-stage-label" aria-hidden="true">
             <span className="exp-stage-title">Experience</span>
           </div>
 
-          {/* progress rail */}
-          <ChapterRail items={items} progress={progress} total={total} />
-
-          {/* chapters */}
           {items.map((item, i) => (
             <Chapter
               key={item.company + item.when}
@@ -187,8 +174,6 @@ function Chapter({
   const isFirst = index === 0;
   const isLast = index === total - 1;
 
-  // Cross-fade windows differ for the first/last chapter so the section
-  // opens already showing chapter 1 and closes holding the last.
   const opOffsets = isFirst
     ? [s, outStart, e]
     : isLast
@@ -196,23 +181,9 @@ function Chapter({
     : [s, inEnd, outStart, e];
   const opValues = isFirst ? [1, 1, 0] : isLast ? [0, 1, 1] : [0, 1, 1, 0];
   const opacity = useTransform(progress, opOffsets, opValues);
+  // Only the visible chapter should receive pointer events (so drag works).
+  const pointerEvents = useTransform(opacity, (o) => (o > 0.5 ? "auto" : "none"));
 
-  const badgeY = useTransform(
-    progress,
-    isFirst ? [s, outStart, e] : [s, inEnd, outStart, e],
-    isFirst ? [0, 0, -180] : [-170, 0, 0, -180]
-  );
-  const badgeScale = useTransform(
-    progress,
-    isFirst ? [s, outStart, e] : [s, inEnd, outStart, e],
-    isFirst ? [1, 1, 0.92] : [0.9, 1, 1, 0.92]
-  );
-  // Rests tilted slightly to the left (-6deg) rather than dead straight.
-  const badgeRotate = useTransform(
-    progress,
-    isFirst ? [s, outStart, e] : [s, inEnd, outStart, e],
-    isFirst ? [-6, -6, 2] : [-12, -6, -6, 3]
-  );
   const copyY = useTransform(
     progress,
     isFirst ? [s, outStart, e] : [s, inEnd, outStart, e],
@@ -220,40 +191,17 @@ function Chapter({
   );
 
   return (
-    <motion.div className="exp-chapter" style={{ opacity }}>
+    <motion.div className="exp-chapter" style={{ opacity, pointerEvents }}>
       <div
         className="exp-chapter-bg"
         style={{
-          background: `radial-gradient(60% 55% at 32% 42%, ${item.accent}2e 0%, transparent 70%)`,
+          background: `radial-gradient(60% 55% at 30% 42%, ${item.accent}2e 0%, transparent 70%)`,
         }}
         aria-hidden="true"
       />
 
       <div className="exp-chapter-inner">
-        <motion.div
-          className="exp-chapter-badge"
-          style={{ y: badgeY, scale: badgeScale }}
-        >
-          <span
-            className="exp-cord-long"
-            style={{ background: item.accent }}
-            aria-hidden="true"
-          />
-          <span className="exp-clasp" aria-hidden="true" />
-          <motion.div
-            className="exp-cine-swing"
-            style={{ rotate: badgeRotate }}
-          >
-            <motion.div
-              className="exp-cine-enter"
-              variants={badgeEnter}
-              initial="hidden"
-              animate={inView ? "visible" : "hidden"}
-            >
-              <CineBadgeCard item={item} />
-            </motion.div>
-          </motion.div>
-        </motion.div>
+        <Lanyard item={item} opacity={opacity} inView={inView} />
 
         <motion.div
           className="exp-chapter-copy"
@@ -262,32 +210,6 @@ function Chapter({
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          <motion.div className="exp-chapter-meta" variants={copyItem}>
-            <span className="exp-chapter-when">
-              <span
-                className="exp-when-dot"
-                style={{ background: item.accent }}
-                aria-hidden="true"
-              />
-              {item.when}
-            </span>
-            <span className="exp-chapter-loc">
-              <svg
-                className="exp-loc-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
-              {item.location}
-            </span>
-          </motion.div>
           <motion.h3 className="exp-company" variants={copyItem}>
             {item.company}
           </motion.h3>
@@ -368,63 +290,171 @@ function Chapter({
   );
 }
 
-function ChapterRail({
-  items,
-  progress,
-  total,
+/* ============================================================
+   LANYARD — a draggable pendulum ID badge on a metal clasp
+   ============================================================ */
+function Lanyard({
+  item,
+  opacity,
+  inView,
 }: {
-  items: ExperienceItem[];
-  progress: MotionValue<number>;
-  total: number;
+  item: ExperienceItem;
+  opacity: MotionValue<number>;
+  inView: boolean;
 }) {
-  const fillScaleY = progress;
+  const rotate = useMotionValue(REST_ANGLE);
+  const dropY = useMotionValue(0);
+  const rigRef = useRef<HTMLDivElement | null>(null);
+  const dragging = useRef(false);
+  const pivot = useRef({ x: 0, y: 0 });
+  const entered = useRef(false);
+  const [grabbing, setGrabbing] = useState(false);
+
+  // Drop-from-top + settle-swing whenever this chapter becomes visible.
+  useEffect(() => {
+    const play = (visible: boolean) => {
+      if (inView && visible && !entered.current) {
+        entered.current = true;
+        dropY.set(-Math.min(520, window.innerHeight * 0.6));
+        rotate.set(9);
+        animate(dropY, 0, {
+          type: "spring",
+          stiffness: 90,
+          damping: 13,
+          mass: 1,
+        });
+        animate(rotate, REST_ANGLE, {
+          type: "spring",
+          stiffness: 42,
+          damping: 5,
+          mass: 1,
+        });
+      } else if (!visible) {
+        entered.current = false;
+      }
+    };
+    play(opacity.get() > 0.5);
+    const unsub = opacity.on("change", (v) => play(v > 0.5));
+    return () => unsub();
+  }, [inView, opacity, rotate, dropY]);
+
+  const onDown = (e: PointerEvent<HTMLDivElement>) => {
+    const rig = rigRef.current?.getBoundingClientRect();
+    if (!rig) return;
+    pivot.current = { x: rig.left + rig.width / 2, y: rig.top };
+    dragging.current = true;
+    setGrabbing(true);
+    rotate.stop();
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* synthetic / unsupported pointer — safe to ignore */
+    }
+  };
+  const onMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (!dragging.current) return;
+    const dx = e.clientX - pivot.current.x;
+    const dy = Math.max(30, e.clientY - pivot.current.y);
+    let ang = (Math.atan2(dx, dy) * 180) / Math.PI;
+    ang = Math.max(-48, Math.min(48, ang));
+    rotate.set(ang);
+  };
+  const onUp = (e: PointerEvent<HTMLDivElement>) => {
+    if (!dragging.current) return;
+    dragging.current = false;
+    setGrabbing(false);
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+    // Underdamped spring → the badge swings a few times before resting.
+    animate(rotate, REST_ANGLE, {
+      type: "spring",
+      stiffness: 55,
+      damping: 5.5,
+      mass: 1,
+    });
+  };
+
   return (
-    <div className="exp-rail" aria-hidden="true">
-      <div className="exp-rail-line">
-        <motion.div
-          className="exp-rail-fill"
-          style={{ scaleY: fillScaleY }}
-        />
-      </div>
-      <ul className="exp-rail-ticks">
-        {items.map((item, i) => (
-          <RailTick
-            key={item.company}
-            index={i}
-            total={total}
-            progress={progress}
-            label={item.when}
-          />
-        ))}
-      </ul>
+    <div className="exp-lanyard-rig" ref={rigRef}>
+      <motion.div
+        className={`exp-lanyard-swing${grabbing ? " is-grabbing" : ""}`}
+        style={{ rotate, y: dropY }}
+        onPointerDown={onDown}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+        onPointerCancel={onUp}
+      >
+        <div
+          className="exp-strap"
+          style={{
+            backgroundImage: `linear-gradient(180deg, ${item.accent}, color-mix(in oklab, ${item.accent} 78%, #000))`,
+          }}
+          aria-hidden="true"
+        >
+          <span className="exp-strap-text">
+            {`${item.company} · ${item.company} · `}
+          </span>
+        </div>
+        <MetalClasp id={item.badgeId} />
+        <CineBadgeCard item={item} />
+      </motion.div>
     </div>
   );
 }
 
-function RailTick({
-  index,
-  total,
-  progress,
-  label,
-}: {
-  index: number;
-  total: number;
-  progress: MotionValue<number>;
-  label: string;
-}) {
-  const seg = 1 / total;
-  const s = index * seg;
-  const e = s + seg;
-  const opacity = useTransform(
-    progress,
-    [Math.max(0, s - 0.001), s, e, Math.min(1, e + 0.001)],
-    [0.4, 1, 1, 0.4]
-  );
+function MetalClasp({ id }: { id: string }) {
+  const gid = `chrome-${id}`;
   return (
-    <motion.li className="exp-rail-tick" style={{ opacity }}>
-      <span className="exp-rail-dot" />
-      <span className="exp-rail-label">{label}</span>
-    </motion.li>
+    <svg
+      className="exp-clasp-metal"
+      viewBox="0 0 40 60"
+      width="40"
+      height="60"
+      aria-hidden="true"
+    >
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#dfe4ea" />
+          <stop offset="0.22" stopColor="#9aa3ad" />
+          <stop offset="0.5" stopColor="#f6f8fb" />
+          <stop offset="0.78" stopColor="#828c98" />
+          <stop offset="1" stopColor="#c6cdd5" />
+        </linearGradient>
+      </defs>
+      {/* top crimp that grips the strap */}
+      <rect
+        x="11"
+        y="0"
+        width="18"
+        height="14"
+        rx="3"
+        fill={`url(#${gid})`}
+        stroke="#6a727d"
+        strokeWidth="0.6"
+      />
+      {/* neck */}
+      <rect x="17.5" y="12" width="5" height="10" rx="2" fill={`url(#${gid})`} />
+      {/* swivel ring */}
+      <circle
+        cx="20"
+        cy="36"
+        r="12"
+        fill="none"
+        stroke={`url(#${gid})`}
+        strokeWidth="5"
+      />
+      <circle
+        cx="20"
+        cy="36"
+        r="12"
+        fill="none"
+        stroke="rgba(0,0,0,0.25)"
+        strokeWidth="0.6"
+      />
+    </svg>
   );
 }
 
@@ -457,6 +487,7 @@ function CineBadgeCard({ item }: { item: ExperienceItem }) {
           width={400}
           height={520}
           className="exp-badge-photo-img"
+          draggable={false}
           style={{
             objectPosition: item.photoPos,
             transform: `scale(${item.photoScale})`,
@@ -471,6 +502,7 @@ function CineBadgeCard({ item }: { item: ExperienceItem }) {
             alt=""
             width={64}
             height={64}
+            draggable={false}
             className={
               isRaster
                 ? "exp-badge-logo-img exp-badge-logo-img--raster"
@@ -487,13 +519,15 @@ function CineBadgeCard({ item }: { item: ExperienceItem }) {
           aria-hidden="true"
         />
         <p className="exp-badge-company">{item.company}</p>
-        <p className="exp-badge-pos">{item.role}</p>
-        <div className="exp-badge-foot">
+        <p className="exp-badge-meta">
           <span
-            className="exp-badge-dot"
+            className="exp-badge-mdot"
             style={{ background: item.accent }}
             aria-hidden="true"
           />
+          {item.when} · {item.location}
+        </p>
+        <div className="exp-badge-foot">
           <span>ID {item.badgeId}</span>
         </div>
       </div>
@@ -550,10 +584,9 @@ function ExperienceStatic({ items }: { items: ExperienceItem[] }) {
       </motion.header>
 
       <ol className="exp-static-list">
-        {items.map((item, i) => (
+        {items.map((item) => (
           <li className="exp-static-row" key={item.company}>
             <div className="exp-static-side">
-              <span className="exp-chapter-when">{item.when}</span>
               <CineBadgeCard item={item} />
             </div>
             <div className="exp-chapter-copy">
@@ -566,7 +599,6 @@ function ExperienceStatic({ items }: { items: ExperienceItem[] }) {
               >
                 {item.role}
               </p>
-              <p className="exp-location">{item.location}</p>
               <p className="exp-summary">{item.summary}</p>
               <ol className="exp-outcomes">
                 {item.bullets.map((b, bi) => (
