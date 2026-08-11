@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hero mockup — sketch name + figma stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Gochi+Hand&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  @font-face{font-family:"Montserrat";font-weight:700;font-style:normal;font-display:swap;src:url("https://cdn.jsdelivr.net/npm/@fontsource/montserrat@5/files/montserrat-latin-700-normal.woff2") format("woff2")}
+  @font-face{font-family:"Montserrat";font-weight:800;font-style:normal;font-display:swap;src:url("https://cdn.jsdelivr.net/npm/@fontsource/montserrat@5/files/montserrat-latin-800-normal.woff2") format("woff2")}
+  :root{
+    --paper:#f3f0e9; --line:rgba(24,28,38,.14); --grid:56px;
+    --ink:#20242e; --ink-soft:#565d6b; --ink-faint:#8a91a0;
+    --coral:#ff6a52; --hl:#ffe14d; --mint:#bfe9cf; --pink:#ffc9d6; --sky:#cfe6ff; --lav:#e7e3fb;
+    --font:"Plus Jakarta Sans",system-ui,sans-serif; --mono:"JetBrains Mono",monospace;
+    --sketch:"Gochi Hand",cursive; --marker:"Caveat",cursive;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--font);color:var(--ink);overflow-x:hidden;
+    background-color:var(--paper);
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:var(--grid) var(--grid)}
+  .nav{position:absolute;top:22px;left:50%;transform:translateX(-50%);z-index:30;display:flex;gap:6px;
+    padding:7px 10px;background:#fff;border:1px solid rgba(24,28,38,.08);border-radius:999px;box-shadow:0 10px 24px -12px rgba(20,24,40,.22)}
+  .nav a{padding:9px 16px;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);text-decoration:none}
+  .nav a.on{background:var(--ink);color:#fff}
+
+  .stage{position:relative;height:100vh;min-height:780px;width:100%}
+  #sketch-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
+
+  /* Centered sketch name */
+  .center{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);text-align:center;z-index:5;width:min(780px,92vw)}
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px}
+  /* "Jayesh" stays solid; only "Jidge" gets the SKETCH hatch-fill treatment.
+     Font = Montserrat (the ARCHITECT text-effect's actual typeface). */
+  .name{font-family:"Montserrat",var(--sketch);font-weight:800;font-size:clamp(2.7rem,7.2vw,5.4rem);line-height:1.08;letter-spacing:-.01em;color:var(--ink)}
+  .name .hl{position:relative;display:inline-block;white-space:nowrap;z-index:0;
+    color:transparent;
+    background-image:repeating-linear-gradient(48deg,var(--ink) 0 1.4px,transparent 1.4px 5.5px);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-stroke:1.5px var(--ink);
+    filter:url(#sketchy)}
+  .name .hl::before{content:"";position:absolute;z-index:-1;left:-.12em;right:-.12em;top:.14em;bottom:.02em;
+    background:var(--hl);border-radius:18px 40px 24px 46px/40px 22px 44px 24px;transform:rotate(-2deg)}
+  .tagline{margin-top:16px;font-family:var(--mono);font-size:clamp(.66rem,1.1vw,.8rem);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+
+  /* now-building — sketch hand doodle */
+  .doodle{position:absolute;left:50%;top:calc(44% + 118px);transform:translateX(-50%);z-index:6;text-align:center;pointer-events:none}
+  .doodle .live{display:inline-block;width:9px;height:9px;border-radius:50%;background:#22c07a;box-shadow:0 0 0 5px rgba(34,192,122,.2);vertical-align:middle;margin-right:8px;animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{50%{box-shadow:0 0 0 9px rgba(34,192,122,0)}}
+  .doodle .l1{font-family:var(--sketch);font-size:1.5rem;color:var(--ink);filter:url(#rough)}
+  .doodle .l2{font-family:var(--marker);font-size:2.1rem;color:var(--coral);line-height:.9;margin-top:2px}
+
+  /* scattered interactive objects (draggable) */
+  .obj{position:absolute;z-index:4;transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s;cursor:grab}
+  .obj:hover{transform:translateY(-7px) rotate(0deg) scale(1.03);z-index:15}
+  .prop{position:absolute;z-index:3}
+  .prop img{width:100%;display:block;filter:drop-shadow(0 12px 16px rgba(20,24,40,.22))}
+  .prop-lab{position:absolute;left:50%;top:100%;transform:translateX(-50%);font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);opacity:0;white-space:nowrap;transition:.25s}
+  .prop:hover .prop-lab{opacity:1}
+  @keyframes bob{50%{transform:translateY(-9px)}}
+  .float{animation:bob 3.4s ease-in-out infinite}
+
+  /* mac window card */
+  .mac{width:230px;background:#fff;border-radius:12px;overflow:hidden;border:1px solid rgba(24,28,38,.08);box-shadow:0 18px 40px -22px rgba(20,24,40,.4)}
+  .mac .bar{height:30px;display:flex;align-items:center;gap:6px;padding:0 10px;background:#ecebe6;border-bottom:1px solid rgba(24,28,38,.08)}
+  .mac .bar i{width:10px;height:10px;border-radius:50%}
+  .mac .bar i:nth-child(1){background:#ff5f57}.mac .bar i:nth-child(2){background:#febc2e}.mac .bar i:nth-child(3){background:#28c840}
+  .mac .bar span{margin-left:auto;font-family:var(--mono);font-size:.6rem;color:var(--ink-faint)}
+  .mac .body{padding:12px}
+  .mac .prev{height:96px;border-radius:8px;background:linear-gradient(135deg,var(--sky),#eef5ff);margin-bottom:9px;display:grid;place-items:center;color:#3a6ea5;font-family:var(--mono);font-size:.66rem}
+  .mac h4{margin:0;font-family:var(--sketch);font-size:1.15rem}
+  .mac p{margin:2px 0 0;font-size:.72rem;color:var(--ink-soft)}
+
+  /* terminal */
+  .term{width:250px;background:#14161d;border-radius:12px;overflow:hidden;box-shadow:0 18px 40px -22px rgba(20,24,40,.5)}
+  .term .bar{height:28px;display:flex;align-items:center;gap:6px;padding:0 10px;background:#22252d}
+  .term .bar i{width:10px;height:10px;border-radius:50%}
+  .term .bar i:nth-child(1){background:#ff5f57}.term .bar i:nth-child(2){background:#febc2e}.term .bar i:nth-child(3){background:#28c840}
+  .term .body{padding:12px 14px;font-family:var(--mono);font-size:.72rem;line-height:1.7;color:#e6e8ee}
+  .term .g{color:#7ee787}.term .dim{color:#8b93a1}
+
+  /* contact soft card */
+  .soft{width:230px;padding:18px;border-radius:20px;color:#123;box-shadow:0 18px 40px -22px rgba(20,24,40,.4)}
+  .soft.p{background:var(--pink)}
+  .soft h4{margin:0;font-family:var(--sketch);font-size:1.5rem}
+  .soft p{margin:8px 0 0;font-size:.78rem;line-height:1.4;opacity:.8}
+  .soft .go{display:inline-block;margin-top:10px;font-weight:700;font-size:.8rem}
+
+  /* ===== Figma stacked pages ===== */
+  .figstack{position:absolute;z-index:6;width:250px;height:200px;cursor:pointer}
+  .figframe{position:absolute;left:0;top:0;width:220px;height:168px;background:#fff;border-radius:12px;overflow:hidden;
+    border:1px solid rgba(24,28,38,.1);box-shadow:0 20px 40px -22px rgba(20,24,40,.45);transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .4s;transform-origin:center bottom}
+  .figframe:nth-child(1){transform:rotate(-7deg) translate(0,10px)}
+  .figframe:nth-child(2){transform:rotate(-1deg) translate(14px,4px)}
+  .figframe:nth-child(3){transform:rotate(5deg) translate(28px,0)}
+  .figstack:hover .figframe:nth-child(1){transform:rotate(-13deg) translate(-56px,-4px)}
+  .figstack:hover .figframe:nth-child(2){transform:rotate(-1deg) translate(14px,-10px) scale(1.03)}
+  .figstack:hover .figframe:nth-child(3){transform:rotate(11deg) translate(96px,-2px)}
+  .figbar{height:26px;display:flex;align-items:center;gap:7px;padding:0 10px;border-bottom:1px solid rgba(24,28,38,.07)}
+  .figbar img{width:12px;height:12px}
+  .figbar b{font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);font-weight:500}
+  .figcanvas{padding:10px;display:flex;flex-direction:column;gap:6px;height:calc(100% - 26px)}
+  .row{border-radius:5px}
+  .fig-a .row.hero{height:44px;background:linear-gradient(135deg,#ffd7c8,#ffe9b0)}
+  .fig-a .row.s{height:8px;width:70%;background:#ececf6}
+  .fig-a .row.s2{height:8px;width:50%;background:#ececf6}
+  .fig-a .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .fig-a .grid div{height:26px;border-radius:5px;background:#eef1fb}
+  .fig-b{background:#0f1220}
+  .fig-b .figbar{border-color:rgba(255,255,255,.08)}
+  .fig-b .figbar b{color:#9aa0ac}
+  .fig-b .side{display:flex;gap:8px;height:100%}
+  .fig-b .nav{width:26%;background:#181c2c;border-radius:6px}
+  .fig-b .main{flex:1;display:flex;flex-direction:column;gap:6px}
+  .fig-b .bars{display:flex;align-items:flex-end;gap:5px;height:56px}
+  .fig-b .bars i{flex:1;border-radius:3px;background:linear-gradient(#7c9dff,#5865f2)}
+  .fig-b .chip{height:9px;width:60%;background:#232838;border-radius:4px}
+  .fig-c .phone{margin:0 auto;width:70px;height:100%;background:#f4f5fb;border-radius:12px;border:3px solid #20242e;padding:6px;display:flex;flex-direction:column;gap:5px}
+  .fig-c .phone .r{height:14px;border-radius:4px;background:#e2e6f4}
+  .fig-c .phone .r.a{background:linear-gradient(90deg,#c9f0d8,#bfe9cf)}
+
+  .clickme{position:absolute;z-index:7;font-family:var(--marker);font-size:1.7rem;color:var(--coral);transform:rotate(-8deg)}
+</style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter>
+    <filter id="sketchy"><feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="1" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.7"/></filter>
+  </svg>
+
+  <nav class="nav"><a class="on" href="#">Home</a><a href="#">Work</a><a href="#">Projects</a><a href="#">Contact</a></nav>
+
+  <div class="stage" id="stage">
+    <svg id="sketch-layer"></svg>
+
+    <!-- CENTER NAME -->
+    <div class="center">
+      <div class="eyebrow">Software Engineer · web &amp; mobile</div>
+      <div class="name">Jayesh <span class="hl">Jidge</span></div>
+      <div class="tagline">building for web &amp; mobile</div>
+    </div>
+
+    <!-- now building — sketch doodle -->
+    <div class="doodle">
+      <div class="l1"><span class="live"></span>now building</div>
+      <div class="l2">micro-frontends</div>
+    </div>
+
+    <div class="clickme" id="clickme" style="left:9%;top:60%">play with me →</div>
+
+    <!-- project cards -->
+    <div class="obj mac" id="o1" style="left:6%;top:12%;transform:rotate(-4deg)">
+      <div class="bar"><i></i><i></i><i></i><span>print-shop</span></div>
+      <div class="body"><div class="prev">&lt;marketplace/&gt;</div><h4>Print Shop Forum</h4><p>Artwork quotes &amp; stickers</p></div>
+    </div>
+    <div class="obj mac" id="o3" style="right:6%;top:14%;transform:rotate(5deg)">
+      <div class="bar"><i></i><i></i><i></i><span>video-chat</span></div>
+      <div class="body"><div class="prev" style="background:linear-gradient(135deg,var(--lav),#f3f0ff);color:#6a5acd">peer-to-peer</div><h4>Video Chat</h4><p>Real-time calls</p></div>
+    </div>
+
+    <!-- terminal -->
+    <div class="obj term" id="o2" style="left:3%;top:52%;transform:rotate(3deg)">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="body"><div><span class="g">~ $</span> whoami</div><div class="dim">software engineer</div><div><span class="g">~ $</span> ls ~/craft/</div><div class="dim">clean · fast · thoughtful</div></div>
+    </div>
+
+    <!-- Figma stacked pages (replaces the about card) -->
+    <div class="figstack" id="figstack" style="left:8%;top:70%">
+      <div class="figframe fig-a">
+        <div class="figbar"><img src="https://cdn.simpleicons.org/figma" alt=""><b>landing.fig</b></div>
+        <div class="figcanvas"><div class="row hero"></div><div class="row s"></div><div class="row s2"></div><div class="grid"><div></div><div></div><div></div></div></div>
+      </div>
+      <div class="figframe fig-b">
+        <div class="figbar"><img src="https://cdn.simpleicons.org/figma" alt=""><b>dashboard.fig</b></div>
+        <div class="figcanvas"><div class="side"><div class="nav"></div><div class="main"><div class="bars"><i style="height:60%"></i><i style="height:90%"></i><i style="height:45%"></i><i style="height:75%"></i><i style="height:55%"></i></div><div class="chip"></div></div></div></div>
+      </div>
+      <div class="figframe fig-c">
+        <div class="figbar"><img src="https://cdn.simpleicons.org/figma" alt=""><b>app.fig</b></div>
+        <div class="figcanvas"><div class="phone"><div class="r a"></div><div class="r"></div><div class="r"></div><div class="r"></div></div></div>
+      </div>
+    </div>
+
+    <!-- contact -->
+    <div class="obj soft p" id="o5" style="right:8%;top:72%;transform:rotate(3deg)">
+      <h4>Let&rsquo;s talk</h4><p>Good things start with a hello.</p><span class="go">jayeshjidge@gmail.com →</span>
+    </div>
+
+    <!-- 3D props -->
+    <div class="prop float" style="left:40%;top:12%;width:74px;animation-delay:.1s"><img src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Rocket/3D/rocket_3d.png" alt=""><span class="prop-lab">ship it</span></div>
+    <div class="prop float" style="left:70%;top:60%;width:80px;animation-delay:.5s"><img src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Potted%20plant/3D/potted_plant_3d.png" alt=""><span class="prop-lab">calm</span></div>
+    <div class="prop float" style="left:33%;top:72%;width:66px;animation-delay:.8s"><img src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Hot%20beverage/3D/hot_beverage_3d.png" alt=""><span class="prop-lab">fuel</span></div>
+    <div class="prop float" style="left:58%;top:20%;width:70px;animation-delay:.3s"><img src="https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/Headphone/3D/headphone_3d.png" alt=""><span class="prop-lab">deep work</span></div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.js"></script>
+<script>
+  const svg=document.getElementById('sketch-layer'), stage=document.getElementById('stage');
+  function draw(){
+    svg.setAttribute('width',stage.clientWidth); svg.setAttribute('height',stage.clientHeight); svg.innerHTML='';
+    const rc=rough.svg(svg), W=stage.clientWidth, H=stage.clientHeight;
+    const ink={stroke:'#20242e',strokeWidth:2,roughness:1.8}, faint={stroke:'#8a91a0',strokeWidth:1.4,roughness:2};
+    // blueprint dimension line under the name (architect-drawing style)
+    const dLx=W*0.5-158, dRx=W*0.5+158, dY=H*0.44+56;
+    svg.appendChild(rc.line(dLx,dY,dRx,dY,{...faint,strokeLineDash:[7,6]}));
+    svg.appendChild(rc.line(dLx,dY-7,dLx,dY+7,faint));
+    svg.appendChild(rc.line(dRx,dY-7,dRx,dY+7,faint));
+    // doodle dashes around "now building" (chalk-times style)
+    const dy=H*0.44+150;
+    [[-215,-8],[-232,10],[-248,28]].forEach(([dx,dyy])=>svg.appendChild(rc.line(W*0.5+dx,dy+dyy,W*0.5+dx+22,dy+dyy-8,ink)));
+    [[215,-8],[232,10],[248,28]].forEach(([dx,dyy])=>svg.appendChild(rc.line(W*0.5+dx,dy+dyy,W*0.5+dx-22,dy+dyy-8,ink)));
+    // sparkle above doodle
+    svg.appendChild(rc.line(W*0.5+150,dy-30,W*0.5+150,dy-14,faint));
+    svg.appendChild(rc.line(W*0.5+142,dy-22,W*0.5+158,dy-22,faint));
+    // circle accent around rocket
+    svg.appendChild(rc.circle(W*0.40+37,H*0.12+30,96,faint));
+    // arrow from "play with me" to figma stack
+    svg.appendChild(rc.linearPath([[W*0.09+60,H*0.60+34],[W*0.11,H*0.66],[W*0.13,H*0.70]],ink));
+  }
+  draw(); window.addEventListener('resize',draw);
+
+  // drag for scattered cards
+  ['o1','o2','o3','o5','clickme'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return; let sx,sy,ox,oy,drag=false;
+    el.addEventListener('pointerdown',e=>{drag=true;el.setPointerCapture(e.pointerId);sx=e.clientX;sy=e.clientY;const r=el.getBoundingClientRect();ox=r.left;oy=r.top;el.style.transition='none';el.style.cursor='grabbing'});
+    el.addEventListener('pointermove',e=>{if(!drag)return;el.style.left=(ox+e.clientX-sx)+'px';el.style.right='auto';el.style.top=(oy+e.clientY-sy)+'px';el.style.transform='rotate(0deg)'});
+    el.addEventListener('pointerup',e=>{drag=false;el.style.cursor='grab';el.releasePointerCapture(e.pointerId)});
+  });
+  // figma stack: click to cycle the top page to the back
+  const fig=document.getElementById('figstack');
+  fig.addEventListener('click',()=>fig.appendChild(fig.firstElementChild));
+</script>
+</body>
+</html>
