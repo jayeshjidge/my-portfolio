@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { portfolio } from "@/data/portfolio";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Header() {
   const [active, setActive] = useState("#home");
@@ -24,7 +23,7 @@ export function Header() {
   }, []);
 
   return (
-    <header className="topbar" id="top">
+    <header className="topbar is-paper" id="top">
       <nav className="nav-pill" aria-label="Primary">
         {portfolio.nav.map((item) => (
           <a
@@ -36,7 +35,6 @@ export function Header() {
           </a>
         ))}
       </nav>
-      <ThemeToggle />
     </header>
   );
 }

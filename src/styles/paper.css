@@ -1,0 +1,588 @@
+/* ============================================================
+   Paper / desk design system (grid-sketch redesign)
+   Grid-paper canvas + crisp "sticker" cards + macOS windows.
+   Replaces glassmorphism site-wide. Light only.
+   ============================================================ */
+
+/* ——— Global paper canvas ——— */
+.paper-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--paper-bg);
+  /* Clean uniform grid (like the reference — 56px cells, single weight). */
+  background-image:
+    linear-gradient(var(--paper-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+  background-size: var(--paper-grid) var(--paper-grid);
+  background-position: center top;
+}
+
+/* Soft paper vignette + warm light, so the flat grid feels like a real sheet */
+.paper-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 60% 45% at 50% 22%,
+      rgba(255, 250, 236, 0.28),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 90% 80% at 50% 100%,
+      rgba(31, 36, 48, 0.05),
+      transparent 60%
+    );
+}
+
+/* Registration / crop marks in the page corners (like the reference) */
+.paper-marks {
+  position: fixed;
+  inset: 20px;
+  z-index: 0;
+  pointer-events: none;
+  color: var(--ink-faint);
+}
+.paper-marks span {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  opacity: 0.5;
+}
+.paper-marks span::before,
+.paper-marks span::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.paper-marks span::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-0.5px);
+}
+.paper-marks span::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-0.5px);
+}
+.paper-marks .m-tl {
+  left: 0;
+  top: 0;
+}
+.paper-marks .m-tr {
+  right: 0;
+  top: 0;
+}
+.paper-marks .m-bl {
+  left: 0;
+  bottom: 0;
+}
+.paper-marks .m-br {
+  right: 0;
+  bottom: 0;
+}
+
+/* ——— Sticker card primitive ——— */
+.sticker {
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  border-radius: 14px;
+  box-shadow: var(--sticker-shadow);
+}
+
+/* Washi tape strip — attach with .tape on a positioned child */
+.tape {
+  position: absolute;
+  width: 74px;
+  height: 26px;
+  background: var(--tape);
+  box-shadow: 0 1px 2px rgba(20, 24, 40, 0.12);
+  opacity: 0.92;
+}
+.tape::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.25) 0 6px,
+    transparent 6px 12px
+  );
+  mix-blend-mode: overlay;
+}
+.tape--blue {
+  background: var(--tape-2);
+}
+
+/* ——— macOS window chrome (terminal / finder / project cards) ——— */
+.mac {
+  background: var(--mac-body);
+  border: 1px solid var(--sticker-edge);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--sticker-shadow);
+}
+.mac-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  background: linear-gradient(var(--mac-bar), var(--mac-bar-2));
+  border-bottom: 1px solid var(--ink-hair);
+}
+.mac-dots {
+  display: flex;
+  gap: 7px;
+}
+.mac-dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: block;
+}
+.mac-dots i:nth-child(1) {
+  background: var(--mac-red);
+}
+.mac-dots i:nth-child(2) {
+  background: var(--mac-amber);
+}
+.mac-dots i:nth-child(3) {
+  background: var(--mac-green);
+}
+.mac-title {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.01em;
+  margin-right: 44px; /* balance the traffic lights */
+}
+
+/* ============================================================
+   HERO — "Jayesh's desk" collage
+   ============================================================ */
+.desk {
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  min-height: 100vh;
+  padding: clamp(90px, 12vh, 150px) 0 60px;
+  overflow: hidden;
+}
+
+.desk-canvas {
+  position: relative;
+  width: min(1320px, 94vw);
+  height: min(760px, 78vh);
+  margin: 0 auto;
+}
+
+/* A positioned collage object */
+.obj {
+  position: absolute;
+  will-change: transform;
+}
+.obj--drag {
+  cursor: grab;
+}
+.obj--drag:active {
+  cursor: grabbing;
+}
+
+/* Signature name + tagline (center) */
+.desk-sign {
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+}
+.desk-sign h1 {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 8vw, 6.6rem);
+  line-height: 0.9;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.desk-sign .desk-tag {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: clamp(0.72rem, 1.1vw, 0.9rem);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding-left: 0.42em;
+}
+
+/* Lanyard ID badge */
+.badge-card {
+  width: 236px;
+}
+.badge-strap {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: clamp(70px, 12vh, 120px);
+  background: #23262e;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.05) 0 8px,
+    transparent 8px 16px
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.badge-strap span {
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.28em;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+.badge-clasp {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translate(-50%, 50%);
+  width: 40px;
+  height: 12px;
+  border-radius: 3px;
+  background: linear-gradient(#d9dde3, #a7adb8 55%, #cfd4db);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+.badge-body {
+  position: relative;
+  background: linear-gradient(150deg, #2b2f38, #191c22);
+  border-radius: 16px;
+  padding: 18px 18px 22px;
+  color: #fff;
+  box-shadow: var(--sticker-shadow-lift);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.badge-body .zh {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.badge-body .badge-sub {
+  margin-top: 4px;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.6);
+}
+.badge-photo {
+  margin: 16px auto 12px;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  background: #0e1014;
+}
+.badge-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 12%;
+}
+.badge-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+}
+.badge-foot b {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Terminal window */
+.term {
+  width: 340px;
+}
+.term .mac-bar {
+  background: linear-gradient(#2a2d36, #22252d);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+.term .mac-title {
+  color: rgba(255, 255, 255, 0.5);
+}
+.term-body {
+  background: var(--term-bg);
+  padding: 16px 18px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--term-text);
+}
+.term-body .t-cmd {
+  color: var(--term-text);
+}
+.term-body .t-cmd .p {
+  color: var(--term-green);
+  margin-right: 6px;
+}
+.term-body .t-out {
+  color: var(--term-dim);
+  margin-bottom: 8px;
+}
+.term-body .cur {
+  display: inline-block;
+  width: 8px;
+  height: 1em;
+  background: var(--term-green);
+  vertical-align: -2px;
+  animation: term-blink 1.1s steps(1) infinite;
+}
+@keyframes term-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Polaroid moodboard on kraft */
+.moodboard {
+  width: 300px;
+  padding: 18px 18px 26px;
+  background: linear-gradient(160deg, var(--kraft-2), var(--kraft));
+  border-radius: 6px;
+  box-shadow: var(--sticker-shadow-lift);
+}
+.moodboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.polaroid {
+  background: #fff;
+  padding: 5px 5px 5px;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(20, 24, 40, 0.25);
+}
+.polaroid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 1px;
+  display: block;
+}
+.moodboard-cap {
+  margin-top: 12px;
+  text-align: right;
+  font-family: var(--font-hand);
+  font-size: 1.5rem;
+  color: #6b533a;
+  line-height: 1;
+}
+
+/* Small sticky note (stats) */
+.sticky {
+  width: 210px;
+  padding: 16px 18px;
+  background: #fdf3c8;
+  box-shadow: 0 1px 2px rgba(20, 24, 40, 0.08),
+    0 14px 26px -14px rgba(20, 24, 40, 0.4);
+}
+.sticky .sticky-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9a8a3f;
+}
+.sticky-stats {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sticky-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.sticky-stat b {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: #3a3320;
+  min-width: 58px;
+}
+.sticky-stat span {
+  font-size: 0.72rem;
+  color: #6f6438;
+}
+
+/* Ticket stub */
+.ticket {
+  width: 250px;
+  display: flex;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: var(--sticker-shadow);
+  overflow: hidden;
+}
+.ticket-stub {
+  width: 58px;
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+.ticket-main {
+  flex: 1;
+  padding: 12px 14px;
+}
+.ticket-main h4 {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.ticket-main .ticket-meta {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+.ticket-perf {
+  border-left: 2px dashed var(--ink-hair);
+  padding: 12px 10px;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  writing-mode: vertical-rl;
+  letter-spacing: 0.1em;
+}
+
+/* Small "now building" chip card */
+.chip-card {
+  width: 200px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  background: var(--sticker);
+}
+.chip-card .chip-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--mac-green);
+  box-shadow: 0 0 0 4px rgba(40, 200, 64, 0.16);
+  flex-shrink: 0;
+}
+.chip-card .chip-txt b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+.chip-card .chip-txt span {
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+}
+
+/* CSS potted plant + coffee doodles (a little desk life) */
+.doodle {
+  position: absolute;
+  color: var(--ink-soft);
+}
+
+.desk-social {
+  position: absolute;
+  left: 50%;
+  top: calc(40% + 132px);
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.desk-scrollcue {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  z-index: 3;
+}
+
+/* ——— Mobile: reflow the collage into a calm stack ——— */
+.desk-stack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+  padding: 110px 22px 60px;
+}
+.desk-stack .desk-sign {
+  position: static;
+  transform: none;
+}
+.desk-stack .badge-card {
+  margin-top: 34px;
+}
+
+/* ——— Paper-themed header (drops the glass pill) ——— */
+.topbar.is-paper {
+  background: transparent;
+}
+.is-paper .nav-pill {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--sticker-edge);
+  backdrop-filter: none;
+  box-shadow: var(--sticker-shadow);
+}
+.is-paper .brand-tag {
+  grid-column: 1;
+  justify-self: start;
+  font-family: var(--font-hand);
+  font-size: 1.7rem;
+  color: var(--ink);
+  line-height: 1;
+  padding-left: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term-body .cur {
+    animation: none;
+  }
+}

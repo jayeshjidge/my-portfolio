@@ -4,6 +4,7 @@ import { SmoothScroll } from "@/components/layout/SmoothScroll";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/glass.css";
+import "@/styles/paper.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -32,14 +33,8 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sacramento&family=Space+Grotesk:wght@500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sacramento&family=Space+Grotesk:wght@500;600;700&display=swap"
           rel="stylesheet"
-        />
-        {/* Prevent theme flash before React hydrates */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){document.documentElement.setAttribute("data-theme","light");}})();`,
-          }}
         />
       </head>
       <body>

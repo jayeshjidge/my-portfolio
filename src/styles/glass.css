@@ -681,9 +681,7 @@
   letter-spacing: -0.03em;
   margin: 6px 0 16px;
   width: fit-content;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--ink);
 }
 
 /* ——— Progress rail ——— */
@@ -1032,14 +1030,13 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  background: var(--tile-bg);
-  border: 1px solid var(--tile-border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  padding: 14px 16px 14px 20px;
+  border-radius: 12px;
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  box-shadow: var(--sticker-shadow);
   overflow: hidden;
-  transition: transform 0.4s var(--ease-out), border-color 0.35s var(--ease);
+  transition: transform 0.4s var(--ease-out), box-shadow 0.35s var(--ease);
 }
 
 .exp-highlight::before {
@@ -1048,18 +1045,13 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 3px;
-  background: linear-gradient(
-    to bottom,
-    var(--exp-role-from, var(--accent-ink)),
-    var(--exp-role-to, var(--accent))
-  );
-  opacity: 0.85;
+  width: 4px;
+  background: var(--exp-accent, var(--ink));
 }
 
 .exp-highlight:hover {
   transform: translateY(-3px);
-  border-color: color-mix(in oklab, var(--exp-accent) 45%, var(--tile-border));
+  box-shadow: var(--sticker-shadow-lift);
 }
 
 .exp-highlight-value {
@@ -1068,9 +1060,7 @@
   font-size: clamp(1.7rem, 2.6vw, 2.15rem);
   letter-spacing: -0.03em;
   line-height: 1;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
 

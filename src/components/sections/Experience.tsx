@@ -195,14 +195,6 @@ function Chapter({
 
   return (
     <motion.div className="exp-chapter" style={{ opacity, pointerEvents }}>
-      <div
-        className="exp-chapter-bg"
-        style={{
-          background: `radial-gradient(60% 55% at 30% 42%, ${item.accent}2e 0%, transparent 70%)`,
-        }}
-        aria-hidden="true"
-      />
-
       <div className="exp-chapter-inner">
         <Lanyard item={item} index={index} dropReady={dropReady} />
 
@@ -216,13 +208,7 @@ function Chapter({
           <motion.h3 className="exp-company" variants={copyItem}>
             {item.company}
           </motion.h3>
-          <motion.p
-            className="exp-role-line"
-            variants={copyItem}
-            style={{
-              backgroundImage: `linear-gradient(100deg, ${item.roleFrom}, ${item.roleTo})`,
-            }}
-          >
+          <motion.p className="exp-role-line" variants={copyItem}>
             {item.role}
           </motion.p>
           <motion.p className="exp-summary" variants={copyItem}>
@@ -242,14 +228,7 @@ function Chapter({
           >
             {item.highlights.map((h) => (
               <div className="exp-highlight" key={h.label}>
-                <span
-                  className="exp-highlight-value"
-                  style={{
-                    backgroundImage: `linear-gradient(140deg, ${item.roleFrom}, ${item.roleTo})`,
-                  }}
-                >
-                  {h.value}
-                </span>
+                <span className="exp-highlight-value">{h.value}</span>
                 <span className="exp-highlight-label">{h.label}</span>
               </div>
             ))}
@@ -487,12 +466,7 @@ function CineBadgeCard({ item }: { item: ExperienceItem }) {
   return (
     <div className="exp-badge-card exp-badge-card--cine">
       <span className="exp-badge-hole" aria-hidden="true" />
-      <div
-        className="exp-badge-photo"
-        style={{
-          background: `linear-gradient(165deg, ${item.glow} 0%, ${item.glow}66 100%)`,
-        }}
-      >
+      <div className="exp-badge-photo">
         <Image
           src={item.photo}
           alt={`${portfolio.name} — member photo`}
@@ -525,9 +499,7 @@ function CineBadgeCard({ item }: { item: ExperienceItem }) {
         <p className="exp-badge-name">{portfolio.name}</p>
         <span
           className="exp-badge-underline"
-          style={{
-            backgroundImage: `linear-gradient(90deg, ${item.roleFrom}, ${item.roleTo})`,
-          }}
+          style={{ background: item.accent }}
           aria-hidden="true"
         />
         <p className="exp-badge-company">{item.company}</p>
@@ -603,14 +575,7 @@ function ExperienceStatic({ items }: { items: ExperienceItem[] }) {
             </div>
             <div className="exp-chapter-copy">
               <h3 className="exp-company">{item.company}</h3>
-              <p
-                className="exp-role-line"
-                style={{
-                  backgroundImage: `linear-gradient(100deg, ${item.roleFrom}, ${item.roleTo})`,
-                }}
-              >
-                {item.role}
-              </p>
+              <p className="exp-role-line">{item.role}</p>
               <p className="exp-summary">{item.summary}</p>
               <ol className="exp-outcomes">
                 {item.bullets.map((b, bi) => (

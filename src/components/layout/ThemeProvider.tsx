@@ -21,16 +21,9 @@ type ThemeContextValue = {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function getPreferredTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  try {
-    const stored = localStorage.getItem("theme");
-    if (stored === "light" || stored === "dark") return stored;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  } catch {
-    return "light";
-  }
+  // Grid-sketch redesign is light-only — the paper aesthetic assumes a light
+  // sheet, so we pin the theme and ignore any stored/system preference.
+  return "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
