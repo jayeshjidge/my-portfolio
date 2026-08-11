@@ -17,7 +17,7 @@ import {
 import { portfolio, type ExperienceItem } from "@/data/portfolio";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
-const REST_ANGLE = 0; // the card hangs naturally straight at rest
+const REST_ANGLE = -4; // the card rests with a slight tilt toward the right
 
 /** One-time entrance orchestration for a chapter's content. */
 const copyContainer: Variants = {
@@ -90,22 +90,26 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
     target: sectionRef,
     offset: ["start end", "start start"],
   });
-  const enterY = useTransform(enter, [0, 1], [64, 0]);
-
-  // One-time staggered content reveal, gated on the approach scroll. We wait a
-  // beat after mount (`ready`) so the hero image's load-time layout shift can't
-  // spike `enter` and mis-fire the reveal before the user ever scrolls here.
+  // Content reveal (early, on approach) + card drop (later, once pinned) are
+  // gated on the approach scroll. A mount delay (`ready`) guards against a
+  // load-time layout-shift mis-firing them before the user scrolls here.
   const [ready, setReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
+  const [pinned, setPinned] = useState(false);
   useEffect(() => {
     const id = window.setTimeout(() => setReady(true), 700);
     return () => window.clearTimeout(id);
   }, []);
   useEffect(() => {
-    if (ready && enter.get() > 0.4) setRevealed(true);
+    if (!ready) return;
+    const v = enter.get();
+    if (v > 0.4) setRevealed(true);
+    if (v > 0.85) setPinned(true);
   }, [ready, enter]);
   useMotionValueEvent(enter, "change", (v) => {
-    if (ready && v > 0.4) setRevealed(true);
+    if (!ready) return;
+    if (v > 0.4) setRevealed(true);
+    if (v > 0.85) setPinned(true);
   });
 
   return (
@@ -117,7 +121,7 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
       style={{ height: `${(total + 1) * 100}vh` }}
     >
       <div className="exp-stage">
-        <motion.div className="exp-stage-inner" style={{ y: enterY }}>
+        <div className="exp-stage-inner">
           <div className="exp-stage-label" aria-hidden="true">
             <span className="exp-stage-title">Experience</span>
           </div>
@@ -130,11 +134,12 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
               total={total}
               progress={progress}
               inView={revealed}
+              dropReady={pinned}
             />
           ))}
 
           <ScrollHint progress={progress} />
-        </motion.div>
+        </div>
       </div>
 
       {/* Accessible, non-visual list for SEO / a11y */}
@@ -155,12 +160,14 @@ function Chapter({
   total,
   progress,
   inView,
+  dropReady,
 }: {
   item: ExperienceItem;
   index: number;
   total: number;
   progress: MotionValue<number>;
   inView: boolean;
+  dropReady: boolean;
 }) {
   const seg = 1 / total;
   const s = index * seg;
@@ -197,7 +204,7 @@ function Chapter({
       />
 
       <div className="exp-chapter-inner">
-        <Lanyard item={item} index={index} inView={inView} />
+        <Lanyard item={item} index={index} dropReady={dropReady} />
 
         <motion.div
           className="exp-chapter-copy"
@@ -292,36 +299,47 @@ function Chapter({
 function Lanyard({
   item,
   index,
-  inView,
+  dropReady,
 }: {
   item: ExperienceItem;
   index: number;
-  inView: boolean;
+  dropReady: boolean;
 }) {
   const rotateZ = useMotionValue(REST_ANGLE); // pendulum swing
   const rotateY = useMotionValue(0); // 3D turn toward the drag
   const dropY = useMotionValue(0);
+  // First chapter's card starts hidden and drops in; later chapters are simply
+  // present (their whole chapter cross-fades) so there's no second drop.
+  const cardOpacity = useMotionValue(index === 0 ? 0 : 1);
   const rigRef = useRef<HTMLDivElement | null>(null);
   const dragging = useRef(false);
   const pivot = useRef({ x: 0, y: 0 });
   const entered = useRef(false);
   const [grabbing, setGrabbing] = useState(false);
 
-  // Only the FIRST chapter's badge drops in from the top, and only once.
-  // Later chapters just cross-fade in (no drop → no glitchy re-entry).
+  // Only the FIRST chapter's badge drops in from above — once, when pinned.
   useEffect(() => {
-    if (index !== 0 || !inView || entered.current) return;
+    if (index !== 0 || !dropReady || entered.current) return;
     entered.current = true;
-    dropY.set(-Math.min(460, window.innerHeight * 0.55));
-    rotateZ.set(7);
-    animate(dropY, 0, { type: "spring", stiffness: 92, damping: 14, mass: 1 });
-    animate(rotateZ, REST_ANGLE, {
+    const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+    dropY.set(-(vh * 0.92));
+    rotateZ.set(8);
+    cardOpacity.set(0);
+    animate(cardOpacity, 1, { duration: 0.35, ease: "easeOut" });
+    animate(dropY, 0, {
       type: "spring",
-      stiffness: 48,
-      damping: 6.5,
+      stiffness: 72,
+      damping: 11,
       mass: 1,
     });
-  }, [index, inView, dropY, rotateZ]);
+    animate(rotateZ, REST_ANGLE, {
+      type: "spring",
+      stiffness: 46,
+      damping: 5.5,
+      mass: 1,
+      delay: 0.05,
+    });
+  }, [index, dropReady, dropY, rotateZ, cardOpacity]);
 
   const onDown = (e: PointerEvent<HTMLDivElement>) => {
     const rig = rigRef.current?.getBoundingClientRect();
@@ -373,7 +391,7 @@ function Lanyard({
     <div className="exp-lanyard-rig" ref={rigRef}>
       <motion.div
         className={`exp-lanyard-swing${grabbing ? " is-grabbing" : ""}`}
-        style={{ rotate: rotateZ, y: dropY }}
+        style={{ rotate: rotateZ, y: dropY, opacity: cardOpacity }}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
