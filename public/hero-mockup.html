@@ -36,7 +36,9 @@
   /* Full name = two architect hatch wordmark PNGs, height-matched */
   .name{display:flex;align-items:flex-end;justify-content:center;gap:clamp(10px,1.6vw,24px)}
   .name .wm{height:clamp(2.4rem,6.6vw,4.8rem);width:auto;display:block}
-  .tagline{margin-top:16px;font-family:var(--mono);font-size:clamp(.66rem,1.1vw,.8rem);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .tagline{position:relative;margin-top:20px;font-family:var(--mono);font-size:clamp(.66rem,1.1vw,.8rem);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .tagline .hl-y{position:relative;z-index:1;color:var(--ink);font-weight:700}
+  /* highlight + brackets are drawn on the sketch svg layer below */
 
   /* now-building — sketch hand doodle */
   .doodle{position:absolute;left:50%;top:calc(44% + 118px);transform:translateX(-50%);z-index:6;text-align:center;pointer-events:none}
@@ -130,9 +132,9 @@
 
     <!-- CENTER NAME -->
     <div class="center">
-      <div class="eyebrow">Software Engineer · web &amp; mobile</div>
+      <div class="eyebrow">Software Engineer</div>
       <div class="name"><img class="wm" src="/images/jayesh-wordmark.png" alt="Jayesh" /><img class="wm" src="/images/jidge-wordmark.png" alt="Jidge" /></div>
-      <div class="tagline">building for web &amp; mobile</div>
+      <div class="tagline"><span class="tag-text">building for <span class="hl-y">web &amp; mobile</span></span></div>
     </div>
 
     <!-- now building — sketch doodle -->
@@ -194,6 +196,37 @@
     svg.setAttribute('width',stage.clientWidth); svg.setAttribute('height',stage.clientHeight); svg.innerHTML='';
     const rc=rough.svg(svg), W=stage.clientWidth, H=stage.clientHeight;
     const ink={stroke:'#20242e',strokeWidth:2,roughness:1.8}, faint={stroke:'#8a91a0',strokeWidth:1.4,roughness:2};
+
+    // hand-painted highlighter swipe behind "WEB & MOBILE" (rough.js hachure fill)
+    const stageBox=stage.getBoundingClientRect();
+    const hl=document.querySelector('.tagline .hl-y');
+    if(hl){
+      const b=hl.getBoundingClientRect();
+      const px=6, py=3;
+      const x=b.left-stageBox.left-px, y=b.top-stageBox.top-py;
+      const w=b.width+px*2, h=b.height+py*2;
+      const swipe=rc.rectangle(x,y,w,h,{
+        fill:'#ffe14d', fillStyle:'hachure', hachureAngle:-8, hachureGap:3.2,
+        fillWeight:2.6, stroke:'none', roughness:2.4, bowing:2
+      });
+      // put the swipe *behind* the text (below other svg children)
+      svg.insertBefore(swipe, svg.firstChild);
+    }
+    // blueprint dimension brackets ⊢ … ⊣ framing the tagline (architect theme)
+    const tag=document.querySelector('.tag-text');
+    if(tag){
+      const tb=tag.getBoundingClientRect();
+      const xL=tb.left-stageBox.left-14, xR=tb.right-stageBox.left+14;
+      const yMid=tb.top-stageBox.top + tb.height/2;
+      const armLen=10, tickH=8;
+      const brk={stroke:'#8a91a0',strokeWidth:1.5,roughness:1.6};
+      // left bracket: vertical tick + short horizontal arm pointing right
+      svg.appendChild(rc.line(xL,yMid-tickH,xL,yMid+tickH,brk));
+      svg.appendChild(rc.line(xL,yMid,xL+armLen,yMid,brk));
+      // right bracket: vertical tick + short horizontal arm pointing left
+      svg.appendChild(rc.line(xR,yMid-tickH,xR,yMid+tickH,brk));
+      svg.appendChild(rc.line(xR-armLen,yMid,xR,yMid,brk));
+    }
     // doodle dashes around "now building" (chalk-times style)
     const dy=H*0.44+150;
     [[-215,-8],[-232,10],[-248,28]].forEach(([dx,dyy])=>svg.appendChild(rc.line(W*0.5+dx,dy+dyy,W*0.5+dx+22,dy+dyy-8,ink)));
@@ -207,6 +240,10 @@
     svg.appendChild(rc.linearPath([[W*0.09+60,H*0.60+34],[W*0.11,H*0.66],[W*0.13,H*0.70]],ink));
   }
   draw(); window.addEventListener('resize',draw);
+  document.querySelectorAll('.name .wm').forEach(img=>{
+    if(img.complete) return; img.addEventListener('load',draw);
+  });
+  setTimeout(draw,300);
 
   // drag for scattered cards
   ['o1','o2','o3','o5','clickme'].forEach(id=>{
