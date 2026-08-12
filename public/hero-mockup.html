@@ -33,17 +33,9 @@
   /* Centered sketch name */
   .center{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);text-align:center;z-index:5;width:min(780px,92vw)}
   .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px}
-  /* "Jayesh" stays solid; only "Jidge" gets the SKETCH hatch-fill treatment.
-     Font = Montserrat (the ARCHITECT text-effect's actual typeface). */
-  .name{font-family:"Montserrat",var(--sketch);font-weight:800;font-size:clamp(2.7rem,7.2vw,5.4rem);line-height:1.08;letter-spacing:-.01em;color:var(--ink)}
-  .name .hl{position:relative;display:inline-block;white-space:nowrap;z-index:0;
-    color:transparent;
-    background-image:repeating-linear-gradient(48deg,var(--ink) 0 1.4px,transparent 1.4px 5.5px);
-    -webkit-background-clip:text;background-clip:text;
-    -webkit-text-stroke:1.5px var(--ink);
-    filter:url(#sketchy)}
-  .name .hl::before{content:"";position:absolute;z-index:-1;left:-.12em;right:-.12em;top:.14em;bottom:.02em;
-    background:var(--hl);border-radius:18px 40px 24px 46px/40px 22px 44px 24px;transform:rotate(-2deg)}
+  /* Full name = two architect hatch wordmark PNGs, height-matched */
+  .name{display:flex;align-items:flex-end;justify-content:center;gap:clamp(10px,1.6vw,24px)}
+  .name .wm{height:clamp(2.4rem,6.6vw,4.8rem);width:auto;display:block}
   .tagline{margin-top:16px;font-family:var(--mono);font-size:clamp(.66rem,1.1vw,.8rem);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
 
   /* now-building — sketch hand doodle */
@@ -139,7 +131,7 @@
     <!-- CENTER NAME -->
     <div class="center">
       <div class="eyebrow">Software Engineer · web &amp; mobile</div>
-      <div class="name">Jayesh <span class="hl">Jidge</span></div>
+      <div class="name"><img class="wm" src="/images/jayesh-wordmark.png" alt="Jayesh" /><img class="wm" src="/images/jidge-wordmark.png" alt="Jidge" /></div>
       <div class="tagline">building for web &amp; mobile</div>
     </div>
 
@@ -202,11 +194,6 @@
     svg.setAttribute('width',stage.clientWidth); svg.setAttribute('height',stage.clientHeight); svg.innerHTML='';
     const rc=rough.svg(svg), W=stage.clientWidth, H=stage.clientHeight;
     const ink={stroke:'#20242e',strokeWidth:2,roughness:1.8}, faint={stroke:'#8a91a0',strokeWidth:1.4,roughness:2};
-    // blueprint dimension line under the name (architect-drawing style)
-    const dLx=W*0.5-158, dRx=W*0.5+158, dY=H*0.44+56;
-    svg.appendChild(rc.line(dLx,dY,dRx,dY,{...faint,strokeLineDash:[7,6]}));
-    svg.appendChild(rc.line(dLx,dY-7,dLx,dY+7,faint));
-    svg.appendChild(rc.line(dRx,dY-7,dRx,dY+7,faint));
     // doodle dashes around "now building" (chalk-times style)
     const dy=H*0.44+150;
     [[-215,-8],[-232,10],[-248,28]].forEach(([dx,dyy])=>svg.appendChild(rc.line(W*0.5+dx,dy+dyy,W*0.5+dx+22,dy+dyy-8,ink)));
