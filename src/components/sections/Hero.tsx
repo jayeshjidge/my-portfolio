@@ -15,14 +15,17 @@
 
 import {
   AmbientProp,
+  CenterSketch,
   DeckWidget,
   ErrWidget,
+  HeroDecor,
   Nameplate,
   PerfWidget,
   PwaWidget,
   RespWidget,
   SketchDefs,
   StateWidget,
+  StickyNotes,
 } from "./hero";
 
 export function Hero() {
@@ -30,6 +33,11 @@ export function Hero() {
     <section className="hero2" id="home" aria-label="Introduction">
       <SketchDefs />
       <div className="hero2-stage">
+        {/* decorative layers under the interactive widgets */}
+        <CenterSketch />
+        <HeroDecor />
+        <StickyNotes />
+
         <Nameplate />
         <div className="hero2-widgets">
           <div className="hw hw--resp">

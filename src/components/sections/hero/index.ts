@@ -7,3 +7,6 @@ export { PerfWidget } from "./PerfWidget";
 export { StateWidget } from "./StateWidget";
 export { DeckWidget } from "./DeckWidget";
 export { ErrWidget } from "./ErrWidget";
+export { HeroDecor } from "./HeroDecor";
+export { StickyNotes } from "./StickyNotes";
+export { CenterSketch } from "./CenterSketch";
