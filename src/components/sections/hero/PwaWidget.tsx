@@ -17,7 +17,7 @@ export function PwaWidget() {
           <i />
           <i />
           <i />
-          <b>yourapp.pwa</b>
+          <b>www.jayesh.com</b>
         </div>
         <div className="scr">
           <span className="appicon">
@@ -30,7 +30,7 @@ export function PwaWidget() {
               decoding="async"
             />
           </span>
-          <span className="wtxt">www</span>
+          <span className="wtxt">pwa</span>
         </div>
         <div className="bd">
           <span className="b1">Offline</span>

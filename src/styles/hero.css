@@ -1374,10 +1374,16 @@
   opacity: 0;
   animation: h2pwab 3.8s ease-in-out infinite;
 }
-.hero2 .pwa1 .bd .b1,
-.hero2 .pwa1 .bd .b2,
+.hero2 .pwa1 .bd .b1 {
+  background: #22c07a;
+  color: #fff;
+}
+.hero2 .pwa1 .bd .b2 {
+  background: #0ea5e9;
+  color: #fff;
+}
 .hero2 .pwa1 .bd .b3 {
-  background: #1b1e26;
+  background: #f97316;
   color: #fff;
 }
 .hero2 .pwa1 .bd span:nth-child(2) {
@@ -1387,10 +1393,10 @@
   animation-delay: 0.5s;
 }
 .hero2 .pwa1 .ins {
-  margin: 9px 9px 0;
+  margin: 9px 9px 9px;
   height: 0;
   overflow: hidden;
-  background: #1b1e26;
+  background: #e24b4a;
   color: #fff;
   border-radius: 8px;
   display: grid;
