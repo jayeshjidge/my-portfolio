@@ -409,12 +409,14 @@
   background: var(--ink);
   margin: 3px auto;
 }
+/* ---------- iPhone silhouette (< MOBILE_BP) ---------- */
 .hero2 .r6 .frame.is-mobile {
-  border-radius: 24px;
-  border-width: 3px;
+  border-radius: 30px;
+  border-width: 4px;
+  border-color: #1b1e26;
 }
 .hero2 .r6 .frame.is-mobile .top {
-  height: 15px;
+  height: 16px;
   background: #fff;
 }
 .hero2 .r6 .frame.is-mobile .top .dots,
@@ -422,13 +424,78 @@
   opacity: 0;
 }
 .hero2 .r6 .frame.is-mobile .notch {
+  /* Dynamic Island */
+  top: 5px;
+  width: 34px;
+  height: 8px;
+  border-radius: 6px;
+  background: #1b1e26;
   opacity: 1;
 }
 .hero2 .r6 .frame.is-mobile .col {
   flex-basis: 100%;
 }
 .hero2 .r6 .frame.is-mobile .homebar {
-  height: 9px;
+  height: 10px;
+}
+.hero2 .r6 .frame.is-mobile .homebar i {
+  width: 36px;
+  height: 3px;
+  background: #1b1e26;
+}
+/* side buttons — power (right) + volume rocker (left) */
+.hero2 .r6 .frame.is-mobile::before,
+.hero2 .r6 .frame.is-mobile::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  width: 3px;
+  border-radius: 2px 0 0 2px;
+  background: #1b1e26;
+}
+.hero2 .r6 .frame.is-mobile::before {
+  top: 26%;
+  height: 16px;
+}
+.hero2 .r6 .frame.is-mobile::after {
+  top: 42%;
+  height: 22px;
+}
+
+/* ---------- iPad silhouette (MOBILE_BP–TABLET_BP) ---------- */
+.hero2 .r6 .frame.is-tablet {
+  border-radius: 16px;
+  border-width: 6px;
+  border-color: #9aa1ac;
+  background: #f5f6f8;
+}
+.hero2 .r6 .frame.is-tablet .top {
+  height: 14px;
+  background: #fff;
+}
+.hero2 .r6 .frame.is-tablet .top .dots,
+.hero2 .r6 .frame.is-tablet .top .url {
+  opacity: 0;
+}
+.hero2 .r6 .frame.is-tablet .notch {
+  /* front camera */
+  top: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6b7280;
+  opacity: 1;
+}
+.hero2 .r6 .frame.is-tablet .col {
+  flex-basis: 44%;
+}
+.hero2 .r6 .frame.is-tablet .homebar {
+  height: 8px;
+}
+.hero2 .r6 .frame.is-tablet .homebar i {
+  width: 26px;
+  height: 2.5px;
+  background: #9aa1ac;
 }
 .hero2 .r6 .handle {
   position: absolute;

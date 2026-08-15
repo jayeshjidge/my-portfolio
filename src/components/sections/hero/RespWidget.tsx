@@ -2,20 +2,23 @@
 
 /**
  * RESP-06 — a tiny browser window with a right-edge handle you can drag.
- * As it narrows past the breakpoint it morphs into a phone (border-radius,
- * notch, home-bar, single-column layout).
+ * Three device silhouettes, chosen by width:
+ *   < MOBILE_BP        → iPhone: space-black bezel, Dynamic Island, side buttons
+ *   MOBILE_BP–TABLET_BP → iPad: silver bezel, front camera dot, thin home indicator
+ *   ≥ TABLET_BP         → desktop browser window (traffic-light chrome)
  */
 
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
 const MIN = 90;
 const MAX = 220;
-const BREAKPOINT = 150;
+const MOBILE_BP = 150;
+const TABLET_BP = 190;
 
 const labelFor = (w: number) =>
-  w < BREAKPOINT
+  w < MOBILE_BP
     ? "mobile · 375px"
-    : w < 190
+    : w < TABLET_BP
       ? "tablet · 768px"
       : "desktop · 1440px";
 
@@ -49,7 +52,9 @@ export function RespWidget() {
     <div className={`r6${dragged ? " dragged" : ""}`}>
       <span className="wlabel">{labelFor(w)}</span>
       <div
-        className={`frame${w < BREAKPOINT ? " is-mobile" : ""}`}
+        className={`frame${
+          w < MOBILE_BP ? " is-mobile" : w < TABLET_BP ? " is-tablet" : ""
+        }`}
         style={{ width: w }}
       >
         <div className="top">
