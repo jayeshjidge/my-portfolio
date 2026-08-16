@@ -7,6 +7,7 @@
  */
 
 import { useCallback, useState } from "react";
+import "./DeckWidget.css";
 
 type Project = {
   id: number;
@@ -52,7 +53,7 @@ const PROJECTS: Project[] = [
   },
 ];
 
-export function DeckWidget() {
+export default function DeckWidget() {
   // order[0] = front, order[1..3] = fanned back cards (closest → farthest)
   const [order, setOrder] = useState([0, 1, 2, 3]);
   const cycle = useCallback(

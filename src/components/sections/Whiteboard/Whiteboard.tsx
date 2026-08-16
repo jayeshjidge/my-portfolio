@@ -56,7 +56,7 @@ const PROPS: Prop[] = [
   { name: "Hot beverage", file: "hot_beverage", x: 156, y: 470, w: 66, delay: 0.8, label: "fuel" },
 ];
 
-export function Whiteboard() {
+export default function Whiteboard() {
   const reduce = useReducedMotion();
 
   return (

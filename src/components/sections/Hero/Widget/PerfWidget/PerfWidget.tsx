@@ -9,6 +9,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import "./PerfWidget.css";
 
 const PRIMARY_SRC =
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=360&q=70&auto=format&fit=crop";
@@ -16,7 +17,7 @@ const FALLBACK_SRC = "https://picsum.photos/seed/jidge9/360/220";
 
 type Phase = "idle" | "dl" | "ok";
 
-export function PerfWidget() {
+export default function PerfWidget() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const imgwrapRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("idle");

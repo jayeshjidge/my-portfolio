@@ -1,0 +1,319 @@
+/* ---------------------- RESP-06 — drag to resize -------------------- */
+
+.hero2 .hw--resp {
+  left: 8%;
+  top: 0%;
+  width: 250px;
+  height: 220px;
+  transform: rotate(-4deg);
+}
+
+.hero2 .r6 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+.hero2 .r6 .frame {
+  position: relative;
+  width: 216px;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 12px 24px -14px rgba(20, 24, 40, 0.5);
+  transition: border-radius 0.35s ease, background 0.35s;
+  touch-action: none;
+}
+.hero2 .r6 .top {
+  height: 18px;
+  background: #ecebe6;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 7px;
+  position: relative;
+  transition: height 0.35s, background 0.35s;
+}
+.hero2 .r6 .top .dots {
+  display: flex;
+  gap: 3px;
+  transition: opacity 0.25s;
+}
+.hero2 .r6 .top .dots i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.hero2 .r6 .top .dots i:nth-child(1) {
+  background: #ff5f57;
+}
+.hero2 .r6 .top .dots i:nth-child(2) {
+  background: #febc2e;
+}
+.hero2 .r6 .top .dots i:nth-child(3) {
+  background: #28c840;
+}
+.hero2 .r6 .top .url {
+  margin-left: 6px;
+  height: 7px;
+  flex: 1;
+  background: #dfe1e4;
+  border-radius: 4px;
+  transition: opacity 0.25s;
+}
+.hero2 .r6 .notch {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 5px;
+  border-radius: 4px;
+  background: var(--ink);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.hero2 .r6 .content {
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  transition: padding 0.35s;
+}
+.hero2 .r6 .h-hero {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #c9b8ff, #e9e3fb);
+}
+.hero2 .r6 .h-hero .sun {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffd76a;
+}
+.hero2 .r6 .h-hero .mt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22px;
+  background: linear-gradient(135deg, #8f79df, #b6a4ef);
+  clip-path: polygon(0 100%, 26% 42%, 44% 72%, 68% 22%, 100% 70%, 100% 100%);
+}
+.hero2 .r6 .col {
+  flex: 1 1 44%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: flex-basis 0.35s;
+}
+.hero2 .r6 .cardimg {
+  height: 32px;
+  border-radius: 5px;
+}
+.hero2 .r6 .cardimg.a {
+  background: linear-gradient(135deg, #bfe9cf, #d9f3e2);
+}
+.hero2 .r6 .cardimg.b {
+  background: linear-gradient(135deg, #fbe6b0, #fdefc8);
+}
+.hero2 .r6 .ln {
+  height: 5px;
+  border-radius: 3px;
+  background: #e0e3ea;
+}
+.hero2 .r6 .ln.s {
+  width: 65%;
+}
+.hero2 .r6 .homebar {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.35s;
+}
+.hero2 .r6 .homebar i {
+  display: block;
+  width: 34px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--ink);
+  margin: 3px auto;
+}
+/* ---------- iPhone silhouette (< MOBILE_BP) ---------- */
+.hero2 .r6 .frame.is-mobile {
+  border-radius: 30px;
+  border-width: 4px;
+  border-color: #1b1e26;
+}
+.hero2 .r6 .frame.is-mobile .top {
+  height: 16px;
+  background: #fff;
+}
+.hero2 .r6 .frame.is-mobile .top .dots,
+.hero2 .r6 .frame.is-mobile .top .url {
+  opacity: 0;
+}
+.hero2 .r6 .frame.is-mobile .notch {
+  /* Dynamic Island */
+  top: 5px;
+  width: 34px;
+  height: 8px;
+  border-radius: 6px;
+  background: #1b1e26;
+  opacity: 1;
+}
+.hero2 .r6 .frame.is-mobile .col {
+  flex-basis: 100%;
+}
+.hero2 .r6 .frame.is-mobile .homebar {
+  height: 10px;
+}
+.hero2 .r6 .frame.is-mobile .homebar i {
+  width: 36px;
+  height: 3px;
+  background: #1b1e26;
+}
+/* side buttons — power (right) + volume rocker (left) */
+.hero2 .r6 .frame.is-mobile::before,
+.hero2 .r6 .frame.is-mobile::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  width: 3px;
+  border-radius: 2px 0 0 2px;
+  background: #1b1e26;
+}
+.hero2 .r6 .frame.is-mobile::before {
+  top: 26%;
+  height: 16px;
+}
+.hero2 .r6 .frame.is-mobile::after {
+  top: 42%;
+  height: 22px;
+}
+
+/* ---------- iPad silhouette (MOBILE_BP–TABLET_BP) ---------- */
+.hero2 .r6 .frame.is-tablet {
+  border-radius: 16px;
+  border-width: 6px;
+  border-color: #9aa1ac;
+  background: #f5f6f8;
+}
+.hero2 .r6 .frame.is-tablet .top {
+  height: 14px;
+  background: #fff;
+}
+.hero2 .r6 .frame.is-tablet .top .dots,
+.hero2 .r6 .frame.is-tablet .top .url {
+  opacity: 0;
+}
+.hero2 .r6 .frame.is-tablet .notch {
+  /* front camera */
+  top: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6b7280;
+  opacity: 1;
+}
+.hero2 .r6 .frame.is-tablet .col {
+  flex-basis: 44%;
+}
+.hero2 .r6 .frame.is-tablet .homebar {
+  height: 8px;
+}
+.hero2 .r6 .frame.is-tablet .homebar i {
+  width: 26px;
+  height: 2.5px;
+  background: #9aa1ac;
+}
+.hero2 .r6 .handle {
+  position: absolute;
+  top: 50%;
+  right: -9px;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 38px;
+  border-radius: 7px;
+  background: var(--ink);
+  cursor: ew-resize;
+  z-index: 6;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35);
+  display: grid;
+  place-items: center;
+  touch-action: none;
+}
+.hero2 .r6 .handle::before {
+  content: "";
+  width: 2px;
+  height: 16px;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 3px 0 0 #fff, -3px 0 0 #fff;
+}
+.hero2 .r6 .wlabel {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  font-family: var(--h-mono);
+  font-size: 0.5rem;
+  color: var(--ink-soft);
+  background: #fff;
+  border: 1px solid var(--hair);
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+.hero2 .r6 .hint {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  font-family: var(--h-marker);
+  font-size: 1rem;
+  color: var(--coral);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: h2r6hint 1.7s ease-in-out infinite;
+}
+.hero2 .r6.dragged .hint {
+  display: none;
+}
+
+@keyframes h2r6hint {
+  0%,
+  100% {
+    transform: translateX(-52%);
+  }
+  50% {
+    transform: translateX(-38%);
+  }
+}
+
+/* on shorter/narrower desktops tighten the arc so the fold still fits */
+@media (min-width: 1180px) and (max-width: 1400px) {
+  .hero2 .hw--resp {
+    left: 6%;
+    top: 0%;
+  }
+}
+
+/* responsive reflow — widgets flow into a centered grid below 1180px */
+@media (max-width: 1179px) {
+  .hero2 .hw--resp {
+    width: 210px;
+    min-height: 210px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero2 .r6 .hint {
+    animation: none !important;
+  }
+}

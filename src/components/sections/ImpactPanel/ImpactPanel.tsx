@@ -59,7 +59,7 @@ function Stat({ stat }: { stat: ImpactStat }) {
   );
 }
 
-export function ImpactPanel({ stats }: { stats: ImpactStat[] }) {
+export default function ImpactPanel({ stats }: { stats: ImpactStat[] }) {
   return (
     <article className="panel">
       <div className="panel-head">

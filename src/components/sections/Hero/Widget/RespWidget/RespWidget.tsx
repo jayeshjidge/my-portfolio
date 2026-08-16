@@ -9,6 +9,7 @@
  */
 
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import "./RespWidget.css";
 
 const MIN = 90;
 const MAX = 220;
@@ -22,7 +23,7 @@ const labelFor = (w: number) =>
       ? "tablet · 768px"
       : "desktop · 1440px";
 
-export function RespWidget() {
+export default function RespWidget() {
   const [w, setW] = useState(216);
   const [dragged, setDragged] = useState(false);
   const dragging = useRef(false);

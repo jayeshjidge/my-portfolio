@@ -1,0 +1,225 @@
+/* ---------- PERF-09 — scroll → network chunk → lazy image ---------- */
+
+.hero2 .hw--perf {
+  left: 8%;
+  top: 26%;
+  width: 190px;
+  transform: rotate(-3deg);
+}
+
+.hero2 .scrollcard,
+.hero2 .p9 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hero2 .scrollcard .sarrow,
+.hero2 .p9 .sarrow {
+  margin-top: 6px;
+  font-family: var(--h-mono);
+  font-size: 0.5rem;
+  color: #ef8f2e;
+  font-weight: 600;
+}
+.hero2 .p9 .win {
+  width: 190px;
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 14px 30px -16px rgba(20, 24, 40, 0.5);
+  background: #fff;
+}
+.hero2 .p9 .wbar {
+  height: 22px;
+  background: linear-gradient(#f4f4f0, #e9e9e3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--hair);
+}
+.hero2 .p9 .wbar i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.hero2 .p9 .wbar i:nth-child(1) {
+  background: #ff5f57;
+}
+.hero2 .p9 .wbar i:nth-child(2) {
+  background: #febc2e;
+}
+.hero2 .p9 .wbar i:nth-child(3) {
+  background: #28c840;
+}
+.hero2 .p9 .wbar .url {
+  margin-left: 4px;
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: #fff;
+  border: 1px solid var(--hair);
+}
+.hero2 .p9 .scroll {
+  height: 120px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+.hero2 .p9 .scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.hero2 .p9 .scroll::-webkit-scrollbar-thumb {
+  background: #d8dbe2;
+  border-radius: 6px;
+}
+.hero2 .p9 .para {
+  padding: 9px 11px;
+}
+.hero2 .p9 .para .t {
+  height: 6px;
+  border-radius: 4px;
+  background: #e6e8ee;
+  margin-bottom: 6px;
+}
+.hero2 .p9 .para .t.w90 {
+  width: 90%;
+}
+.hero2 .p9 .para .t.w80 {
+  width: 80%;
+}
+.hero2 .p9 .para .t.w60 {
+  width: 60%;
+}
+.hero2 .p9 .imgwrap {
+  margin: 6px 11px 10px;
+  border-radius: 9px;
+  overflow: hidden;
+  position: relative;
+  height: 118px;
+  background: #eef1f6;
+  border: 1px solid var(--hair);
+}
+.hero2 .p9 .imgwrap .loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #5a76c9;
+  font-family: var(--h-mono);
+  font-size: 0.5rem;
+  transition: opacity 0.3s;
+}
+.hero2 .p9 .imgwrap .spin {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 3px solid #dbe2f3;
+  border-top-color: #7c9dff;
+  animation: h2spin 0.8s linear infinite;
+}
+.hero2 .p9 .imgwrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 0.5s, transform 0.5s;
+}
+.hero2 .p9 .imgwrap.done img {
+  opacity: 1;
+  transform: none;
+}
+.hero2 .p9 .imgwrap.done .loading {
+  opacity: 0;
+}
+.hero2 .p9 .net {
+  width: 190px;
+  margin-top: 8px;
+  background: #0f1116;
+  border-radius: 10px;
+  padding: 9px 11px;
+}
+.hero2 .p9 .net .hd {
+  font-family: var(--h-mono);
+  font-size: 0.44rem;
+  color: #8b93a1;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.hero2 .p9 .net.dl .stat {
+  color: #febc2e;
+}
+.hero2 .p9 .net.ok .stat {
+  color: #7ee787;
+}
+.hero2 .p9 .net .row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero2 .p9 .net .nm {
+  width: 72px;
+  font-family: var(--h-mono);
+  font-size: 0.44rem;
+  color: #cdd2db;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero2 .p9 .net .bar {
+  flex: 1;
+  height: 7px;
+  background: #242833;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.hero2 .p9 .net .bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #7c9dff;
+}
+.hero2 .p9 .net.dl .bar i {
+  animation: h2fillbar 0.95s ease forwards;
+}
+.hero2 .p9 .net .kb {
+  font-family: var(--h-mono);
+  font-size: 0.44rem;
+  color: #7c9dff;
+  width: 28px;
+  text-align: right;
+}
+
+@keyframes h2spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes h2fillbar {
+  to {
+    width: 100%;
+  }
+}
+
+/* on shorter/narrower desktops tighten the arc so the fold still fits */
+@media (min-width: 1180px) and (max-width: 1400px) {
+  .hero2 .hw--perf {
+    left: 5%;
+    top: 28%;
+  }
+}
+
+/* responsive reflow — widgets flow into a centered grid below 1180px */
+@media (max-width: 1179px) {
+  .hero2 .hw--perf {
+    width: auto;
+  }
+}

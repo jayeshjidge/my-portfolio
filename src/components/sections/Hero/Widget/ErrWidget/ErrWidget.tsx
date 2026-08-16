@@ -7,11 +7,12 @@
  *          state; Users & Orders keep working.
  *   OFF → Break Sales → whole widget shakes and swaps to a "💥 App crashed"
  *          fullscreen fallback.
- * Rendered inside a distinctive white "safety card" — see hero.css.
+ * Rendered inside a distinctive white "safety card" — see ErrWidget.css.
  */
 
 import { useEffect, useRef, useState } from "react";
-import { fluent } from "./constants";
+import { fluent } from "../../constants";
+import "./ErrWidget.css";
 
 type Chart = "healthy" | "fallback" | "loading";
 type Status = { text: string; cls: string };
@@ -37,7 +38,7 @@ const STATUS: Record<string, Status> = {
   reload: OFF_MSG,
 };
 
-export function ErrWidget() {
+export default function ErrWidget() {
   const [on, setOn] = useState(true);
   const [chart, setChart] = useState<Chart>("healthy");
   const [crashed, setCrashed] = useState(false);

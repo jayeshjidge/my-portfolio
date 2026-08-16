@@ -1,18 +1,19 @@
 /**
  * StickyNotes — two taped-paper doodle cards that fill the empty
  * spaces around the widget collage. Content only; layout & tilt come
- * from hero.css (.snote / .snote-2 / .snote-3).
+ * from StickyNotes.css (.snote / .snote-2 / .snote-3).
  */
 
 /* eslint-disable @next/next/no-img-element */
 
-import { fluent } from "./constants";
+import { fluent } from "../constants";
+import "./StickyNotes.css";
 
 function Tape() {
   return <span className="snote-tape" aria-hidden="true" />;
 }
 
-export function StickyNotes() {
+export default function StickyNotes() {
   return (
     <div className="hero-stickies" aria-hidden="true">
       {/* pink "What I focus on" checklist */}

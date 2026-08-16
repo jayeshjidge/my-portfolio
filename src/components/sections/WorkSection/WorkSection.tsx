@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { portfolio } from "@/data/portfolio";
-import { ImpactPanel } from "@/components/sections/ImpactPanel";
+import ImpactPanel from "@/components/sections/ImpactPanel/ImpactPanel";
 import { Reveal, RevealGroup, RevealChild } from "@/components/motion/Reveal";
 
-export function WorkSection() {
+export default function WorkSection() {
   return (
     <>
       <Reveal direction="up" amount={0.4}>

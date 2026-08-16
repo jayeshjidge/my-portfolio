@@ -57,7 +57,7 @@ function iconUrlFor(tag: string) {
   return slug ? `https://cdn.simpleicons.org/${slug}` : null;
 }
 
-export function Experience() {
+export default function Experience() {
   const prefersReduced = useReducedMotion();
   const items = portfolio.experience;
 

@@ -1,0 +1,27 @@
+/* Central sketchy browser above the nameplate */
+.hero2 .center-sketch {
+  position: absolute;
+  left: 50%;
+  top: 2%;
+  transform: translateX(-50%);
+  width: min(300px, 21vw);
+  height: auto;
+  z-index: 1;
+  pointer-events: none;
+  color: var(--ink);
+  opacity: 0.92;
+}
+
+/* Hidden on the responsive reflow — the widgets stack cleanly there and
+   extras would just add clutter. */
+@media (max-width: 1179px) {
+  .hero2 .center-sketch {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero2 .center-sketch {
+    animation: none !important;
+  }
+}

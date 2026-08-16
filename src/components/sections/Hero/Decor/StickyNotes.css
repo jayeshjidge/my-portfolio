@@ -1,0 +1,137 @@
+.hero2 .hero-stickies {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.hero2 .snote {
+  position: absolute;
+  padding: 14px 14px 12px;
+  border-radius: 3px;
+  box-shadow: 0 20px 32px -18px rgba(20, 24, 40, 0.35),
+    0 2px 6px rgba(20, 24, 40, 0.08);
+  font-family: var(--h-marker);
+  color: #20242e;
+  line-height: 1.2;
+  transform: rotate(-3deg);
+}
+.hero2 .snote-tape {
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 48px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(20, 24, 40, 0.1);
+  backdrop-filter: blur(2px);
+}
+.hero2 .snote-body {
+  font-size: 0.82rem;
+  margin: 4px 0 0;
+  line-height: 1.22;
+  color: #2d2f37;
+}
+.hero2 .snote-body b {
+  font-weight: 700;
+}
+.hero2 .snote-title {
+  font-family: var(--h-marker);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #20242e;
+}
+.hero2 .snote-checks,
+.hero2 .snote-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--h-marker);
+  font-size: 0.82rem;
+  display: grid;
+  gap: 4px;
+  color: #20242e;
+}
+.hero2 .snote-checks li {
+  padding-left: 22px;
+  position: relative;
+}
+.hero2 .snote-checks li::before {
+  content: "☑";
+  position: absolute;
+  left: 0;
+  color: #2fa363;
+  font-size: 0.9rem;
+  line-height: 1;
+  top: 2px;
+}
+.hero2 .snote-bullets li {
+  padding-left: 16px;
+  position: relative;
+}
+.hero2 .snote-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  background: #20242e;
+  border-radius: 50%;
+}
+
+/* per-note colors + placement */
+.hero2 .snote-2 {
+  background: #ffd6df;
+  top: 61%;
+  left: 32%;
+  width: 174px;
+  transform: rotate(2deg);
+}
+.hero2 .snote-3 {
+  background: #fdf1b7;
+  top: 62%;
+  right: 26%;
+  width: 178px;
+  transform: rotate(-2deg);
+}
+
+.hero2 .snote-smile {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+.hero2 .snote-smile svg {
+  width: 100%;
+  height: 100%;
+}
+.hero2 .snote-star {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+.hero2 .snote-star img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Hidden on the responsive reflow — the widgets stack cleanly there and
+   extras would just add clutter. */
+@media (max-width: 1179px) {
+  .hero2 .hero-stickies {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero2 .snote {
+    animation: none !important;
+  }
+}

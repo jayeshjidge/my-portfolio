@@ -71,7 +71,7 @@ function fadeStops(z: number): [number, number, number, number] {
   return [at(-5600), at(-2800), at(-500), at(250)];
 }
 
-export function FlyThrough() {
+export default function FlyThrough() {
   const prefersReduced = useReducedMotion();
   if (prefersReduced) return <FlyStatic />;
   return <CareerFly />;

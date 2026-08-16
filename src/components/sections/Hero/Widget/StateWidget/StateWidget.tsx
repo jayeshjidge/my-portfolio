@@ -6,8 +6,9 @@
  */
 
 import { useState } from "react";
+import "./StateWidget.css";
 
-export function StateWidget() {
+export default function StateWidget() {
   const [count, setCount] = useState(0);
   const [renders, setRenders] = useState(1);
   const interacted = renders > 1;

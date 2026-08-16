@@ -1,8 +1,8 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Experience } from "@/components/sections/Experience";
-import { Hero } from "@/components/sections/Hero";
-import { Whiteboard } from "@/components/sections/Whiteboard";
+import Experience from "@/components/sections/Experience/Experience";
+import Hero from "@/components/sections/Hero/Hero";
+import Whiteboard from "@/components/sections/Whiteboard/Whiteboard";
 
 export default function HomePage() {
   return (
@@ -18,8 +18,8 @@ export default function HomePage() {
         <Header />
         <main>
           <Hero />
-          <Whiteboard />
           <Experience />
+          <Whiteboard />
           <Footer />
         </main>
       </div>

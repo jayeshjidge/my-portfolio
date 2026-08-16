@@ -6,9 +6,11 @@
  * sparkles, hearts and a crown.
  *
  * All doodles are lightweight inline SVGs styled via CSS classes in
- * hero.css. The sketch-wobble is inherited from the shared `#hero-sketch`
- * filter that SketchDefs already renders in this section.
+ * HeroDecor.css. The sketch-wobble is inherited from the shared
+ * `#hero-sketch` filter that SketchDefs already renders in this section.
  */
+
+import "./HeroDecor.css";
 
 /* Little 4-point sparkle burst. */
 function Sparkle({ className }: { className?: string }) {
@@ -163,7 +165,7 @@ function Heart({ className, color = "#a78bfa" }: { className?: string; color?: s
   );
 }
 
-export function HeroDecor() {
+export default function HeroDecor() {
   return (
     <div className="hero-decor" aria-hidden="true">
       {/* top-left fluffy cloud */}

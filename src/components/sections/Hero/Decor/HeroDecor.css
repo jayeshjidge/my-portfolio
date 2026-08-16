@@ -1,0 +1,201 @@
+/* Decoration layer wrapper */
+.hero2 .hero-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  color: var(--ink);
+}
+.hero2 .hero-decor .decor {
+  position: absolute;
+  color: inherit;
+}
+
+/* --- clouds / crown / plane / curly / brackets / dots --- */
+.hero2 .decor.cloud {
+  color: #b0b7c2;
+}
+.hero2 .d-cloud {
+  top: 1%;
+  left: 1%;
+  width: 48px;
+  height: auto;
+  animation: h2float 8s ease-in-out infinite;
+}
+.hero2 .d-crown {
+  right: 22%;
+  top: 5%;
+  font-size: 22px;
+  transform: rotate(-10deg);
+  animation: h2float 6s ease-in-out infinite;
+}
+.hero2 .d-plane {
+  top: 15%;
+  left: 36%;
+  width: 74px;
+  height: auto;
+  transform: rotate(-6deg);
+  animation: h2plane 9s ease-in-out infinite;
+}
+
+/* --- arrows --- */
+.hero2 .d-loop {
+  top: 11%;
+  left: 35%;
+  width: 84px;
+  height: auto;
+}
+.hero2 .d-ocurl {
+  top: 19%;
+  left: 61%;
+  width: 46px;
+  height: auto;
+}
+.hero2 .d-darrow {
+  top: 6%;
+  left: 68%;
+  width: 86px;
+  height: auto;
+}
+.hero2 .d-deckarrow {
+  /* left-margin placement, pointing up-right into the deck — the
+     restored (bigger) card now extends almost to the fold, so there's
+     no clear room left below it for this arrow. */
+  top: 63%;
+  left: 2%;
+  width: 46px;
+  height: auto;
+}
+.hero2 .d-squiggle {
+  top: 44%;
+  left: 65%;
+  width: 64px;
+  height: auto;
+}
+
+.hero2 .d-code {
+  top: 47%;
+  right: 13%;
+  width: 46px;
+  height: auto;
+  color: var(--ink);
+}
+.hero2 .d-dots {
+  color: #b0b7c2;
+  width: 22px;
+  height: 22px;
+}
+.hero2 .d-dots-1 {
+  top: 61%;
+  left: 2%;
+}
+.hero2 .d-dots-2 {
+  top: 48%;
+  left: 69%;
+}
+
+/* --- hearts --- */
+.hero2 .d-heart {
+  width: 22px;
+  height: 22px;
+}
+.hero2 .d-heart-1 {
+  top: 62%;
+  left: 47%;
+  transform: rotate(-14deg);
+}
+.hero2 .d-heart-2 {
+  top: 45%;
+  left: 41%;
+  transform: rotate(8deg);
+}
+
+/* --- sparkles --- */
+.hero2 .decor.sparkle {
+  color: #fbcf3c;
+  width: 14px;
+  height: 14px;
+  animation: h2twinkle 2.4s ease-in-out infinite;
+}
+.hero2 .d-sp-1 {
+  top: 9%;
+  left: 28%;
+  width: 20px;
+  height: 20px;
+  animation-delay: 0.2s;
+}
+.hero2 .d-sp-2 {
+  top: 22%;
+  right: 22%;
+  width: 16px;
+  height: 16px;
+  animation-delay: 0.6s;
+}
+.hero2 .d-sp-3 {
+  top: 4%;
+  left: 62%;
+  width: 14px;
+  height: 14px;
+  animation-delay: 0.9s;
+}
+.hero2 .d-sp-4 {
+  top: 56%;
+  right: 24%;
+  width: 14px;
+  height: 14px;
+  animation-delay: 1.2s;
+}
+.hero2 .d-sp-5 {
+  top: 30%;
+  left: 25%;
+  width: 12px;
+  height: 12px;
+  color: #6f83ff;
+  animation-delay: 1.5s;
+}
+
+@keyframes h2twinkle {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+@keyframes h2float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes h2plane {
+  0% {
+    transform: translate(0, 0) rotate(-8deg);
+  }
+  50% {
+    transform: translate(10px, -8px) rotate(-4deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(-8deg);
+  }
+}
+
+/* Hidden on the responsive reflow — the widgets stack cleanly there and
+   extras would just add clutter. */
+@media (max-width: 1179px) {
+  .hero2 .hero-decor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero2 .decor {
+    animation: none !important;
+  }
+}

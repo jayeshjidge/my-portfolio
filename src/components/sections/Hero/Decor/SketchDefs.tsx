@@ -2,7 +2,7 @@
  * Sketch filters — hand-drawn wobble for the highlight, brackets, and doodle.
  * Rendered once per Hero, referenced by CSS `filter: url(#hero-rough)` etc.
  */
-export function SketchDefs() {
+export default function SketchDefs() {
   return (
     <svg
       width="0"

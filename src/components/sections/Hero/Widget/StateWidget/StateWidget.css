@@ -1,0 +1,150 @@
+/* --------------------- STATE-06 — useState card -------------------- */
+
+.hero2 .hw--state {
+  right: 8%;
+  top: 26%;
+  width: 198px;
+  transform: rotate(3deg);
+}
+
+.hero2 .s6 {
+  width: 198px;
+}
+.hero2 .s6 .code {
+  background: #1b1e26;
+  padding: 12px 13px;
+  border-radius: 11px;
+  font-family: var(--h-mono);
+  font-size: 0.58rem;
+  line-height: 1.7;
+  color: #e6e8ee;
+  box-shadow: 0 12px 24px -14px rgba(20, 24, 40, 0.5);
+  transition: box-shadow 0.25s;
+}
+.hero2 .s6.render .code {
+  box-shadow: 0 0 0 2px #9a86e0, 0 14px 28px -12px rgba(154, 134, 224, 0.55);
+}
+.hero2 .s6 .code .cmt {
+  color: #8b93a1;
+}
+.hero2 .s6 .code .kw {
+  color: #c9b8ff;
+}
+.hero2 .s6 .code .cv {
+  color: #7ee787;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.hero2 .s6 .ctrl {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  justify-content: center;
+  padding: 11px 8px 6px;
+}
+.hero2 .s6 .step {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--hair);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.hero2 .s6 .step button {
+  font: inherit;
+  font-family: var(--h-mono);
+  width: 23px;
+  height: 26px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: 0.15s;
+}
+.hero2 .s6 .step .minus {
+  background: #fdecec;
+  color: #a32d2d;
+}
+.hero2 .s6 .step .minus:hover {
+  background: #f8dada;
+}
+.hero2 .s6 .step .plus {
+  background: #eaf3de;
+  color: #3b6d11;
+}
+.hero2 .s6 .step .plus:hover {
+  background: #dcecca;
+}
+.hero2 .s6 .step .val {
+  min-width: 28px;
+  text-align: center;
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 0 4px;
+}
+.hero2 .s6 .update {
+  font: inherit;
+  font-family: var(--h-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 8px;
+  border: none;
+  background: #6a5acd;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #4a3fa0;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.hero2 .s6 .update:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #4a3fa0;
+}
+.hero2 .s6 .renders {
+  text-align: center;
+  font-family: var(--h-mono);
+  font-size: 0.48rem;
+  color: var(--ink-faint);
+  padding-bottom: 6px;
+}
+.hero2 .s6 .renders b {
+  color: #6a5acd;
+}
+.hero2 .s6 .rb {
+  margin-left: 6px;
+  color: #6a5acd;
+  opacity: 0;
+}
+.hero2 .s6.render .rb {
+  animation: h2rbpop 0.6s ease;
+}
+
+@keyframes h2rbpop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* on shorter/narrower desktops tighten the arc so the fold still fits */
+@media (min-width: 1180px) and (max-width: 1400px) {
+  .hero2 .hw--state {
+    right: 5%;
+    top: 28%;
+  }
+}
+
+/* responsive reflow — widgets flow into a centered grid below 1180px */
+@media (max-width: 1179px) {
+  .hero2 .hw--state {
+    width: auto;
+  }
+}

@@ -7,9 +7,10 @@
  * 3.8s CSS loop.
  */
 
-import { fluent } from "./constants";
+import { fluent } from "../../constants";
+import "./PwaWidget.css";
 
-export function PwaWidget() {
+export default function PwaWidget() {
   return (
     <div className="pwa1">
       <div className="win">

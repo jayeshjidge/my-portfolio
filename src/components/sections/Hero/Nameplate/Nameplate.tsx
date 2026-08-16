@@ -5,9 +5,9 @@
  * story widgets are arranged around.
  */
 
-import { Dashes } from "./SketchDefs";
+import { Dashes } from "../Decor/SketchDefs";
 
-export function Nameplate() {
+export default function Nameplate() {
   return (
     <>
       <div className="center">

@@ -1,10 +1,12 @@
 /**
  * CenterSketch — the big hand-drawn browser wireframe that sits above
  * the nameplate. All strokes wobble via the shared `#hero-sketch`
- * filter. Positioned & sized in hero.css (.center-sketch).
+ * filter. Positioned & sized in CenterSketch.css.
  */
 
-export function CenterSketch() {
+import "./CenterSketch.css";
+
+export default function CenterSketch() {
   return (
     <svg
       className="center-sketch"
