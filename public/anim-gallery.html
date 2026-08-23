@@ -426,15 +426,83 @@
   .eb .status{margin-top:8px;text-align:center;font-family:var(--mono);font-size:.44rem;color:var(--ink-soft);min-height:11px;line-height:1.3;padding:0 4px}
   .eb .status.ok{color:#3b6d11}.eb .status.bad{color:#a32d2d}
 
-  /* ============ PWA (kept) ============ */
-  .gpwa .win{width:150px}
-  .gpwa .scr{height:44px;background:linear-gradient(135deg,#dfeafe,#f0f5ff);display:grid;place-items:center;font-family:var(--mono);font-weight:600;color:#3a6ea5;letter-spacing:.14em;font-size:.6rem}
-  .gpwa .bd{display:flex;gap:4px;justify-content:center;padding:7px 6px 0}
-  .gpwa .bd span{font-size:.44rem;font-weight:700;padding:3px 5px;border-radius:5px;background:#eef2fb;color:#3a5a86;opacity:0;animation:gpb 3.6s ease-in-out infinite}
-  .gpwa .bd span:nth-child(2){animation-delay:.2s}.gpwa .bd span:nth-child(3){animation-delay:.4s}
-  .gpwa .ins{margin:7px 8px 9px;height:0;overflow:hidden;background:var(--ink);color:#fff;border-radius:6px;display:grid;place-items:center;font-size:.5rem;font-weight:700;animation:gpi 3.6s ease-in-out infinite}
-  @keyframes gpb{0%,20%{opacity:0;transform:translateY(3px)}40%,90%{opacity:1;transform:none}100%{opacity:0}}
-  @keyframes gpi{0%,45%{height:0}60%,92%{height:22px}100%{height:0}}
+  /* ============ PWA — Slide to Install ============ */
+  /* ONE fixed box shared by both states → flipping to success causes zero CLS.
+     width is fluid (max-capped) and the slide travel is measured live in JS,
+     so the widget never breaks when its cell resizes. */
+  .pwx{position:relative;width:100%;max-width:206px;height:202px;background:#fff;border:1px solid var(--hair);border-radius:16px;padding:14px;box-shadow:0 10px 24px -14px rgba(20,24,40,.4);display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+  .pwx .hd{display:flex;align-items:center;gap:9px}
+  .pwx .ico{width:38px;height:38px;flex-shrink:0;border-radius:11px;background:var(--amber);box-shadow:0 4px 10px -5px rgba(20,24,40,.35);display:grid;place-items:center;font-size:1.1rem}
+  .pwx .tt{font-weight:800;font-size:.74rem;color:var(--ink);line-height:1.1}
+  .pwx .sub{font-size:.5rem;color:var(--ink-soft);margin-top:3px;line-height:1.2}
+  .pwx .track{position:relative;height:42px;border-radius:12px;background:#ffe3ea;border:2px dotted #e79bac;overflow:hidden}
+  .pwx .fill{position:absolute;left:4px;top:4px;bottom:4px;width:30px;border-radius:8px;background:#ff9db1;z-index:1}
+  /* "Slide to install" hint centred in the track — fades out as you slide */
+  .pwx .cta{position:absolute;inset:0;display:grid;place-items:center;z-index:2;pointer-events:none}
+  .pwx .cta .a{font-family:var(--font);font-size:.6rem;font-weight:700;letter-spacing:.02em;color:#c76b82;white-space:nowrap}
+  .pwx .cta .b{display:none}
+  /* ›› slide-direction hint at the track's right edge */
+  .pwx .chev{position:absolute;right:12px;top:50%;transform:translateY(-50%);z-index:2;color:#c76b82;font-family:var(--font);font-weight:800;font-size:.66rem;letter-spacing:1px;pointer-events:none}
+  .pwx .thumb{position:absolute;left:4px;top:4px;width:34px;height:34px;border-radius:9px;background:#fff;box-shadow:0 2px 6px -2px rgba(20,24,40,.4);display:flex;align-items:center;justify-content:center;font-size:1.05rem;z-index:4;cursor:grab;touch-action:none;animation:pwxnudge 2.6s ease-in-out infinite}
+  /* idle "drag me" hint — pauses on hover / while dragging / once installed so it never fights the drag */
+  .pwx .thumb:hover,.pwx.grabbing .thumb,.pwx.done .thumb{animation:none}
+  @keyframes pwxnudge{0%,55%,100%{transform:translateX(0)}64%{transform:translateX(5px)}73%{transform:translateX(0)}83%{transform:translateX(3px)}91%{transform:translateX(0)}}
+  /* inline SVG rocket pointing right — fixed viewBox, pixel-centred everywhere */
+  .pwx .thumb .rk{display:block;width:22px;height:22px}
+  .pwx .thumb .trail{position:absolute;right:100%;top:50%;transform:translateY(-50%);margin-right:4px;width:17px;height:13px;opacity:0;transition:opacity .12s ease}
+  .pwx .thumb .trail i{position:absolute;right:0;height:2.5px;border-radius:2px;background:rgba(255,255,255,.95);box-shadow:0 0 3px rgba(255,255,255,.6)}
+  .pwx .thumb .trail i:nth-child(1){top:0;width:15px}
+  .pwx .thumb .trail i:nth-child(2){top:5px;width:9px}
+  .pwx .thumb .trail i:nth-child(3){top:10px;width:15px}
+  .pwx.grabbing .thumb{cursor:grabbing}
+  /* feature chips — dotted borders + pastel fills (homepage sketch palette) */
+  /* feature row — minimal, pastel icon dots + hairline dividers */
+  .pwx .feats{display:flex;justify-content:center;margin-top:2px}
+  .pwx .feats .feat{flex:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 3px;text-align:center}
+  .pwx .feats .feat+.feat::before{content:"";position:absolute;left:0;top:12%;bottom:12%;width:1px;background:var(--hair)}
+  .pwx .feats .feat i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:.58rem;line-height:1}
+  .pwx .feats .feat b{font-family:var(--font);font-weight:600;font-size:.42rem;color:var(--ink-soft);line-height:1.15}
+  .pwx .feats .f1 i{background:var(--amber)}
+  .pwx .feats .f2 i{background:var(--sky)}
+  .pwx .feats .f3 i{background:var(--mint)}
+  /* give this card's gallery cell room for the taller fixed box (static → no CLS) */
+  .va.pwa .vstage{height:auto;min-height:230px;padding:12px 0;overflow:visible}
+  /* ---- installed success view: mini phone + "You're all set!" (homepage pastel system) ---- */
+  .pwx .okview{position:absolute;inset:0;z-index:6;background:#fff;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:11px;text-align:center;opacity:0;transform:scale(.96);pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+  .pwx.done .okview{opacity:1;transform:none;pointer-events:auto}
+  .pwx .okphonewrap{position:relative;flex-shrink:0}
+  .pwx .okphone{position:relative;width:66px;height:56px;border-radius:12px 12px 4px 4px;background:#f5f3ec;border:2px solid #e6e2d8;padding:0 8px;overflow:hidden}
+  .pwx .okphone::before{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);width:16px;height:3px;border-radius:2px;background:#dcd7cb}
+  .pwx .okgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:13px}
+  .pwx .okgrid i{aspect-ratio:1;border-radius:6px;background:#e6e2d8}
+  .pwx .okgrid .japp{position:relative;aspect-ratio:1;border-radius:7px;background:var(--coral);display:grid;place-items:center;color:#fff;font-weight:800;font-size:.58rem;box-shadow:0 0 0 3px #fff,0 3px 7px -2px rgba(255,106,82,.75)}
+  .pwx .okgrid .japp::after{content:"";position:absolute;inset:-2px;border-radius:9px;border:2px solid var(--coral);opacity:0;pointer-events:none}
+  .pwx .jspk{position:absolute;line-height:1;opacity:0}
+  .pwx .jspk.a{top:-3px;left:11px;color:var(--coral);font-size:.5rem}
+  .pwx .jspk.b{top:-5px;right:13px;color:#ffb340;font-size:.42rem}
+  .pwx .jspk.c{top:15px;right:1px;color:#ffd23f;font-size:.4rem}
+  .pwx .okh{font-weight:800;font-size:.84rem;color:var(--ink);line-height:1.1;letter-spacing:-.01em}
+  .pwx .oks{font-size:.52rem;color:var(--ink-soft);line-height:1.5;margin-top:2px}
+  .pwx .okbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid #f2cabf;background:#fff;color:var(--ink);font-family:var(--font);font-weight:700;font-size:.56rem;padding:7px 12px;border-radius:9px;cursor:pointer;box-shadow:0 3px 8px -5px rgba(20,24,40,.35);transition:background .2s,border-color .2s}
+  .pwx .okbtn:hover{background:#fff6f4;border-color:#eeb6a8}
+  .pwx .okbtn .gi{display:grid;grid-template-columns:1fr 1fr;gap:1.5px;width:9px;height:9px}
+  .pwx .okbtn .gi i{background:currentColor;border-radius:1.5px}
+  .pwx .okclose{background:none;border:none;font-family:var(--font);font-weight:700;font-size:.54rem;color:var(--ink-soft);cursor:pointer;padding:1px 6px;border-radius:6px}
+  .pwx .okclose:hover{color:var(--ink)}
+  .pwx.done .okphonewrap{animation:okpop .55s cubic-bezier(.2,1.5,.4,1) both}
+  .pwx.done .jspk{animation:jsp .5s .22s ease both}
+  .pwx.done .jspk.b{animation-delay:.3s}.pwx.done .jspk.c{animation-delay:.26s}
+  @keyframes okpop{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+  @keyframes jsp{0%{opacity:0;transform:scale(.3)}60%{opacity:1;transform:scale(1.2)}100%{opacity:.9;transform:scale(1)}}
+  /* "View on Home Screen" → spotlight the freshly-installed app */
+  .pwx.viewed .okphone{animation:phonefoc .7s ease}
+  .pwx.viewed .okgrid i{animation:dimtile .7s ease}
+  .pwx.viewed .japp{animation:jbounce .7s cubic-bezier(.2,1.4,.4,1)}
+  .pwx.viewed .japp::after{animation:jring .7s ease}
+  @keyframes phonefoc{0%,100%{transform:scale(1)}45%{transform:scale(1.06)}}
+  @keyframes dimtile{0%,100%{opacity:1}45%{opacity:.4}}
+  @keyframes jbounce{0%,100%{transform:translateY(0) scale(1)}30%{transform:translateY(-6px) scale(1.14)}65%{transform:translateY(0) scale(1)}}
+  @keyframes jring{0%{opacity:.85;transform:scale(.7)}100%{opacity:0;transform:scale(1.7)}}
 
   /* ============ FIGMA (kept) ============ */
   .gfig{position:relative;width:150px;height:112px}
@@ -560,7 +628,7 @@
       <div class="stitle"><h2>Kept as-is</h2><span class="tag">your favourites</span></div>
       <p class="sdesc">You liked these — keeping them exactly.</p>
       <div class="variants">
-        <div class="va"><div class="vstage"><div class="gpwa"><div class="win"><div class="wbar"><i></i><i></i><i></i></div><div class="scr">www</div><div class="bd"><span>Offline</span><span>Install</span><span>Push</span></div><div class="ins">Install app ⤓</div></div></div></div><div class="vfoot"><span class="vid">PWA-01</span><span class="vcap">Installable app</span></div></div>
+        <div class="va pwa"><div class="vstage"><div class="pwx"><div class="hd"><div class="ico">⚡</div><div><div class="tt">Install our PWA</div><div class="sub">Slide the icon to install</div></div></div><div class="track"><div class="fill"></div><div class="cta"><span class="a">Slide to install</span></div><span class="chev">›››</span><div class="thumb"><span class="trail"><i></i><i></i><i></i></span><svg class="rk" viewBox="4 4.5 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M18.5 12C16.5 9.2 12.5 8.2 8.5 8.2V15.8C12.5 15.8 16.5 14.8 18.5 12Z" fill="#eef1f6" stroke="#2c313c" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 8.4 6.2 5.4 9.2 10Z" fill="#ff6a52" stroke="#2c313c" stroke-width="1" stroke-linejoin="round"/><path d="M9 15.6 6.2 18.6 9.2 14Z" fill="#ff6a52" stroke="#2c313c" stroke-width="1" stroke-linejoin="round"/><path d="M8.5 10 4.5 12 8.5 14Z" fill="#ffb84d" stroke="#2c313c" stroke-width=".9" stroke-linejoin="round"/><circle cx="12.6" cy="12" r="1.9" fill="#9cccff" stroke="#2c313c" stroke-width="1"/></svg></div></div><div class="feats"><div class="feat f1"><i>⚡</i><b>Fast Access</b></div><div class="feat f2"><i>☁️</i><b>Works Offline</b></div><div class="feat f3"><i>📱</i><b>App-like Experience</b></div></div><div class="okview"><div class="okphonewrap"><div class="okphone"><div class="okgrid"><i></i><div class="japp">J</div><i></i><i></i><i></i><i></i></div></div><span class="jspk a">✦</span><span class="jspk b">✦</span><span class="jspk c">✦</span></div><div class="oktxt"><div class="okh">You're all set!</div><div class="oks">Look for Jayesh App<br>on your home screen.</div></div><button class="okbtn"><span class="gi"><i></i><i></i><i></i><i></i></span>View on Home Screen</button><button class="okclose">Close</button></div></div></div><div class="vfoot"><span class="vid">PWA-01</span><span class="vcap">Slide to install PWA</span></div></div>
         <div class="va"><div class="vstage"><div class="gfig"><div class="fr f1"><div class="b"><img src="https://cdn.simpleicons.org/figma" alt=""></div><div class="c"><i></i><i></i></div></div><div class="fr f2"><div class="b"><img src="https://cdn.simpleicons.org/figma" alt=""></div><div class="c"><i></i><i></i></div></div><div class="fr f3"><div class="b"><img src="https://cdn.simpleicons.org/figma" alt=""></div><div class="c"><i></i></div></div></div></div><div class="vfoot"><span class="vid">FIG-01</span><span class="vcap">Figma file stack</span></div></div>
       </div>
     </section>
@@ -681,6 +749,42 @@
       comp.classList.remove('rr'); void comp.offsetWidth; comp.classList.add('rr');
       const st=r.closest('.vstage'); if(st) st.classList.add('played');
     });
+  });
+  // PWA-01 — drag the rocket to install → "You're all set!" success screen.
+  // Travel is measured from the live track width, so any card resize just works.
+  document.querySelectorAll('.pwx').forEach(pwx=>{
+    const thumb=pwx.querySelector('.thumb'), fill=pwx.querySelector('.fill');
+    const cta=pwx.querySelector('.cta'), trail=pwx.querySelector('.trail'), track=pwx.querySelector('.track'), chev=pwx.querySelector('.chev');
+    const START=4, THUMB=34;
+    const L=(a,b,k)=>Math.round(a+(b-a)*k);
+    const PINK=[255,157,177], GREEN=[87,192,106];
+    const col=k=>'rgb('+L(PINK[0],GREEN[0],k)+','+L(PINK[1],GREEN[1],k)+','+L(PINK[2],GREEN[2],k)+')';
+    let dragging=false, sx=0, x=0, done=false, tv=130;
+    const measure=()=>{ tv=Math.max(40, track.clientWidth - THUMB - START*2); };
+    const paint=()=>{ const k=tv?Math.max(0,Math.min(1,x/tv)):0;
+      thumb.style.transform='translateX('+x+'px)';
+      fill.style.width=(THUMB+x)+'px';
+      fill.style.background=col(k);
+      const fade=String(Math.max(0,1-k*1.5));
+      cta.style.opacity=fade; if(chev) chev.style.opacity=fade; };
+    const setX=px=>{ x=Math.max(0,Math.min(tv,px)); paint(); if(dragging&&trail) trail.style.opacity=String(Math.min(1,(x/tv)*2)); };
+    const glide=s=>{ thumb.style.transition='transform '+s+' ease'; fill.style.transition='width '+s+' ease,background '+s+' ease';
+      setTimeout(()=>{thumb.style.transition='';fill.style.transition='';},parseFloat(s)*1000+40); };
+    const springBack=()=>{ glide('.3s'); setX(0); };
+    const reset=()=>{ done=false; pwx.classList.remove('done'); measure(); glide('.35s'); setX(0); };
+    const complete=()=>{ done=true; pwx.classList.add('done'); glide('.2s'); x=tv; paint(); if(trail) trail.style.opacity='0'; };
+    thumb.addEventListener('pointerdown',e=>{ if(done) return;
+      measure(); pwx.classList.add('grabbing'); dragging=true; sx=e.clientX; x=0; paint();
+      try{thumb.setPointerCapture(e.pointerId);}catch(_){}; e.preventDefault();
+      const st=pwx.closest('.vstage'); if(st) st.classList.add('played'); });
+    thumb.addEventListener('pointermove',e=>{ if(dragging) setX(e.clientX-sx); });
+    const end=e=>{ if(!dragging) return; dragging=false; pwx.classList.remove('grabbing');
+      try{thumb.releasePointerCapture(e.pointerId);}catch(_){}; if(trail) trail.style.opacity='0';
+      if(x>=tv*0.82) complete(); else springBack(); };
+    thumb.addEventListener('pointerup',end); thumb.addEventListener('pointercancel',end);
+    const closeBtn=pwx.querySelector('.okclose'); if(closeBtn) closeBtn.addEventListener('click',reset);
+    const viewBtn=pwx.querySelector('.okbtn');
+    if(viewBtn) viewBtn.addEventListener('click',()=>{ pwx.classList.remove('viewed'); void pwx.offsetWidth; pwx.classList.add('viewed'); });
   });
   // PERF-05 route tabs → load that chunk
   document.querySelectorAll('.p5 .tabs button').forEach(b=>{

@@ -1,171 +1,506 @@
-/* ---------------- PWA-01 — colorful installable app ---------------- */
+/* ---------------- PWA-01 — slide-to-install widget ---------------- */
 
 .hero2 .hw--pwa {
-  right: 9%;
-  top: 1%;
-  width: 158px;
-  transform: rotate(4deg);
+  right: 7%;
+  top: 0.5%;
+  width: 200px;
+  transform: rotate(3deg);
 }
 
-.hero2 .pwa1 {
-  width: 158px;
-}
-.hero2 .pwa1 .win {
-  width: 158px;
+/* ONE fixed box shared by both states → the flip to success causes zero CLS */
+.pwaslide {
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  height: 200px;
   background: #fff;
-  border: 1px solid rgba(24, 28, 38, 0.1);
-  border-radius: 12px;
-  box-shadow: 0 16px 32px -16px rgba(20, 24, 40, 0.45);
+  border: 1px solid var(--hair);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 12px 28px -16px rgba(20, 24, 40, 0.45);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+.pwaslide .hd {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.pwaslide .ico {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: #fbe6b0;
+  box-shadow: 0 4px 10px -5px rgba(20, 24, 40, 0.35);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+}
+.pwaslide .tt {
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.74rem;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.pwaslide .sub {
+  font-family: var(--h-font);
+  font-size: 0.5rem;
+  color: var(--ink-soft);
+  margin-top: 3px;
+  line-height: 1.2;
+}
+
+.pwaslide .track {
+  position: relative;
+  height: 48px;
+  border-radius: 13px;
+  background: #ffe3ea;
+  border: 2px dotted #e79bac;
   overflow: hidden;
 }
-.hero2 .pwa1 .wbar {
-  height: 22px;
-  background: linear-gradient(#f4f4f0, #e9e9e3);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 0 8px;
-  border-bottom: 1px solid var(--hair);
+.pwaslide .fill {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  bottom: 6px;
+  width: 32px;
+  border-radius: 8px;
+  background: #ff9db1;
+  z-index: 1;
 }
-.hero2 .pwa1 .wbar i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
+/* "Slide to install" hint centred in the track — fades out as you slide */
+.pwaslide .cta {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  pointer-events: none;
 }
-.hero2 .pwa1 .wbar i:nth-child(1) {
-  background: #ff5f57;
+.pwaslide .cta .a {
+  font-family: var(--h-font);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #c76b82;
+  white-space: nowrap;
 }
-.hero2 .pwa1 .wbar i:nth-child(2) {
-  background: #febc2e;
+/* ›› slide-direction hint at the track's right edge */
+.pwaslide .chev {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  color: #c76b82;
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.66rem;
+  letter-spacing: 1px;
+  pointer-events: none;
 }
-.hero2 .pwa1 .wbar i:nth-child(3) {
-  background: #28c840;
-}
-.hero2 .pwa1 .wbar b {
-  margin-left: 6px;
-  font-family: var(--h-mono);
-  font-size: 0.46rem;
-  color: #9098a6;
-  font-weight: 600;
-}
-.hero2 .pwa1 .scr {
-  height: 58px;
-  background: #e24b4a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-.hero2 .pwa1 .scr .appicon {
+.pwaslide .thumb {
+  position: absolute;
+  left: 6px;
+  top: 6px;
   width: 32px;
   height: 32px;
   border-radius: 9px;
-  background: rgba(255, 255, 255, 0.94);
-  display: grid;
-  place-items: center;
-  box-shadow: 0 5px 12px rgba(20, 24, 40, 0.28);
-}
-.hero2 .pwa1 .scr .appicon img {
-  width: 21px;
-  height: 21px;
-}
-.hero2 .pwa1 .scr .wtxt {
-  font-family: var(--h-mono);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.14em;
-  font-size: 0.62rem;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
-}
-.hero2 .pwa1 .bd {
+  background: #fff;
+  box-shadow: 0 2px 6px -2px rgba(20, 24, 40, 0.4);
   display: flex;
-  gap: 5px;
+  align-items: center;
   justify-content: center;
-  padding: 9px 6px 0;
+  z-index: 4;
+  cursor: grab;
+  touch-action: none;
+  animation: pwsnudge 2.6s ease-in-out infinite;
 }
-.hero2 .pwa1 .bd span {
-  font-size: 0.46rem;
-  font-weight: 800;
-  padding: 4px 7px;
-  border-radius: 6px;
+/* idle "drag me" hint — pauses on hover / while dragging / once installed */
+.pwaslide .thumb:hover,
+.pwaslide.grabbing .thumb,
+.pwaslide.done .thumb {
+  animation: none;
+}
+.pwaslide.grabbing .thumb {
+  cursor: grabbing;
+}
+/* inline SVG rocket, sized with padding so it never touches the tile edges */
+.pwaslide .thumb .rk {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.pwaslide .thumb .trail {
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 4px;
+  width: 17px;
+  height: 13px;
   opacity: 0;
-  animation: h2pwab 3.8s ease-in-out infinite;
+  transition: opacity 0.12s ease;
 }
-.hero2 .pwa1 .bd .b1 {
-  background: #22c07a;
-  color: #fff;
+.pwaslide .thumb .trail i {
+  position: absolute;
+  right: 0;
+  height: 2.5px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 3px rgba(255, 255, 255, 0.6);
 }
-.hero2 .pwa1 .bd .b2 {
-  background: #0ea5e9;
-  color: #fff;
+.pwaslide .thumb .trail i:nth-child(1) {
+  top: 0;
+  width: 15px;
 }
-.hero2 .pwa1 .bd .b3 {
-  background: #f97316;
-  color: #fff;
+.pwaslide .thumb .trail i:nth-child(2) {
+  top: 5px;
+  width: 9px;
 }
-.hero2 .pwa1 .bd span:nth-child(2) {
-  animation-delay: 0.25s;
+.pwaslide .thumb .trail i:nth-child(3) {
+  top: 10px;
+  width: 15px;
 }
-.hero2 .pwa1 .bd span:nth-child(3) {
-  animation-delay: 0.5s;
+@keyframes pwsnudge {
+  0%,
+  55%,
+  100% {
+    transform: translateX(0);
+  }
+  64% {
+    transform: translateX(5px);
+  }
+  73% {
+    transform: translateX(0);
+  }
+  83% {
+    transform: translateX(3px);
+  }
+  91% {
+    transform: translateX(0);
+  }
 }
-.hero2 .pwa1 .ins {
-  margin: 9px 9px 9px;
-  height: 0;
-  overflow: hidden;
-  background: #e24b4a;
-  color: #fff;
-  border-radius: 8px;
+
+/* feature row — minimal, pastel icon dots + hairline dividers */
+.pwaslide .feats {
+  display: flex;
+  justify-content: center;
+  margin-top: 2px;
+}
+.pwaslide .feats .feat {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 3px;
+  text-align: center;
+}
+.pwaslide .feats .feat + .feat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12%;
+  bottom: 12%;
+  width: 1px;
+  background: var(--hair);
+}
+.pwaslide .feats .feat i {
+  font-style: normal;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
   display: grid;
   place-items: center;
-  font-family: var(--h-mono);
-  font-size: 0.52rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  animation: h2pwai 3.8s ease-in-out infinite;
+  font-size: 0.58rem;
+  line-height: 1;
 }
-.hero2 .pwa1 .cap {
+.pwaslide .feats .feat b {
+  font-family: var(--h-font);
+  font-weight: 600;
+  font-size: 0.42rem;
+  color: var(--ink-soft);
+  line-height: 1.15;
+}
+.pwaslide .feats .f1 i {
+  background: #fbe6b0;
+}
+.pwaslide .feats .f2 i {
+  background: #cfe6ff;
+}
+.pwaslide .feats .f3 i {
+  background: #bfe9cf;
+}
+
+/* ---- installed success view: mini phone + "You're all set!" ---- */
+.pwaslide .okview {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  background: #fff;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
   text-align: center;
-  font-family: var(--h-mono);
-  font-size: 0.46rem;
-  color: #9098a6;
-  padding: 8px 0 9px;
+  opacity: 0;
+  transform: scale(0.96);
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
 }
-
-@keyframes h2pwab {
-  0%,
-  18% {
+.pwaslide.done .okview {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.pwaslide .okphonewrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.pwaslide .okphone {
+  position: relative;
+  width: 66px;
+  height: 56px;
+  border-radius: 12px 12px 4px 4px;
+  background: #f5f3ec;
+  border: 2px solid #e6e2d8;
+  padding: 0 8px;
+  overflow: hidden;
+}
+.pwaslide .okphone::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+  background: #dcd7cb;
+}
+.pwaslide .okgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+  margin-top: 13px;
+}
+.pwaslide .okgrid i {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: #e6e2d8;
+}
+.pwaslide .okgrid .japp {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 7px;
+  background: var(--coral);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.58rem;
+  box-shadow:
+    0 0 0 3px #fff,
+    0 3px 7px -2px rgba(255, 106, 82, 0.75);
+}
+.pwaslide .okgrid .japp::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 9px;
+  border: 2px solid var(--coral);
+  opacity: 0;
+  pointer-events: none;
+}
+.pwaslide .jspk {
+  position: absolute;
+  line-height: 1;
+  opacity: 0;
+}
+.pwaslide .jspk.a {
+  top: -3px;
+  left: 11px;
+  color: var(--coral);
+  font-size: 0.5rem;
+}
+.pwaslide .jspk.b {
+  top: -5px;
+  right: 13px;
+  color: #ffb340;
+  font-size: 0.42rem;
+}
+.pwaslide .jspk.c {
+  top: 15px;
+  right: 1px;
+  color: #ffd23f;
+  font-size: 0.4rem;
+}
+.pwaslide .okh {
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.84rem;
+  color: var(--ink);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.pwaslide .oks {
+  font-family: var(--h-font);
+  font-size: 0.52rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+.pwaslide .okbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1.5px solid #f2cabf;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--h-font);
+  font-weight: 700;
+  font-size: 0.56rem;
+  padding: 7px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px -5px rgba(20, 24, 40, 0.35);
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+.pwaslide .okbtn:hover {
+  background: #fff6f4;
+  border-color: #eeb6a8;
+}
+.pwaslide .okbtn .gi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5px;
+  width: 9px;
+  height: 9px;
+}
+.pwaslide .okbtn .gi i {
+  background: currentColor;
+  border-radius: 1.5px;
+}
+.pwaslide .okclose {
+  background: none;
+  border: none;
+  font-family: var(--h-font);
+  font-weight: 700;
+  font-size: 0.54rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+.pwaslide .okclose:hover {
+  color: var(--ink);
+}
+.pwaslide.done .okphonewrap {
+  animation: pwspop 0.55s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+.pwaslide.done .jspk {
+  animation: pwsjsp 0.5s 0.22s ease both;
+}
+.pwaslide.done .jspk.b {
+  animation-delay: 0.3s;
+}
+.pwaslide.done .jspk.c {
+  animation-delay: 0.26s;
+}
+@keyframes pwspop {
+  0% {
+    transform: scale(0.5);
     opacity: 0;
-    transform: translateY(3px);
   }
-  38%,
-  88% {
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
     opacity: 1;
-    transform: none;
-  }
-  100% {
-    opacity: 0;
   }
 }
-@keyframes h2pwai {
-  0%,
-  42% {
-    height: 0;
+@keyframes pwsjsp {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
   }
-  58%,
-  90% {
-    height: 26px;
+  60% {
+    opacity: 1;
+    transform: scale(1.2);
   }
   100% {
-    height: 0;
+    opacity: 0.9;
+    transform: scale(1);
   }
 }
 
-/* on shorter/narrower desktops tighten the arc so the fold still fits */
-@media (min-width: 1180px) and (max-width: 1400px) {
-  .hero2 .hw--pwa {
-    right: 6%;
-    top: 1%;
+/* "View on Home Screen" → spotlight the freshly-installed app */
+.pwaslide.viewed .okphone {
+  animation: pwsfoc 0.7s ease;
+}
+.pwaslide.viewed .okgrid i {
+  animation: pwsdim 0.7s ease;
+}
+.pwaslide.viewed .japp {
+  animation: pwsbounce 0.7s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.pwaslide.viewed .japp::after {
+  animation: pwsring 0.7s ease;
+}
+@keyframes pwsfoc {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.06);
+  }
+}
+@keyframes pwsdim {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.4;
+  }
+}
+@keyframes pwsbounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  30% {
+    transform: translateY(-6px) scale(1.14);
+  }
+  65% {
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes pwsring {
+  0% {
+    opacity: 0.85;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
   }
 }
 
@@ -178,14 +513,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero2 .pwa1 .bd span,
-  .hero2 .pwa1 .ins {
-    animation: none !important;
+  .pwaslide .thumb {
+    animation: none;
   }
-  .hero2 .pwa1 .bd span {
+  .pwaslide.done .okphonewrap,
+  .pwaslide.done .jspk {
+    animation: none;
     opacity: 1;
-  }
-  .hero2 .pwa1 .ins {
-    height: 26px;
+    transform: none;
   }
 }
