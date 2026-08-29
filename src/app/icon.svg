@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">
+  <defs>
+    <path id="fTop" d="M 40 150 A 110 110 0 0 1 260 150" />
+    <path id="fBottom" d="M 27 150 A 123 123 0 0 0 273 150" />
+  </defs>
+  <!-- paper disc so the ink stamp reads on any browser-tab colour -->
+  <circle cx="150" cy="150" r="148" fill="#f3f0e9" />
+  <circle cx="150" cy="150" r="143" fill="none" stroke="#20242e" stroke-width="2" />
+  <circle cx="150" cy="150" r="135" fill="none" stroke="#20242e" stroke-width="1" opacity="0.4" />
+
+  <g fill="#20242e" font-family="'JetBrains Mono','Courier New',monospace" font-weight="600">
+    <text font-size="15" letter-spacing="4.5">
+      <textPath href="#fTop" startOffset="50%" text-anchor="middle">SOFTWARE ENGINEER</textPath>
+    </text>
+    <text font-size="13.5" letter-spacing="3">
+      <textPath href="#fBottom" startOffset="50%" text-anchor="middle">BUILDING FOR WEB &amp; MOBILE</textPath>
+    </text>
+  </g>
+
+  <g fill="#20242e" font-family="'Space Grotesk','Arial Black',sans-serif" font-weight="700" font-size="44" text-anchor="middle" letter-spacing="1">
+    <text x="150" y="129" dominant-baseline="central">JAYESH</text>
+    <text x="150" y="171" dominant-baseline="central">JIDGE</text>
+  </g>
+
+  <text x="58" y="156" fill="#20242e" font-size="13" text-anchor="middle" opacity="0.8">✦</text>
+  <text x="242" y="156" fill="#20242e" font-size="13" text-anchor="middle" opacity="0.8">✦</text>
+</svg>

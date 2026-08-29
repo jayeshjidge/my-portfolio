@@ -16,10 +16,11 @@ export default function CircleStamp() {
         aria-label="Jayesh Jidge — Software Engineer · Building for web & mobile"
       >
         <defs>
-          {/* top arc (left → right, over the top) */}
-          <path id="stampTop" d="M 42 150 A 108 108 0 0 1 258 150" />
-          {/* bottom arc (left → right, under the bottom) */}
-          <path id="stampBottom" d="M 46 150 A 104 104 0 0 0 254 150" />
+          {/* top arc — glyphs sit just inside the ring */}
+          <path id="stampTop" d="M 40 150 A 110 110 0 0 1 260 150" />
+          {/* bottom arc — larger radius so the (inward-growing) glyphs land in
+              the same band as the top text, keeping both symmetric to the ring */}
+          <path id="stampBottom" d="M 27 150 A 123 123 0 0 0 273 150" />
         </defs>
 
         <circle cx="150" cy="150" r="143" className="stamp-ring" />
@@ -36,10 +37,22 @@ export default function CircleStamp() {
           </textPath>
         </text>
 
-        <text x="150" y="147" className="stamp-name" textAnchor="middle">
+        <text
+          x="150"
+          y="129"
+          className="stamp-name"
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
           JAYESH
         </text>
-        <text x="150" y="192" className="stamp-name" textAnchor="middle">
+        <text
+          x="150"
+          y="171"
+          className="stamp-name"
+          textAnchor="middle"
+          dominantBaseline="central"
+        >
           JIDGE
         </text>
 
