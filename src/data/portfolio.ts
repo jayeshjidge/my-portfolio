@@ -150,7 +150,7 @@ export const portfolio = {
   ] as PathItem[],
   experience: [
     {
-      company: "Jio Platforms Limited",
+      company: "Jio",
       role: "Software Development Engineer",
       location: "Mumbai, IN",
       when: "2022 — Present",
@@ -239,7 +239,7 @@ export const portfolio = {
   nav: [
     { label: "Home", href: "#home" },
     { label: "Experience", href: "#experience" },
-    { label: "Projects", href: "#projects" },
+    { label: "Lab", href: "#lab" },
     { label: "Contact", href: "#contact" },
   ],
 } as const;

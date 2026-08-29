@@ -2,6 +2,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import Experience from "@/components/sections/Experience/Experience";
 import Hero from "@/components/sections/Hero/Hero";
+import Lab from "@/components/sections/Lab/Lab";
 import Whiteboard from "@/components/sections/Whiteboard/Whiteboard";
 
 export default function HomePage() {
@@ -19,6 +20,7 @@ export default function HomePage() {
         <main>
           <Hero />
           <Experience />
+          <Lab />
           <Whiteboard />
           <Footer />
         </main>

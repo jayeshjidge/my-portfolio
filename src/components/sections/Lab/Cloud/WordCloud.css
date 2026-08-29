@@ -1,0 +1,74 @@
+.lab-cloud-vp {
+  position: relative;
+  width: 100%;
+  /* Mobile/stacked: a 16:11 canvas gives the window its height. Desktop's
+     one-viewport layout overrides this to flex-fill a height-sized window. */
+  aspect-ratio: 16 / 11;
+  /* Query container so words size in cqi and the whole cloud scales together. */
+  container-type: size;
+  overflow: hidden;
+  touch-action: pan-y;
+  background: linear-gradient(180deg, #fdfcf8, #f7f5ee);
+}
+
+/* Faint grid so the canvas reads as a real sheet. */
+.lab-cloud-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(24, 28, 48, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 28, 48, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 78% at 50% 48%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 78% at 50% 48%, #000 55%, transparent 100%);
+}
+
+.lab-cloud-plane {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* transform (scale = zoom) is set inline so its transition fires on change */
+  transform-origin: center center;
+  transition: transform 0.32s var(--ease-out);
+  animation: lab-deck-in 0.4s var(--ease-out) both;
+  will-change: transform;
+}
+
+@keyframes lab-deck-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.lab-wires {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+.lab-wires line {
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 5 6;
+  opacity: 0.55;
+  /* keep the dash crisp regardless of zoom scale on the plane */
+  vector-effect: non-scaling-stroke;
+  animation: lab-wire-in 0.3s var(--ease-out) both;
+}
+
+@keyframes lab-wire-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.55;
+  }
+}

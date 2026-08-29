@@ -1,0 +1,54 @@
+.lab-switch {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 14px;
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  box-shadow: var(--sticker-shadow);
+}
+
+/* Sliding highlight behind the active tab. */
+.lab-switch-thumb {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  width: calc(50% - 7px);
+  border-radius: 10px;
+  background: var(--accent-soft, rgba(124, 58, 237, 0.12));
+  border: 1px solid rgba(124, 58, 237, 0.28);
+  transition: left 0.28s var(--ease-out);
+}
+.lab-switch-thumb[data-active="frontend"] {
+  left: 5px;
+}
+.lab-switch-thumb[data-active="backend"] {
+  left: calc(50% + 2px);
+}
+
+.lab-switch-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  font-family: var(--font-typewriter);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color 0.2s var(--ease);
+}
+.lab-switch-btn.is-on {
+  color: var(--accent-ink, #6d28d9);
+}
+.lab-switch-btn svg {
+  color: currentColor;
+}

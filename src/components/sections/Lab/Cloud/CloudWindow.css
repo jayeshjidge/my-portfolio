@@ -1,0 +1,81 @@
+.lab-window {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 16px;
+  box-shadow: var(--sticker-shadow);
+  /* mac-bar (34) + footer (52) — the non-canvas height. Used by the desktop
+     one-viewport sizing in Lab.css. */
+  --lab-chrome: 86px;
+}
+
+/* Canvas wrapper — holds the cloud and overlays the zoom controls. */
+.lab-window-canvas {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* Footer: legend + hint pill. */
+.lab-window-foot {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  height: 52px;
+  padding: 0 16px;
+  overflow: hidden;
+  background: #faf8f2;
+  border-top: 1px solid var(--ink-hair);
+}
+.lab-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+.lab-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(20, 24, 40, 0.12);
+}
+.lab-tip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  box-shadow: 0 1px 2px rgba(20, 24, 40, 0.06);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+.lab-tip svg {
+  color: #d89a2a;
+}
+
+@media (max-width: 860px) {
+  .lab-window-hint span:last-child {
+    display: none;
+  }
+  .lab-legend {
+    display: none;
+  }
+  .lab-window-foot {
+    justify-content: center;
+  }
+}

@@ -30,7 +30,10 @@ export function Header() {
     if (!el) return; // target not on this page — fall back to default nav
     e.preventDefault();
     setActive(href);
-    if (lenis) lenis.scrollTo(el, { offset: -80 });
+    // Full-viewport sections carry their own top padding for the nav and opt to
+    // snap flush to the top via data-nav-offset.
+    const offset = el.dataset.navOffset ? Number(el.dataset.navOffset) : -80;
+    if (lenis) lenis.scrollTo(el, { offset });
     else el.scrollIntoView({ behavior: "smooth" });
   };
 

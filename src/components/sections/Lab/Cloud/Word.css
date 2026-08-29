@@ -1,0 +1,62 @@
+.lab-word {
+  position: absolute;
+  /* Centre on the (left,top) point. Hover uses the independent `scale`
+     property so it composes with this translate. */
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  padding: 0.05em 0.18em;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-typewriter);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--wc-ink);
+  border-radius: 7px;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.4s var(--ease), scale 0.16s var(--ease),
+    text-shadow 0.28s var(--ease), filter 0.28s var(--ease);
+  will-change: opacity;
+}
+
+.lab-word:hover,
+.lab-word:focus-visible {
+  scale: 1.16;
+}
+.lab-word:active {
+  scale: 0.97;
+}
+.lab-word:focus-visible {
+  outline: none;
+}
+.lab-word:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: -3px -1px;
+  border-radius: 9px;
+  box-shadow: 0 0 0 2px var(--wc-ink);
+  opacity: 0.55;
+}
+
+.lab-word.is-focal {
+  font-weight: 700;
+  text-shadow: 0 2px 0 rgba(224, 82, 74, 0.14);
+}
+
+.lab-word.is-hi {
+  text-shadow: 0 4px 14px var(--wc-soft);
+  filter: saturate(1.14);
+}
+
+.lab-word.is-pinned {
+  background: var(--wc-soft);
+  box-shadow: 0 1px 0 rgba(20, 24, 40, 0.05),
+    0 8px 18px -10px rgba(20, 24, 40, 0.3);
+}
+
+.lab-word.is-dim {
+  filter: saturate(0.7);
+}
