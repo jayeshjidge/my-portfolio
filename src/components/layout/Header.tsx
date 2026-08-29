@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
+import { useLenis } from "lenis/react";
 import { portfolio } from "@/data/portfolio";
 
 export function Header() {
   const [active, setActive] = useState("#home");
+  const lenis = useLenis();
 
   useEffect(() => {
     const onScroll = () => {
       const ids = portfolio.nav.map((n) => n.href.slice(1));
-      let current = "#home";
+      let current = "#home"; // default to Home while near the top of the page
       for (const id of ids) {
         const el = document.getElementById(id);
         if (!el) continue;
@@ -22,6 +24,16 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Smooth-scroll to the section WITHOUT pushing a #hash onto the URL.
+  const onNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+    const el = document.getElementById(href.slice(1));
+    if (!el) return; // target not on this page — fall back to default nav
+    e.preventDefault();
+    setActive(href);
+    if (lenis) lenis.scrollTo(el, { offset: -80 });
+    else el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <header className="topbar is-paper" id="top">
       <nav className="nav-pill" aria-label="Primary">
@@ -29,6 +41,7 @@ export function Header() {
           <a
             key={item.href}
             href={item.href}
+            onClick={(e) => onNavClick(e, item.href)}
             className={active === item.href ? "is-active" : undefined}
           >
             {item.label}

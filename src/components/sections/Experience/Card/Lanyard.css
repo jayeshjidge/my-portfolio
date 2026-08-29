@@ -1,0 +1,69 @@
+/* ---------------- Experience — draggable lanyard rig ---------------- */
+
+.exp-lanyard-rig {
+  position: relative;
+  z-index: 5; /* keep the card above the copy when it swings over it */
+  display: flex;
+  justify-content: center;
+  perspective: 1300px;
+}
+
+.exp-lanyard-swing {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.exp-lanyard-swing.is-grabbing {
+  cursor: grabbing;
+}
+
+/* card face — turns in 3D toward the drag */
+.exp-badge-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* fabric strap carrying the company name, rising out of frame */
+.exp-strap {
+  position: relative;
+  width: 34px;
+  height: clamp(120px, 24vh, 240px);
+  margin-bottom: -6px;
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  box-shadow:
+    inset 0 -10px 16px rgba(0, 0, 0, 0.32),
+    inset 0 8px 12px rgba(255, 255, 255, 0.14),
+    inset 2px 0 3px rgba(255, 255, 255, 0.12),
+    inset -2px 0 3px rgba(0, 0, 0, 0.22);
+}
+.exp-strap-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: nowrap;
+  font-family: var(--font-typewriter);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 8px 0;
+}
+
+.exp-clasp-metal {
+  position: relative;
+  z-index: 3;
+  margin-bottom: -6px;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.4));
+}

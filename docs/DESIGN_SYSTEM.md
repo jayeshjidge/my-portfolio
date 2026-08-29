@@ -124,7 +124,9 @@ Defined in `src/styles/paper.css`. Reuse these; don't invent one-off card styles
 
 ## 7. Imagery & iconography
 
-- **NO personal photos of Jayesh, anywhere.** Substitute objects, illustration, or type. (Hard rule.)
+- **NO personal photos of Jayesh** — substitute objects, illustration, or type. (Hard rule.)
+  **One sanctioned exception:** the Experience section's lanyard ID-badge card (`Experience/Card/IdCard.tsx`)
+  intentionally shows his real photo, since it's a factual "employee badge." Don't remove it there.
 - **3D object props** — free **Fluent Emoji 3D** pack via jsDelivr CDN:
   `https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/<Name>/3D/<snake_name>_3d.png`
   (folder name = sentence case, e.g. `Potted plant`). Reliable, transparent PNGs. Use for plant,

@@ -1,0 +1,170 @@
+/* ---------------- Experience — ambient decorative doodles ---------------- */
+
+.ex-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0; /* behind the chapters/content */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* corner plus marks */
+.ex-plus {
+  position: absolute;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--ink-faint);
+  opacity: 0.45;
+}
+.ex-plus--tl {
+  top: clamp(20px, 5vh, 54px);
+  right: clamp(24px, 8vw, 130px);
+}
+.ex-plus--br {
+  bottom: clamp(30px, 7vh, 74px);
+  right: clamp(24px, 5vw, 70px);
+}
+
+/* dot grids */
+.ex-dots {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  fill: #b8b2d4;
+  opacity: 0.5;
+}
+.ex-dots--a {
+  top: 15%;
+  left: 33%;
+}
+.ex-dots--b {
+  top: 62%;
+  right: 4%;
+}
+
+/* sparkles */
+.ex-spark {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  opacity: 0.85;
+  animation: exTwinkle 3.6s ease-in-out infinite;
+}
+.ex-spark--coral {
+  bottom: 20%;
+  left: 4.5%;
+  fill: var(--coral, #ff6a52);
+}
+.ex-spark--amber {
+  top: 12%;
+  left: 74%;
+  width: 18px;
+  height: 18px;
+  fill: #ffc23d;
+  animation-delay: 0.8s;
+}
+.ex-spark--violet {
+  bottom: 6%;
+  right: 30%;
+  width: 16px;
+  height: 16px;
+  fill: #7b6cf0;
+  animation-delay: 1.6s;
+}
+
+/* paper plane + trail, top-right */
+.ex-plane {
+  position: absolute;
+  top: 8%;
+  right: 3%;
+  width: clamp(90px, 9vw, 128px);
+  height: auto;
+  opacity: 0.9;
+}
+.ex-plane-trail {
+  stroke: var(--ink-faint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+.ex-plane-arrowhead {
+  stroke: var(--ink-faint);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.6;
+}
+.ex-plane-body {
+  animation: exFloat 5s ease-in-out infinite;
+  transform-origin: 18px 18px;
+}
+
+/* curved arrow, bottom-right */
+.ex-arrow {
+  position: absolute;
+  right: 3.5%;
+  bottom: 12%;
+  width: clamp(44px, 4vw, 58px);
+  height: auto;
+  opacity: 0.8;
+}
+
+/* "that's me" note pointing at the card */
+.ex-note {
+  position: absolute;
+  left: clamp(10px, 3vw, 44px);
+  top: 46%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  opacity: 0.9;
+}
+.ex-note-text {
+  font-family: var(--font-marker, "Caveat", cursive);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  transform: rotate(-4deg);
+}
+.ex-note-arrow {
+  width: 52px;
+  height: 38px;
+  margin-left: 18px;
+}
+
+@keyframes exTwinkle {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(0.7);
+    opacity: 0.4;
+  }
+}
+@keyframes exFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-4deg);
+  }
+}
+
+/* keep the collage from cluttering small screens */
+@media (max-width: 900px) {
+  .ex-decor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ex-spark,
+  .ex-plane-body {
+    animation: none;
+  }
+}

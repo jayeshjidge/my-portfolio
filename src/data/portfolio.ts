@@ -47,6 +47,8 @@ export type ExperienceItem = {
   roleFrom: string;
   roleTo: string;
   summary: string;
+  /** Phrases inside `summary` to colour-emphasise (alternating coral/violet). */
+  emphasize?: string[];
   highlights: { value: string; label: string }[];
   bullets: string[];
   stack: string[];
@@ -164,6 +166,7 @@ export const portfolio = {
       roleTo: "#c98bff",
       summary:
         "Building micro frontends and mobile apps that scale to thousands of daily users.",
+      emphasize: ["micro frontends", "mobile apps"],
       highlights: [
         { value: "2K+", label: "Daily users" },
         { value: "40%", label: "Fewer network calls" },
@@ -193,6 +196,7 @@ export const portfolio = {
       roleTo: "#7c9dff",
       summary:
         "Owned a no-code Form Builder and the IMEX CRM on a Laravel stack.",
+      emphasize: ["Form Builder", "IMEX CRM"],
       highlights: [
         { value: "80%", label: "Faster form creation" },
         { value: "E2E", label: "Feature ownership" },
@@ -234,7 +238,7 @@ export const portfolio = {
   },
   nav: [
     { label: "Home", href: "#home" },
-    { label: "Work", href: "#work" },
+    { label: "Experience", href: "#experience" },
     { label: "Projects", href: "#projects" },
     { label: "Contact", href: "#contact" },
   ],

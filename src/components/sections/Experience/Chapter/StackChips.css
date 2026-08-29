@@ -1,0 +1,35 @@
+/* ---------------- Experience — stack chips ---------------- */
+
+.exp-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.exp-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--font-typewriter);
+  font-size: 0.98rem;
+  font-weight: 600;
+  padding: 13px 20px 13px 15px;
+  border-radius: 16px;
+  color: var(--ink);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+  line-height: 1;
+  box-shadow: 0 4px 10px -7px rgba(20, 24, 40, 0.4);
+  transition:
+    transform 0.25s var(--ease-out, ease),
+    box-shadow 0.25s ease;
+}
+.exp-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px -10px rgba(20, 24, 40, 0.5);
+}
+.exp-chip-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+}

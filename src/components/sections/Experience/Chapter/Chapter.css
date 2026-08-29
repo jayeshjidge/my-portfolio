@@ -1,0 +1,91 @@
+/* ---------------- Experience — chapter layout + copy ---------------- */
+
+/* Chapters stack in the same spot and cross-fade */
+.exp-chapter {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(88px, 12vh, 128px) 0 clamp(28px, 5vh, 48px);
+  will-change: opacity;
+}
+
+.exp-chapter-inner {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 92vw);
+  display: grid;
+  grid-template-columns: auto minmax(0, 640px);
+  justify-content: center;
+  align-items: center;
+  gap: clamp(48px, 6vw, 104px);
+}
+
+/* ——— right-hand copy column ——— */
+.exp-copy {
+  min-width: 0;
+  padding-top: 4px;
+  will-change: transform;
+}
+
+.exp-company {
+  font-family: var(--font-typewriter, "Courier Prime", monospace);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 4vw, 3.5rem);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0;
+}
+.exp-role {
+  font-family: var(--font-typewriter);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: var(--ink-soft);
+  margin: 10px 0 0;
+}
+.exp-summary {
+  font-family: var(--font-typewriter);
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 52ch;
+  margin: 14px 0 0;
+  font-weight: 500;
+}
+.exp-summary-em {
+  font-weight: 700;
+}
+
+/* ——— block (Impact / Stack) with wavy hand-drawn label ——— */
+.exp-block {
+  margin-top: clamp(22px, 3vh, 34px);
+}
+.exp-label {
+  display: inline-block;
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #46437a;
+  margin-bottom: 16px;
+  padding-bottom: 7px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='6' viewBox='0 0 40 6'%3E%3Cpath d='M0 3 Q10 0 20 3 T40 3' stroke='%237b6cf0' fill='none' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: 40px 6px;
+}
+
+/* ——— responsive: stack the columns ——— */
+@media (max-width: 900px) {
+  .exp-chapter-inner {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: left;
+    gap: 34px;
+  }
+  .exp-copy {
+    max-width: 92vw;
+  }
+}

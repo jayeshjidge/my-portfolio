@@ -16,6 +16,11 @@
   --font-editorial: "Inter Tight", "Inter", -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
   --font-hand: "Sacramento", "Segoe Script", cursive;
+  /* rough hand-drawn "sketch" face — Experience heading, EXPERIENCE label */
+  --font-sketch: "Gochi Hand", "Caveat", cursive;
+  --font-marker: "Caveat", cursive;
+  /* typewriter monospace — Experience headings */
+  --font-typewriter: "Courier Prime", "Courier New", monospace;
   --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", ui-monospace,
     monospace;
 

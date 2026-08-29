@@ -1,0 +1,38 @@
+/* ---------------- Experience — impact rows (icon + text) ---------------- */
+
+.exp-impact {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+  max-width: 60ch;
+}
+
+.exp-impact-row {
+  display: grid;
+  grid-template-columns: 62px 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.exp-impact-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 5px 12px -6px rgba(20, 24, 40, 0.4);
+}
+.exp-impact-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.exp-impact-text {
+  font-family: var(--font-typewriter);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
