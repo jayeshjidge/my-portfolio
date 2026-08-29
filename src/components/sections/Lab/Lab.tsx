@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * Experiment Lab — a static, interactive technology word cloud with two decks
- * (Frontend / Backend), framed in a warm macOS-style window. Sized to a single
- * viewport height. This file is the composition shell: it owns the shared state
- * (stack, hover, pin, energy, zoom), computes the circular layout + auto-fit
- * zoom, and lays the parts out.
+ * Experiment Lab — an interactive technology mind-map with two decks
+ * (Frontend / Backend). Progressive disclosure: the canvas is the hero; help,
+ * energy and technology details are revealed only on demand (a `?` popover, a
+ * floating energy control, and a floating inspector beside the clicked word).
+ * This file is the composition shell: shared state + layout + auto-fit zoom.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -14,22 +14,21 @@ import { useLenis } from "lenis/react";
 import { DECKS, type StackId } from "./labData";
 import { layoutCircle } from "./layoutCircle";
 import LabHeading from "./Intro/LabIntro";
-import HowToCard from "./Rail/HowToCard";
-import TuneCard from "./Rail/TuneCard";
+import HelpButton from "./Controls/HelpButton";
 import CloudWindow from "./Cloud/CloudWindow";
-import DetailPanel from "./Detail/DetailPanel";
-import StackSwitch from "./Detail/StackSwitch";
+import InspectorCard from "./Detail/InspectorCard";
 import StatStrip from "./Stats/StatStrip";
 import "./Lab.css";
 
 const ZOOM_MIN = 0.6;
-const ZOOM_MAX = 2.4;
+const ZOOM_MAX = 2.2;
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 export default function Lab() {
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const sectionRef = useRef<HTMLElement | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
 
   const [stack, setStack] = useState<StackId>("frontend");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -39,8 +38,6 @@ export default function Lab() {
 
   const deck = DECKS[stack];
 
-  // Circular pack of the currently-visible words (re-packs only when the deck
-  // or the visible SET changes, so dragging within a tier is stable).
   const visibleIds = deck.words.filter((w) => intensity + 1e-6 >= w.reveal).map((w) => w.id);
   const layoutKey = deck.id + "|" + visibleIds.join(",");
   const layout = useMemo(
@@ -48,15 +45,12 @@ export default function Lab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [layoutKey],
   );
-
-  // On any change to the visible set, snap the zoom back to auto-fit (max zoom
-  // that fits everything). Manual zoom is a multiplier on top until then.
-  const [prevKey, setPrevKey] = useState(layoutKey);
-  if (prevKey !== layoutKey) {
-    setPrevKey(layoutKey);
-    setZoomMul(1);
-  }
+  // The base zoom is the auto-fit that packs everything into view; the manual
+  // +/- buttons apply a multiplier on top, snapped back to 1 whenever the
+  // visible set changes (deck swap or energy re-pack — see those handlers).
   const zoom = clamp(layout.fit * zoomMul, ZOOM_MIN, ZOOM_MAX);
+  const zoomIn = () => setZoomMul((m) => Math.min(3, m * 1.18));
+  const zoomOut = () => setZoomMul((m) => Math.max(0.34, m / 1.18));
 
   const pickWord = (id: string) => setActiveId((prev) => (prev === id ? null : id));
   const selectWord = (id: string) => setActiveId(id);
@@ -64,17 +58,22 @@ export default function Lab() {
     setActiveId(null);
     setHoveredId(null);
   };
+  // Changing energy re-packs the cloud (words glide), so drop any selection so
+  // the floating inspector doesn't chase a moving word.
+  const onIntensity = (v: number) => {
+    setIntensity(v);
+    setActiveId(null);
+    setHoveredId(null);
+    setZoomMul(1);
+  };
   const onStackChange = (id: StackId) => {
     setStack(id);
     setActiveId(null);
     setHoveredId(null);
     setZoomMul(1);
   };
-  const zoomIn = () => setZoomMul((m) => Math.min(3, m * 1.18));
-  const zoomOut = () => setZoomMul((m) => Math.max(0.34, m / 1.18));
 
-  // Scroll-snap: as the section scrolls ~40% into view, take over and ease it
-  // flush to the top, only while entering, and never during nav scrolls.
+  // Scroll-snap: ease the section flush to the top as it scrolls into view.
   useEffect(() => {
     const el = sectionRef.current;
     if (!lenis || reduce || !el) return;
@@ -89,7 +88,6 @@ export default function Lab() {
     window.addEventListener("touchstart", markInput, opts);
     window.addEventListener("touchmove", markInput, opts);
     window.addEventListener("keydown", markInput);
-
     const onScroll = () => {
       const top = el.getBoundingClientRect().top;
       const prev = prevTop;
@@ -128,43 +126,45 @@ export default function Lab() {
       className="lab"
       id="lab"
       data-nav-offset="0"
-      aria-label="Experiment Lab — technology word cloud"
+      aria-label="Experiment Lab — technology map"
     >
-      <LabHeading />
-
-      <div className="lab-body">
-        <div className="lab-left">
-          <HowToCard />
-          <TuneCard intensity={intensity} onIntensity={setIntensity} onReset={clearActive} />
-        </div>
-
-        <div className="lab-center">
-          <div className="lab-winwrap">
-            <CloudWindow
-              deck={deck}
-              positions={layout.positions}
-              activeId={activeId}
-              hoveredId={hoveredId}
-              intensity={intensity}
-              zoom={zoom}
-              zoomMin={ZOOM_MIN}
-              zoomMax={ZOOM_MAX}
-              onZoomIn={zoomIn}
-              onZoomOut={zoomOut}
-              onHover={setHoveredId}
-              onLeave={() => setHoveredId(null)}
-              onPick={pickWord}
-              onResetActive={clearActive}
-            />
-          </div>
-          <StatStrip />
-        </div>
-
-        <div className="lab-right">
-          <StackSwitch value={stack} onChange={onStackChange} />
-          <DetailPanel deck={deck} wordId={activeId} onPick={selectWord} />
+      <div className="lab-topbar">
+        <LabHeading />
+        <div className="lab-help-wrap">
+          <HelpButton />
         </div>
       </div>
+
+      <div className="lab-stage" ref={stageRef}>
+        <CloudWindow
+          deck={deck}
+          stack={stack}
+          positions={layout.positions}
+          activeId={activeId}
+          hoveredId={hoveredId}
+          intensity={intensity}
+          zoom={zoom}
+          zoomMin={ZOOM_MIN}
+          zoomMax={ZOOM_MAX}
+          onStackChange={onStackChange}
+          onZoomIn={zoomIn}
+          onZoomOut={zoomOut}
+          onIntensity={onIntensity}
+          onHover={setHoveredId}
+          onLeave={() => setHoveredId(null)}
+          onPick={pickWord}
+          onResetActive={clearActive}
+        />
+        <InspectorCard
+          deck={deck}
+          wordId={activeId}
+          stageRef={stageRef}
+          recomputeKey={`${layoutKey}|${zoom}`}
+          onPick={selectWord}
+        />
+      </div>
+
+      <StatStrip />
     </section>
   );
 }

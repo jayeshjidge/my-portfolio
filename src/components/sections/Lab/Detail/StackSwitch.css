@@ -3,8 +3,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
-  padding: 5px;
-  border-radius: 14px;
+  padding: 4px;
+  border-radius: 11px;
   background: var(--sticker);
   border: 1px solid var(--sticker-edge);
   box-shadow: var(--sticker-shadow);
@@ -13,16 +13,16 @@
 /* Sliding highlight behind the active tab. */
 .lab-switch-thumb {
   position: absolute;
-  top: 5px;
-  bottom: 5px;
-  width: calc(50% - 7px);
-  border-radius: 10px;
-  background: var(--accent-soft, rgba(124, 58, 237, 0.12));
-  border: 1px solid rgba(124, 58, 237, 0.28);
+  top: 4px;
+  bottom: 4px;
+  width: calc(50% - 6px);
+  border-radius: 8px;
+  background: rgba(15, 166, 187, 0.14);
+  border: 1px solid rgba(15, 166, 187, 0.32);
   transition: left 0.28s var(--ease-out);
 }
 .lab-switch-thumb[data-active="frontend"] {
-  left: 5px;
+  left: 4px;
 }
 .lab-switch-thumb[data-active="backend"] {
   left: calc(50% + 2px);
@@ -34,20 +34,20 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 9px 10px;
+  gap: 7px;
+  padding: 6px 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   background: transparent;
   font-family: var(--font-typewriter);
-  font-size: 0.86rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--ink-soft);
   cursor: pointer;
   transition: color 0.2s var(--ease);
 }
 .lab-switch-btn.is-on {
-  color: var(--accent-ink, #6d28d9);
+  color: #0b8294;
 }
 .lab-switch-btn svg {
   color: currentColor;

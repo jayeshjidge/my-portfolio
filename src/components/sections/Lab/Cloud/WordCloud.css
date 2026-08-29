@@ -54,21 +54,16 @@
   pointer-events: none;
   overflow: visible;
 }
-.lab-wires line {
-  stroke-width: 1.6;
+/* Dotted curved spokes of the mind map. */
+.lab-spoke {
+  fill: none;
+  stroke-width: 1.7;
   stroke-linecap: round;
-  stroke-dasharray: 5 6;
-  opacity: 0.55;
-  /* keep the dash crisp regardless of zoom scale on the plane */
+  stroke-dasharray: 0.1 7;
   vector-effect: non-scaling-stroke;
-  animation: lab-wire-in 0.3s var(--ease-out) both;
+  transition: opacity 0.3s var(--ease);
 }
-
-@keyframes lab-wire-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0.55;
-  }
+.lab-spoke.is-rel {
+  stroke-dasharray: 0.1 6;
+  stroke-width: 2;
 }

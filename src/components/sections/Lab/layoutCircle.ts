@@ -14,14 +14,23 @@ const W = 1000;
 const H = 640;
 const UNIT = 10; // 1cqi ≈ 10 design units on a 1000-wide canvas
 const CHAR = 0.62; // Courier Prime advance ≈ 0.6em
-const PADX = 0.55; // extra horizontal breathing (in font units)
+const PADX = 0.7; // extra horizontal breathing (in font units)
+const FIT_FACTOR = 0.78; // leave margin around the cloud (zoom out a touch)
 
 type Box = { x: number; y: number; hw: number; hh: number };
 
+// Each node stacks an icon over the label, so it's taller than the text alone.
+// The focal word renders as a bigger padded card, so inflate it.
 function halfSize(word: LabWord): { hw: number; hh: number } {
   const fp = SIZE[word.w] * UNIT;
-  const hw = (word.label.length * CHAR * fp + PADX * fp) / 2;
-  const hh = fp * 0.62;
+  const labelW = word.label.length * CHAR * fp + PADX * fp;
+  const iconW = fp * 1.25;
+  let hw = Math.max(labelW, iconW) / 2;
+  let hh = fp * 1.4; // ≈ half of (pad + icon + gap + label + pad)
+  if (word.focal) {
+    hw *= 1.4;
+    hh = fp * 0.9;
+  }
   return { hw, hh };
 }
 
@@ -97,7 +106,7 @@ export function layoutCircle(words: LabWord[], visible: Set<string>): CloudLayou
     hx = Math.max(hx, Math.abs(b.x - cx) + b.hw);
     hy = Math.max(hy, Math.abs(b.y - cy) + b.hh);
   }
-  const fit = Math.min((cx - fitPad) / hx, (cy - fitPad) / hy);
+  const fit = Math.min((cx - fitPad) / hx, (cy - fitPad) / hy) * FIT_FACTOR;
 
   return { positions: pos, fit };
 }

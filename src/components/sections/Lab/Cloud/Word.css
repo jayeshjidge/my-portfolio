@@ -1,10 +1,12 @@
 .lab-word {
   position: absolute;
-  /* Centre on the (left,top) point. Hover uses the independent `scale`
-     property so it composes with this translate. */
   transform: translate(-50%, -50%);
   transform-origin: center;
-  padding: 0.05em 0.18em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.22em;
+  padding: 0.28em 0.4em;
   margin: 0;
   border: none;
   background: none;
@@ -15,50 +17,77 @@
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--wc-ink);
-  border-radius: 7px;
+  border-radius: 12px;
   -webkit-tap-highlight-color: transparent;
-  /* left/top glide as the cloud re-packs when the visible set changes. */
+  /* left/top glide when the cloud re-packs; scale on hover. */
   transition: left 0.55s var(--ease-out), top 0.55s var(--ease-out),
-    opacity 0.45s var(--ease), scale 0.16s var(--ease),
-    text-shadow 0.28s var(--ease), filter 0.28s var(--ease);
+    opacity 0.45s var(--ease), scale 0.18s var(--ease), filter 0.28s var(--ease),
+    background 0.2s var(--ease), box-shadow 0.2s var(--ease);
   will-change: left, top, opacity;
+}
+.lab-word-ic {
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+.lab-word-ic svg {
+  width: 1.05em;
+  height: 1.05em;
+  display: block;
+}
+.lab-word-lb {
+  font-size: 0.82em;
+}
+/* Category marker under the label — hidden at rest, fades in with this word's
+   connectors when it (or its neighbour) is hovered/pinned. */
+.lab-word-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--wc-ink);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+.lab-word.is-hi .lab-word-dot {
+  opacity: 0.9;
 }
 
 .lab-word:hover,
 .lab-word:focus-visible {
-  scale: 1.16;
+  scale: 1.08;
 }
 .lab-word:active {
-  scale: 0.97;
+  scale: 0.98;
 }
 .lab-word:focus-visible {
   outline: none;
 }
-.lab-word:focus-visible::after {
-  content: "";
-  position: absolute;
-  inset: -3px -1px;
-  border-radius: 9px;
+.lab-word:focus-visible {
   box-shadow: 0 0 0 2px var(--wc-ink);
-  opacity: 0.55;
 }
 
-.lab-word.is-focal {
-  font-weight: 700;
-  text-shadow: 0 2px 0 rgba(224, 82, 74, 0.14);
+/* Highlighted (hovered/pinned word + its related). */
+.lab-word.is-hi .lab-word-lb {
+  text-shadow: 0 3px 12px var(--wc-soft);
 }
-
 .lab-word.is-hi {
-  text-shadow: 0 4px 14px var(--wc-soft);
-  filter: saturate(1.14);
+  filter: saturate(1.12);
 }
 
-.lab-word.is-pinned {
+/* Non-focal pinned → soft pill. */
+.lab-word.is-pinned:not(.is-focal) {
   background: var(--wc-soft);
-  box-shadow: 0 1px 0 rgba(20, 24, 40, 0.05),
-    0 8px 18px -10px rgba(20, 24, 40, 0.3);
+  box-shadow: 0 1px 0 rgba(20, 24, 40, 0.05), 0 8px 18px -10px rgba(20, 24, 40, 0.3);
 }
 
 .lab-word.is-dim {
-  filter: saturate(0.7);
+  filter: saturate(0.65);
+}
+
+/* ——— Focal word → same shape as every other node, just larger ——— */
+.lab-word.is-focal {
+  color: #0fa6bb;
+}
+.lab-word.is-focal .lab-word-lb {
+  letter-spacing: -0.03em;
 }

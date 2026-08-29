@@ -1,0 +1,133 @@
+.lab-help {
+  position: relative;
+}
+.lab-help-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 15px;
+  border-radius: var(--radius-pill, 999px);
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  color: var(--ink-soft);
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--sticker-shadow);
+  transition: transform 0.15s var(--ease), color 0.15s var(--ease),
+    border-color 0.15s var(--ease);
+}
+.lab-help-btn svg {
+  color: #0fa6bb;
+}
+.lab-help-btn:hover,
+.lab-help-btn.is-on {
+  transform: translateY(-1px);
+  color: #0fa6bb;
+  border-color: rgba(15, 166, 187, 0.4);
+}
+
+/* Compact to just the icon where the topbar gets tight. */
+@media (max-width: 560px) {
+  .lab-help-btn {
+    padding: 0;
+    width: 38px;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .lab-help-btn span {
+    display: none;
+  }
+}
+
+.lab-help-pop {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 40;
+  width: 250px;
+  padding: 14px;
+  border-radius: 16px;
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  box-shadow: var(--sticker-shadow-lift);
+  animation: lab-pop-in 0.18s var(--ease-out) both;
+}
+@keyframes lab-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.lab-help-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.lab-help-head b {
+  font-family: var(--font-typewriter);
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.lab-help-head button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-faint);
+  cursor: pointer;
+}
+.lab-help-head button:hover {
+  background: rgba(20, 24, 40, 0.06);
+  color: var(--ink);
+}
+.lab-help-list {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-help-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lab-help-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--hover-surface, rgba(20, 24, 40, 0.05));
+  color: #0fa6bb;
+}
+.lab-help-txt {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.lab-help-txt b {
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+.lab-help-txt em {
+  font-style: normal;
+  font-family: var(--font-typewriter);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}

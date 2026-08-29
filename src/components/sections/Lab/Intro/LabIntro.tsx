@@ -1,16 +1,13 @@
 import "./LabIntro.css";
 
-/**
- * Section heading — matches the Experience label: top-left, Courier Prime
- * typewriter face, uppercase, with the same hand-drawn wavy underline.
- */
+/** Section heading — top-left, Courier Prime, with a purple "Lab" accent. */
 export default function LabHeading() {
   return (
     <div className="lab-heading">
-      <span className="lab-heading-title">Experiment Lab</span>
-      <p className="lab-heading-sub">
-        Hover, pin &amp; explore the tech I build with.
-      </p>
+      <h2 className="lab-heading-title">
+        Experiment <span>Lab</span>
+      </h2>
+      <p className="lab-heading-sub">Explore the technologies I build with.</p>
     </div>
   );
 }

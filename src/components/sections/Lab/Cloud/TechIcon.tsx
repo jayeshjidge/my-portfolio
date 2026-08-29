@@ -1,0 +1,126 @@
+import type { ComponentType } from "react";
+import {
+  SiReact,
+  SiNextdotjs,
+  SiTypescript,
+  SiJavascript,
+  SiVite,
+  SiRedux,
+  SiReactquery,
+  SiGraphql,
+  SiPrisma,
+  SiTailwindcss,
+  SiStyledcomponents,
+  SiHtml5,
+  SiFramer,
+  SiJest,
+  SiTestinglibrary,
+  SiCypress,
+  SiGit,
+  SiNodedotjs,
+  SiExpress,
+  SiNestjs,
+  SiPostgresql,
+  SiMongodb,
+  SiRedis,
+  SiSwagger,
+  SiDocker,
+  SiKubernetes,
+  SiNginx,
+  SiJsonwebtokens,
+  SiApachekafka,
+  SiRabbitmq,
+} from "react-icons/si";
+import {
+  Component,
+  Anchor,
+  Code,
+  SlidersHorizontal,
+  RefreshCw,
+  Braces,
+  Layers,
+  Webhook,
+  Palette,
+  Smartphone,
+  MonitorSmartphone,
+  GitBranch,
+  Accessibility,
+  Gauge,
+  Search,
+  Network,
+  Radio,
+  Cloud,
+  Boxes,
+  Puzzle,
+} from "lucide-react";
+
+type Icon = ComponentType<{ size?: number; color?: string }>;
+
+/** Brand logo where one exists, else a lucide concept icon. Keyed by word id. */
+const ICONS: Record<string, Icon> = {
+  // Frontend
+  react: SiReact,
+  "react-native": Smartphone,
+  components: Component,
+  hooks: Anchor,
+  jsx: Code,
+  props: SlidersHorizontal,
+  useeffect: RefreshCw,
+  nextjs: SiNextdotjs,
+  vite: SiVite,
+  typescript: SiTypescript,
+  javascript: SiJavascript,
+  es6: Braces,
+  redux: SiRedux,
+  zustand: Layers,
+  "react-query": SiReactquery,
+  graphql: SiGraphql,
+  "rest-api": Webhook,
+  prisma: SiPrisma,
+  tailwind: SiTailwindcss,
+  css: Palette,
+  styled: SiStyledcomponents,
+  html: SiHtml5,
+  responsive: MonitorSmartphone,
+  framer: SiFramer,
+  jest: SiJest,
+  "testing-library": SiTestinglibrary,
+  cypress: SiCypress,
+  git: SiGit,
+  cicd: GitBranch,
+  accessibility: Accessibility,
+  "web-vitals": Gauge,
+  seo: Search,
+  // Backend
+  nodejs: SiNodedotjs,
+  express: SiExpress,
+  nestjs: SiNestjs,
+  postgres: SiPostgresql,
+  mongodb: SiMongodb,
+  redis: SiRedis,
+  grpc: Network,
+  websockets: Radio,
+  swagger: SiSwagger,
+  docker: SiDocker,
+  kubernetes: SiKubernetes,
+  aws: Cloud,
+  nginx: SiNginx,
+  jwt: SiJsonwebtokens,
+  kafka: SiApachekafka,
+  microservices: Boxes,
+  rabbitmq: SiRabbitmq,
+};
+
+export default function TechIcon({
+  id,
+  size,
+  color,
+}: {
+  id: string;
+  /** Omit to let CSS size it (1em) — used on the canvas so it scales with zoom. */
+  size?: number;
+  color?: string;
+}) {
+  const Icon = ICONS[id] ?? Puzzle;
+  return <Icon size={size} color={color} />;
+}

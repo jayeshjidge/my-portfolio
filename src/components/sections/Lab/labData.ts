@@ -41,14 +41,26 @@ export type LabDeck = {
   words: LabWord[];
 };
 
-/** The five category colours (shared across decks). */
+/**
+ * The five category colours (shared across decks). Vibrant-pastel set: a
+ * saturated `ink` (word text, spokes, dots) kept dark enough to read on the warm
+ * canvas, over a soft `soft` fill and a mid `dot` for the legend.
+ */
 export const CAT_COLORS: Record<LabCat, { ink: string; soft: string; dot: string }> = {
-  core: { ink: "#b8503f", soft: "#ffe6d9", dot: "#e7a595" },
-  lang: { ink: "#5b47a8", soft: "#e7e3fb", dot: "#c1afe4" },
-  data: { ink: "#3a6ea5", soft: "#dcecfb", dot: "#9cc0ec" },
-  style: { ink: "#2f6b45", soft: "#d9f0e4", dot: "#a7d09e" },
-  tools: { ink: "#8a6410", soft: "#f6eccf", dot: "#e7c887" },
+  core: { ink: "#f0533c", soft: "#ffe0d7", dot: "#f79482" }, // coral
+  lang: { ink: "#e94f96", soft: "#ffdeee", dot: "#f6a6cf" }, // rose
+  data: { ink: "#1f8ff0", soft: "#d8ecff", dot: "#8ec6f4" }, // sky blue
+  style: { ink: "#12b07f", soft: "#ccf3e1", dot: "#74d8ac" }, // mint green
+  tools: { ink: "#ed9a12", soft: "#ffeec2", dot: "#f6cd76" }, // honey amber
 };
+
+/**
+ * The focal hub word + tab chrome accent — a fresh vibrant teal, distinct from
+ * every category hue (no violet). `FOCAL_INK` colours the centre word, section
+ * heading, help pill and stack switch; `FOCAL_SOFT` is its pastel fill.
+ */
+export const FOCAL_INK = "#0fa6bb";
+export const FOCAL_SOFT = "#d9f2f6";
 
 /** Weight tier → font size in `cqi` (1% of the canvas width). */
 export const SIZE: Record<number, number> = {
@@ -177,11 +189,12 @@ export const LAB_STATS: { value: string; label: string }[] = [
   { value: "30+", label: "Concepts" },
   { value: "15+", label: "Tools" },
   { value: "∞", label: "Ways to combine" },
-  { value: "Always", label: "Learning" },
 ];
 
-/** "How to interact" rows. */
+/** "How it works" popover rows. */
 export const HOW_TO: { key: string; title: string; sub: string }[] = [
-  { key: "click", title: "Click a word", sub: "See what it is & what I build with it" },
-  { key: "reset", title: "Double-click", sub: "Reset & clear the pinned word" },
+  { key: "hover", title: "Hover", sub: "Highlight connections" },
+  { key: "click", title: "Click", sub: "See what it is & what I build" },
+  { key: "reset", title: "Double-click", sub: "Reset the selection" },
+  { key: "energy", title: "Energy", sub: "Control the cloud intensity" },
 ];
