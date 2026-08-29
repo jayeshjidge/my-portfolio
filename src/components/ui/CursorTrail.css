@@ -1,0 +1,27 @@
+/* ---------------- Cursor comet trail ---------------- */
+
+.cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 9998; /* above content, below nothing critical; never blocks input */
+  pointer-events: none;
+}
+
+.cursor-trail-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #7fa8ff, #7b6cf0);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor-trail {
+    display: none;
+  }
+}

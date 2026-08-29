@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import CursorTrail from "@/components/ui/CursorTrail";
 import "@/styles/tokens.css";
 import "@/styles/base.css";
 import "@/styles/glass.css";
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <SmoothScroll>{children}</SmoothScroll>
+          <CursorTrail />
         </ThemeProvider>
       </body>
     </html>
