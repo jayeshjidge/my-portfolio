@@ -4,13 +4,15 @@
  * Experiment Lab — a static, interactive technology word cloud with two decks
  * (Frontend / Backend), framed in a warm macOS-style window. Sized to a single
  * viewport height. This file is the composition shell: it owns the shared state
- * (stack, hover, pin, energy, zoom) and lays the parts out.
+ * (stack, hover, pin, energy, zoom), computes the circular layout + auto-fit
+ * zoom, and lays the parts out.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { DECKS, type StackId } from "./labData";
+import { layoutCircle } from "./layoutCircle";
 import LabHeading from "./Intro/LabIntro";
 import HowToCard from "./Rail/HowToCard";
 import TuneCard from "./Rail/TuneCard";
@@ -20,9 +22,9 @@ import StackSwitch from "./Detail/StackSwitch";
 import StatStrip from "./Stats/StatStrip";
 import "./Lab.css";
 
-const ZOOM_MIN = 0.7;
-const ZOOM_MAX = 1.8;
-const ZOOM_STEP = 0.15;
+const ZOOM_MIN = 0.6;
+const ZOOM_MAX = 2.4;
+const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 export default function Lab() {
   const reduce = useReducedMotion();
@@ -33,9 +35,28 @@ export default function Lab() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [intensity, setIntensity] = useState(0.5);
-  const [zoom, setZoom] = useState(1);
+  const [zoomMul, setZoomMul] = useState(1);
 
   const deck = DECKS[stack];
+
+  // Circular pack of the currently-visible words (re-packs only when the deck
+  // or the visible SET changes, so dragging within a tier is stable).
+  const visibleIds = deck.words.filter((w) => intensity + 1e-6 >= w.reveal).map((w) => w.id);
+  const layoutKey = deck.id + "|" + visibleIds.join(",");
+  const layout = useMemo(
+    () => layoutCircle(deck.words, new Set(visibleIds)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [layoutKey],
+  );
+
+  // On any change to the visible set, snap the zoom back to auto-fit (max zoom
+  // that fits everything). Manual zoom is a multiplier on top until then.
+  const [prevKey, setPrevKey] = useState(layoutKey);
+  if (prevKey !== layoutKey) {
+    setPrevKey(layoutKey);
+    setZoomMul(1);
+  }
+  const zoom = clamp(layout.fit * zoomMul, ZOOM_MIN, ZOOM_MAX);
 
   const pickWord = (id: string) => setActiveId((prev) => (prev === id ? null : id));
   const selectWord = (id: string) => setActiveId(id);
@@ -47,13 +68,13 @@ export default function Lab() {
     setStack(id);
     setActiveId(null);
     setHoveredId(null);
+    setZoomMul(1);
   };
-  const zoomIn = () => setZoom((z) => Math.min(ZOOM_MAX, +(z + ZOOM_STEP).toFixed(2)));
-  const zoomOut = () => setZoom((z) => Math.max(ZOOM_MIN, +(z - ZOOM_STEP).toFixed(2)));
+  const zoomIn = () => setZoomMul((m) => Math.min(3, m * 1.18));
+  const zoomOut = () => setZoomMul((m) => Math.max(0.34, m / 1.18));
 
   // Scroll-snap: as the section scrolls ~40% into view, take over and ease it
-  // flush to the top, only while entering (a crossing trigger), and never during
-  // programmatic nav scrolls. Disabled under reduced motion.
+  // flush to the top, only while entering, and never during nav scrolls.
   useEffect(() => {
     const el = sectionRef.current;
     if (!lenis || reduce || !el) return;
@@ -121,6 +142,7 @@ export default function Lab() {
           <div className="lab-winwrap">
             <CloudWindow
               deck={deck}
+              positions={layout.positions}
               activeId={activeId}
               hoveredId={hoveredId}
               intensity={intensity}

@@ -14,6 +14,10 @@ Every new component gets its own file, its own colocated CSS file imported direc
 - Every component (not just widgets grouped under a parent folder) is the **default export** of its file. Whatever composes it together (e.g. `Hero.tsx`) imports each one directly by its own path with a default import: `import Nameplate from "./Nameplate/Nameplate";`. **No barrel `index.ts` files** for components — don't create one to re-export a group of components, and don't route imports through one. Every import of a component points straight at that component's own file.
 - Each component's file owns everything specific to it: its own responsive/media-query overrides, keyframes, and reduced-motion rules — not the shared stylesheet.
 
+## JSX rendering
+
+- **No `return` inside a `return`.** Never put a block-body callback with its own `return` inside a component's JSX `return` (e.g. `return ( … {list.map(x => { …; return <Item/> })} … )`). Precompute such lists as a `const` **before** the component's `return` and reference the variable in the JSX (`const items = list.map(x => { …; return <Item/> }); return ( … {items} … )`), or use an implicit arrow return when no local is needed (`list.map(x => <Item/>)`). Early guard `return`s at the top of a component are fine — this rule is only about a `return` nested inside another `return`'s expression.
+
 ## Sections (`src/components/sections/`)
 
 Every top-level section is its own folder — **no standalone `SectionName.tsx` file directly in `sections/`**. A section named `Foo` lives at `sections/Foo/Foo.tsx`, default-exported, imported directly wherever it's used (e.g. in `page.tsx`) — never through a barrel.

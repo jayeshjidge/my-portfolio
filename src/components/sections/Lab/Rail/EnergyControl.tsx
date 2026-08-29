@@ -75,37 +75,33 @@ export default function EnergyControl({
   const label = value < 0.34 ? "Calm" : value < 0.67 ? "Balanced" : "Wild";
   const pct = `${(value * 100).toFixed(1)}%`;
 
+  // Static dots that fade in/out by count (no drift) — precomputed so the JSX
+  // return has no nested `return`.
+  const dots = DOTS.map((d, i) => {
+    const fade = d.t === 0 ? 1 : Math.max(0, Math.min(1, (value - (d.t - 0.06)) / 0.12));
+    return (
+      <span
+        key={i}
+        className="lab-energy-dot"
+        style={
+          {
+            left: `${d.x}%`,
+            top: `${d.y}%`,
+            width: d.r,
+            height: d.r,
+            background: PALETTE[d.c],
+            opacity: fade,
+            scale: (0.5 + 0.5 * fade).toFixed(3),
+          } as CSSProperties
+        }
+      />
+    );
+  });
+
   return (
     <div className="lab-energy">
       <div className="lab-energy-stage" aria-hidden="true">
-        {DOTS.map((d, i) => {
-          // Smooth, continuous fade-in across a small band around the threshold
-          // (no hard 0/1 flip). Drift amplitude is FIXED in CSS, so changing the
-          // energy never disturbs the running animation → no shake.
-          const fade =
-            d.t === 0
-              ? 1
-              : Math.max(0, Math.min(1, (value - (d.t - 0.06)) / 0.12));
-          return (
-            <span
-              key={i}
-              className="lab-energy-dot"
-              style={
-                {
-                  left: `${d.x}%`,
-                  top: `${d.y}%`,
-                  width: d.r,
-                  height: d.r,
-                  background: PALETTE[d.c],
-                  opacity: fade,
-                  scale: (0.5 + 0.5 * fade).toFixed(3),
-                  "--md": `${(2.3 + (i % 4) * 0.4).toFixed(2)}s`,
-                  "--mdelay": `${(i * 0.17).toFixed(2)}s`,
-                } as CSSProperties
-              }
-            />
-          );
-        })}
+        {dots}
       </div>
 
       <div

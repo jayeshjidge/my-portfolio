@@ -11,6 +11,8 @@ import "./Word.css";
  */
 export default function Word({
   word,
+  x,
+  y,
   visible,
   pinned,
   highlight,
@@ -20,6 +22,8 @@ export default function Word({
   onPick,
 }: {
   word: LabWord;
+  x: number;
+  y: number;
   visible: boolean;
   pinned: boolean;
   highlight: boolean;
@@ -33,8 +37,8 @@ export default function Word({
   const opacity = !visible ? 0 : dim ? 0.24 : 1;
 
   const style: CSSProperties = {
-    left: `${(word.x / 1000) * 100}%`,
-    top: `${(word.y / 640) * 100}%`,
+    left: `${(x / 1000) * 100}%`,
+    top: `${(y / 640) * 100}%`,
     fontSize: `${SIZE[word.w]}cqi`,
     color: ink,
     opacity,

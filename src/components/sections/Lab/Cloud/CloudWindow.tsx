@@ -1,6 +1,5 @@
 "use client";
 
-import { Lightbulb } from "lucide-react";
 import { CAT_COLORS, type LabCat, type LabDeck } from "../labData";
 import WordCloud from "./WordCloud";
 import ZoomControls from "./ZoomControls";
@@ -10,10 +9,11 @@ const CAT_ORDER: LabCat[] = ["core", "lang", "data", "style", "tools"];
 
 /**
  * macOS-style Finder window framing the word cloud. Chrome + zoom buttons + a
- * per-deck category legend and a hint pill.
+ * per-deck category legend.
  */
 export default function CloudWindow({
   deck,
+  positions,
   activeId,
   hoveredId,
   intensity,
@@ -28,6 +28,7 @@ export default function CloudWindow({
   onResetActive,
 }: {
   deck: LabDeck;
+  positions: Record<string, { x: number; y: number }>;
   activeId: string | null;
   hoveredId: string | null;
   intensity: number;
@@ -41,6 +42,13 @@ export default function CloudWindow({
   onPick: (id: string) => void;
   onResetActive: () => void;
 }) {
+  const legendEls = CAT_ORDER.map((key) => (
+    <li key={key}>
+      <span className="lab-legend-dot" style={{ background: CAT_COLORS[key].dot }} />
+      {deck.cats[key].short}
+    </li>
+  ));
+
   return (
     <div className="lab-window mac">
       <div className="mac-bar">
@@ -55,6 +63,7 @@ export default function CloudWindow({
       <div className="lab-window-canvas">
         <WordCloud
           deck={deck}
+          positions={positions}
           activeId={activeId}
           hoveredId={hoveredId}
           intensity={intensity}
@@ -64,28 +73,13 @@ export default function CloudWindow({
           onPick={onPick}
           onResetActive={onResetActive}
         />
-        <ZoomControls
-          zoom={zoom}
-          min={zoomMin}
-          max={zoomMax}
-          onIn={onZoomIn}
-          onOut={onZoomOut}
-        />
+        <ZoomControls zoom={zoom} min={zoomMin} max={zoomMax} onIn={onZoomIn} onOut={onZoomOut} />
       </div>
 
       <div className="lab-window-foot">
         <ul className="lab-legend" aria-label="Colour key">
-          {CAT_ORDER.map((key) => (
-            <li key={key}>
-              <span className="lab-legend-dot" style={{ background: CAT_COLORS[key].dot }} />
-              {deck.cats[key].short}
-            </li>
-          ))}
+          {legendEls}
         </ul>
-        <p className="lab-tip">
-          <Lightbulb size={14} strokeWidth={1.9} /> Click any word to see what I
-          build with it
-        </p>
       </div>
     </div>
   );

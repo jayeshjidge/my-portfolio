@@ -5,15 +5,14 @@ import Word from "./Word";
 import "./WordCloud.css";
 
 /**
- * The word cloud — fully static. Words are CSS-positioned by their centre in a
- * 1000 × 640 design space; the connector <svg> shares that exact space
- * (viewBox 0 0 1000 640, preserveAspectRatio "none"), so a line to a word's
- * (x, y) always lands precisely on it — at any zoom. Nothing drifts or animates
- * on its own: energy fades words in/out, hover/pin highlights + draws lines,
- * zoom scales the whole plane. That's it.
+ * The word cloud — static between changes. Positions come from the parent's
+ * circular pack (which re-packs when the visible set changes); words glide to
+ * their new spots via CSS. The connector <svg> shares the 1000 × 640 space so
+ * lines always land exactly on the words. Zoom scales the whole plane.
  */
 export default function WordCloud({
   deck,
+  positions,
   activeId,
   hoveredId,
   intensity,
@@ -24,6 +23,7 @@ export default function WordCloud({
   onResetActive,
 }: {
   deck: LabDeck;
+  positions: Record<string, { x: number; y: number }>;
   activeId: string | null;
   hoveredId: string | null;
   intensity: number;
@@ -43,10 +43,36 @@ export default function WordCloud({
 
   const edges =
     hi && hiSet
-      ? hi.related
-          .map((rid) => byId[rid])
-          .filter((r) => r && isVisible(r.reveal))
+      ? hi.related.map((rid) => byId[rid]).filter((r) => r && isVisible(r.reveal))
       : [];
+
+  // Precompute element lists so the JSX return has no nested `return`.
+  const lineEls = edges.map((r) => (
+    <line
+      key={r.id}
+      x1={positions[hi!.id].x}
+      y1={positions[hi!.id].y}
+      x2={positions[r.id].x}
+      y2={positions[r.id].y}
+      stroke={lineColor}
+    />
+  ));
+
+  const wordEls = deck.words.map((word) => (
+    <Word
+      key={word.id}
+      word={word}
+      x={positions[word.id].x}
+      y={positions[word.id].y}
+      visible={isVisible(word.reveal)}
+      pinned={activeId === word.id}
+      highlight={hiSet ? hiSet.has(word.id) : false}
+      dim={hiSet ? !hiSet.has(word.id) : false}
+      onHover={onHover}
+      onLeave={onLeave}
+      onPick={onPick}
+    />
+  ));
 
   const onDouble = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest(".lab-word")) return;
@@ -62,42 +88,11 @@ export default function WordCloud({
     >
       <div className="lab-cloud-grid" aria-hidden="true" />
 
-      <div
-        key={deck.id}
-        className="lab-cloud-plane"
-        style={{ transform: `scale(${zoom})` }}
-      >
-        <svg
-          className="lab-wires"
-          viewBox="0 0 1000 640"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          {edges.map((r) => (
-            <line
-              key={r.id}
-              x1={hi!.x}
-              y1={hi!.y}
-              x2={r.x}
-              y2={r.y}
-              stroke={lineColor}
-            />
-          ))}
+      <div key={deck.id} className="lab-cloud-plane" style={{ transform: `scale(${zoom})` }}>
+        <svg className="lab-wires" viewBox="0 0 1000 640" preserveAspectRatio="none" aria-hidden="true">
+          {lineEls}
         </svg>
-
-        {deck.words.map((word) => (
-          <Word
-            key={word.id}
-            word={word}
-            visible={isVisible(word.reveal)}
-            pinned={activeId === word.id}
-            highlight={hiSet ? hiSet.has(word.id) : false}
-            dim={hiSet ? !hiSet.has(word.id) : false}
-            onHover={onHover}
-            onLeave={onLeave}
-            onPick={onPick}
-          />
-        ))}
+        {wordEls}
       </div>
     </div>
   );

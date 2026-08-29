@@ -182,8 +182,6 @@ export const LAB_STATS: { value: string; label: string }[] = [
 
 /** "How to interact" rows. */
 export const HOW_TO: { key: string; title: string; sub: string }[] = [
-  { key: "hover", title: "Hover", sub: "Highlight a word & its connections" },
-  { key: "click", title: "Click", sub: "Pin it & trace its connections" },
-  { key: "energy", title: "Energy", sub: "Slide Calm → Wild to grow the cloud" },
+  { key: "click", title: "Click a word", sub: "See what it is & what I build with it" },
   { key: "reset", title: "Double-click", sub: "Reset & clear the pinned word" },
 ];
