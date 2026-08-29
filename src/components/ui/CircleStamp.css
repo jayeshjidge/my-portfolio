@@ -1,0 +1,52 @@
+/* ---------------- Footer circle stamp (rubber-seal) ---------------- */
+
+.stamp {
+  display: flex;
+  justify-content: center;
+}
+
+.stamp-svg {
+  width: clamp(160px, 22vw, 210px);
+  height: auto;
+  color: var(--ink);
+  opacity: 0.86; /* faded-ink stamp feel */
+}
+
+.stamp-ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+.stamp-ring--inner {
+  stroke-width: 1;
+  opacity: 0.4;
+}
+
+.stamp-curve {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  fill: currentColor;
+  text-transform: uppercase;
+}
+.stamp-curve--top {
+  font-size: 15px;
+  letter-spacing: 4.5px;
+}
+.stamp-curve--bottom {
+  font-size: 13.5px;
+  letter-spacing: 3px;
+}
+
+.stamp-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 44px;
+  letter-spacing: 1px;
+  fill: currentColor;
+}
+
+.stamp-star {
+  font-size: 13px;
+  fill: currentColor;
+  opacity: 0.8;
+}

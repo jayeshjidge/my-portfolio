@@ -1,5 +1,6 @@
 import { portfolio } from "@/data/portfolio";
 import { SocialLinks } from "@/components/ui/SocialLinks";
+import CircleStamp from "@/components/ui/CircleStamp";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -18,6 +19,7 @@ export function Footer() {
           {portfolio.contact.email}
         </a>
         <SocialLinks links={[...portfolio.socials]} />
+        <CircleStamp />
       </div>
       <div className="footer-bar">
         <span>

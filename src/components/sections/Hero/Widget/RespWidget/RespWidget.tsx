@@ -11,10 +11,13 @@
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import "./RespWidget.css";
 
-const MIN = 90;
+const MIN = 120;
 const MAX = 220;
-const MOBILE_BP = 150;
-const TABLET_BP = 190;
+// Breakpoints split the [MIN, MAX] drag so the tablet occupies the widest band
+// (it used to flip desktop → mobile too fast to see the tablet view):
+//   mobile 120–148 · tablet 148–198 · desktop 198–220
+const MOBILE_BP = 148;
+const TABLET_BP = 198;
 
 const labelFor = (w: number) =>
   w < MOBILE_BP

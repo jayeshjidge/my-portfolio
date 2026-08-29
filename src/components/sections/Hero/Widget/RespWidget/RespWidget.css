@@ -22,8 +22,9 @@
   border: 2px solid var(--ink);
   border-radius: 10px;
   overflow: hidden;
+  min-height: 0;
   box-shadow: 0 12px 24px -14px rgba(20, 24, 40, 0.5);
-  transition: border-radius 0.35s ease, background 0.35s;
+  transition: border-radius 0.35s ease, background 0.35s, min-height 0.35s ease;
   touch-action: none;
 }
 .hero2 .r6 .top {
@@ -152,6 +153,13 @@
   border-radius: 30px;
   border-width: 4px;
   border-color: #1b1e26;
+  /* stand it up as a proper iPhone: taller body, home-bar pinned to the base */
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+.hero2 .r6 .frame.is-mobile .homebar {
+  margin-top: auto;
 }
 .hero2 .r6 .frame.is-mobile .top {
   height: 16px;

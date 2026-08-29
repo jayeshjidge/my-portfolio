@@ -27,9 +27,9 @@
   /* ============================================================
      Paper / desk design system (grid-sketch) — light only
      ============================================================ */
-  --paper-bg: #f3f0e9;
-  --paper-bg-2: #efece4;
-  --paper-line: rgba(24, 28, 38, 0.16);
+  --paper-bg: white;
+  --paper-bg-2: white;
+  --paper-line: rgba(24, 28, 38, 0.07);
   --paper-line-bold: rgba(24, 28, 38, 0.16);
   --paper-grid: 56px;
 
