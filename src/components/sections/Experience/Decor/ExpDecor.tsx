@@ -6,6 +6,10 @@
  * Hidden below the tablet breakpoint to avoid clutter on small screens.
  */
 
+"use client";
+
+import { motion } from "motion/react";
+import { EASE } from "../constants";
 import "./ExpDecor.css";
 
 function Sparkle({ className }: { className: string }) {
@@ -29,7 +33,14 @@ function DotGrid({ className }: { className: string }) {
 
 export default function ExpDecor() {
   return (
-    <div className="ex-decor" aria-hidden="true">
+    <motion.div
+      className="ex-decor"
+      aria-hidden="true"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.9, ease: EASE, delay: 0.15 }}
+    >
       {/* corner plus marks */}
       <span className="ex-plus ex-plus--tl">+</span>
       <span className="ex-plus ex-plus--br">+</span>
@@ -76,28 +87,6 @@ export default function ExpDecor() {
           strokeLinejoin="round"
         />
       </svg>
-
-      {/* "that's me" note pointing at the ID card */}
-      <div className="ex-note">
-        <span className="ex-note-text">that&apos;s me</span>
-        <svg className="ex-note-arrow" viewBox="0 0 60 44" aria-hidden="true">
-          <path
-            d="M4 8 C 26 2, 44 12, 52 34"
-            fill="none"
-            stroke="var(--ink)"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-          <path
-            d="M44 30 L53 36 L45 40"
-            fill="none"
-            stroke="var(--ink)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
-    </div>
+    </motion.div>
   );
 }

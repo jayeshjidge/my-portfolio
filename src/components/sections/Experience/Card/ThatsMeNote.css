@@ -1,0 +1,40 @@
+/* ---------------- Experience — "that's me" note beside the card ---------------- */
+
+/* Anchored to the lanyard rig's left edge (which tracks the card column), so
+   the note always sits just left of the badge instead of drifting to the far
+   edge of a wide stage. */
+.exp-thatsme {
+  position: absolute;
+  right: calc(100% + clamp(10px, 1.6vw, 30px));
+  top: 42%;
+  /* No z-index: as an earlier-in-DOM auto-stacked sibling it paints beneath the
+     swing, so a dragged badge passes over the note. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.exp-thatsme-text {
+  font-family: var(--font-marker, "Caveat", cursive);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--ink);
+  transform-origin: bottom right;
+}
+
+.exp-thatsme-arrow {
+  width: 54px;
+  height: 40px;
+  margin-left: 20px;
+  overflow: visible;
+}
+
+/* The stacked (mobile) layout drops the decorative note to avoid clutter. */
+@media (max-width: 900px) {
+  .exp-thatsme {
+    display: none;
+  }
+}

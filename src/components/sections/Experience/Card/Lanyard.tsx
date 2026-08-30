@@ -15,6 +15,7 @@ import { REST_ANGLE } from "../constants";
 const MAX_PULL = 100; // how far the strap can stretch when you pull the badge down
 import MetalClasp from "./MetalClasp";
 import IdCard from "./IdCard";
+import ThatsMeNote from "./ThatsMeNote";
 import "./Lanyard.css";
 
 export default function Lanyard({
@@ -117,6 +118,7 @@ export default function Lanyard({
 
   return (
     <div className="exp-lanyard-rig" ref={rigRef}>
+      <ThatsMeNote />
       <motion.div
         className={`exp-lanyard-swing${grabbing ? " is-grabbing" : ""}`}
         style={{ rotate: rotateZ, y: dropY, opacity: cardOpacity }}

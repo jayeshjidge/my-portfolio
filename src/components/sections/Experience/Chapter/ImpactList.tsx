@@ -1,4 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { motion } from "motion/react";
+import { groupStagger, impactRow } from "../constants";
 import "./ImpactList.css";
 
 /**
@@ -94,19 +98,21 @@ const TILES: { bg: string; icon: ReactNode }[] = [
 ];
 
 export default function ImpactList({ bullets }: { bullets: string[] }) {
+  const rows = bullets.map((b, i) => {
+    const tile = TILES[i % TILES.length];
+    return (
+      <motion.li className="exp-impact-row" key={b} variants={impactRow}>
+        <span className="exp-impact-icon" style={{ background: tile.bg }}>
+          {tile.icon}
+        </span>
+        <span className="exp-impact-text">{b}</span>
+      </motion.li>
+    );
+  });
+
   return (
-    <ul className="exp-impact">
-      {bullets.map((b, i) => {
-        const tile = TILES[i % TILES.length];
-        return (
-          <li className="exp-impact-row" key={b}>
-            <span className="exp-impact-icon" style={{ background: tile.bg }}>
-              {tile.icon}
-            </span>
-            <span className="exp-impact-text">{b}</span>
-          </li>
-        );
-      })}
-    </ul>
+    <motion.ul className="exp-impact" variants={groupStagger}>
+      {rows}
+    </motion.ul>
   );
 }

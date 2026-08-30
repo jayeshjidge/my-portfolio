@@ -1,0 +1,121 @@
+/* Ambient doodle layer — behind all Lab content, never interactive. */
+.lab-doodles {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.lab-doodle {
+  position: absolute;
+  overflow: visible;
+  opacity: 0.62;
+  color: #b98f1e;
+  will-change: transform;
+}
+.lab-doodle-path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* pathLength="1" normalises every stroke, so a dash of 1 hides it fully. */
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+
+/* When the section scrolls into view: draw the stroke in (staggered per --d),
+   then let the whole doodle drift. Transform/opacity only. */
+.lab[data-in="true"] .lab-doodle-path {
+  animation: lab-doodle-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) forwards;
+}
+.lab[data-in="true"] .lab-doodle {
+  animation: lab-doodle-float var(--fdur, 7s) ease-in-out var(--fdelay, 1s) infinite;
+}
+@keyframes lab-doodle-draw {
+  0% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+@keyframes lab-doodle-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--rot, 0deg));
+  }
+  50% {
+    transform: translateY(-9px) rotate(calc(var(--rot, 0deg) + 3deg));
+  }
+}
+
+/* ——— placement (kept to the margins; the window/panel occlude the rest) ——— */
+.lab-doodle--spark1 {
+  width: 30px;
+  height: 30px;
+  top: 12%;
+  left: 3%;
+  color: #c9a100;
+}
+.lab-doodle--code {
+  width: 40px;
+  height: 40px;
+  top: 4%;
+  right: 5%;
+  color: #b8890f;
+}
+.lab-doodle--brace {
+  width: 34px;
+  height: 34px;
+  top: 46%;
+  left: 1.6%;
+  color: #b98f1e;
+}
+.lab-doodle--cursor {
+  width: 30px;
+  height: 30px;
+  bottom: 15%;
+  left: 4.5%;
+  color: #8a91a0;
+}
+.lab-doodle--wave {
+  width: 46px;
+  height: 26px;
+  bottom: 13%;
+  right: 3.5%;
+  color: #c9a100;
+}
+.lab-doodle--spark2 {
+  width: 20px;
+  height: 20px;
+  top: 30%;
+  left: 6.5%;
+  color: #b8890f;
+}
+.lab-doodle--hash {
+  width: 26px;
+  height: 26px;
+  bottom: 34%;
+  left: 2.2%;
+  color: #b98f1e;
+}
+
+/* Accessibility — no motion: show them fully drawn and still. */
+@media (prefers-reduced-motion: reduce) {
+  .lab-doodle-path {
+    stroke-dashoffset: 0;
+    opacity: 1;
+    animation: none;
+  }
+  .lab-doodle {
+    animation: none;
+  }
+}

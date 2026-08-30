@@ -24,6 +24,39 @@ export const copyItem: Variants = {
   },
 };
 
+/**
+ * Nested stagger container for a group of small repeated units (impact rows,
+ * stack chips). It carries no visual change of its own — it only sequences its
+ * children — so it can sit inside a `copyItem` block and inherit its
+ * hidden/visible state via variant propagation. Rendered flat (no animating
+ * ancestor, e.g. the reduced-motion static list), it simply rests visible.
+ */
+export const groupStagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.06 } },
+};
+
+/** Impact row: slides in from the left so it reads as a list being written. */
+export const impactRow: Variants = {
+  hidden: { opacity: 0, x: -14 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.5, ease: EASE },
+  },
+};
+
+/** Stack chip: a small settle-in pop that suits a pill/tag. */
+export const stackChip: Variants = {
+  hidden: { opacity: 0, y: 10, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.45, ease: EASE },
+  },
+};
+
 /** Simple Icons CDN slugs for tech we mention in stacks. */
 const ICON_SLUG: Record<string, string> = {
   react: "react",

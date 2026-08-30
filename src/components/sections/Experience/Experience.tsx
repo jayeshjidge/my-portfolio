@@ -12,12 +12,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
+  motion,
   useReducedMotion,
   useScroll,
   useSpring,
   useMotionValueEvent,
 } from "motion/react";
 import { portfolio, type ExperienceItem } from "@/data/portfolio";
+import { EASE } from "./constants";
 import Chapter from "./Chapter/Chapter";
 import ScrollHint from "./ScrollHint";
 import ExperienceStatic from "./ExperienceStatic";
@@ -81,9 +83,16 @@ function ExperienceCinematic({ items }: { items: ExperienceItem[] }) {
         <div className="exp-stage-inner">
           <ExpDecor />
 
-          <div className="exp-stage-label" aria-hidden="true">
+          <motion.div
+            className="exp-stage-label"
+            aria-hidden="true"
+            initial={{ opacity: 0, y: -14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.6, ease: EASE }}
+          >
             <span className="exp-stage-title">Experience</span>
-          </div>
+          </motion.div>
 
           {items.map((item, i) => (
             <Chapter

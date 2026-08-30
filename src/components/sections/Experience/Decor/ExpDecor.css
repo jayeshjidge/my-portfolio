@@ -110,30 +110,6 @@
   opacity: 0.8;
 }
 
-/* "that's me" note pointing at the card */
-.ex-note {
-  position: absolute;
-  left: clamp(10px, 3vw, 44px);
-  top: 46%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  opacity: 0.9;
-}
-.ex-note-text {
-  font-family: var(--font-marker, "Caveat", cursive);
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--ink);
-  transform: rotate(-4deg);
-}
-.ex-note-arrow {
-  width: 52px;
-  height: 38px;
-  margin-left: 18px;
-}
-
 @keyframes exTwinkle {
   0%,
   100% {

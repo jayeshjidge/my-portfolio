@@ -19,12 +19,11 @@
   border: 1px solid rgba(15, 23, 42, 0.05);
   line-height: 1;
   box-shadow: 0 4px 10px -7px rgba(20, 24, 40, 0.4);
-  transition:
-    transform 0.25s var(--ease-out, ease),
-    box-shadow 0.25s ease;
+  /* The lift is driven by Motion's `whileHover` (transform is Motion-owned);
+     CSS only eases the shadow so the two stay in sync. */
+  transition: box-shadow 0.25s ease;
 }
 .exp-chip:hover {
-  transform: translateY(-2px);
   box-shadow: 0 10px 18px -10px rgba(20, 24, 40, 0.5);
 }
 .exp-chip-icon {

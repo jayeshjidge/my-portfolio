@@ -9,11 +9,12 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { motion, useInView, useReducedMotion, type Variants } from "motion/react";
 import { useLenis } from "lenis/react";
 import { DECKS, type StackId } from "./labData";
 import { layoutCircle } from "./layoutCircle";
 import LabHeading from "./Intro/LabIntro";
+import LabDoodles from "./Decor/LabDoodles";
 import CloudWindow from "./Cloud/CloudWindow";
 import StatStrip from "./Stats/StatStrip";
 import StackSwitch from "./Detail/StackSwitch";
@@ -24,10 +25,34 @@ const ZOOM_MIN = 0.6;
 const ZOOM_MAX = 2.2;
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
+// Staggered scroll-in for the three regions: the heading settles down, then the
+// canvas rises + scales up, then the switch/panel column rises. Ease + timing
+// kept gentle; transforms/opacity only.
+const LAB_EASE = [0.16, 1, 0.3, 1] as const;
+const headingV: Variants = {
+  hidden: { opacity: 0, y: -8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: LAB_EASE } },
+};
+const canvasV: Variants = {
+  hidden: { opacity: 0, y: 22, scale: 0.985 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.65, ease: LAB_EASE, delay: 0.12 } },
+};
+const panelV: Variants = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: LAB_EASE, delay: 0.26 } },
+};
+
 export default function Lab() {
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const sectionRef = useRef<HTMLElement | null>(null);
+  // Drives the doodle draw-in / float + the region reveals once in view.
+  const inView = useInView(sectionRef, { once: true, amount: 0.3 });
+  // Reduced motion → render regions normally (no hidden state, no transition).
+  const reveal = (variants: Variants) =>
+    reduce
+      ? {}
+      : { initial: "hidden" as const, animate: inView ? "visible" : "hidden", variants };
 
   const [stack, setStack] = useState<StackId>("frontend");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -132,12 +157,16 @@ export default function Lab() {
       className="lab"
       id="lab"
       data-nav-offset="0"
+      data-in={inView ? "true" : "false"}
       aria-label="Experiment Lab — technology map"
     >
-      <LabHeading />
+      <LabDoodles />
+      <motion.div className="lab-head-anim" {...reveal(headingV)}>
+        <LabHeading />
+      </motion.div>
 
       <div className="lab-body">
-        <div className="lab-center">
+        <motion.div className="lab-center" {...reveal(canvasV)}>
           <div className="lab-winwrap">
             <CloudWindow
               deck={deck}
@@ -161,12 +190,12 @@ export default function Lab() {
             />
           </div>
           {/* <StatStrip /> */}
-        </div>
+        </motion.div>
 
-        <div className="lab-right">
+        <motion.div className="lab-right" {...reveal(panelV)}>
           <StackSwitch value={stack} onChange={onStackChange} />
           <DetailPanel deck={deck} wordId={activeId} onPick={selectWord} />
-        </div>
+        </motion.div>
       </div>
     </section>
   );

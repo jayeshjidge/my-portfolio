@@ -21,8 +21,8 @@ export default function HomePage() {
           <Hero />
           <Experience />
           <Lab />
-          <Whiteboard />
-          <Footer />
+          {/* <Whiteboard /> */}
+          {/* <Footer /> */}
         </main>
       </div>
     </>

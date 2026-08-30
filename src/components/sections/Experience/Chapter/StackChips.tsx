@@ -1,4 +1,7 @@
-import { iconUrlFor } from "../constants";
+"use client";
+
+import { motion } from "motion/react";
+import { groupStagger, iconUrlFor, stackChip } from "../constants";
 import "./StackChips.css";
 
 /** Brand-matched soft tints (falls back to a neutral for unlisted tech). */
@@ -16,30 +19,38 @@ const TINT: Record<string, string> = {
 };
 
 export default function StackChips({ stack }: { stack: string[] }) {
+  const chips = stack.map((tag) => {
+    const url = iconUrlFor(tag);
+    const bg = TINT[tag.trim().toLowerCase()] ?? "#eef1f5";
+    return (
+      <motion.span
+        className="exp-chip"
+        key={tag}
+        style={{ background: bg }}
+        variants={stackChip}
+        whileHover={{ y: -3 }}
+      >
+        {url ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={url}
+            alt=""
+            aria-hidden="true"
+            className="exp-chip-icon"
+            loading="lazy"
+            decoding="async"
+            width={22}
+            height={22}
+          />
+        ) : null}
+        <span>{tag}</span>
+      </motion.span>
+    );
+  });
+
   return (
-    <div className="exp-stack">
-      {stack.map((tag) => {
-        const url = iconUrlFor(tag);
-        const bg = TINT[tag.trim().toLowerCase()] ?? "#eef1f5";
-        return (
-          <span className="exp-chip" key={tag} style={{ background: bg }}>
-            {url ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={url}
-                alt=""
-                aria-hidden="true"
-                className="exp-chip-icon"
-                loading="lazy"
-                decoding="async"
-                width={22}
-                height={22}
-              />
-            ) : null}
-            <span>{tag}</span>
-          </span>
-        );
-      })}
-    </div>
+    <motion.div className="exp-stack" variants={groupStagger}>
+      {chips}
+    </motion.div>
   );
 }
