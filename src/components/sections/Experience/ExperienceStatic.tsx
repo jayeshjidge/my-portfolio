@@ -5,6 +5,7 @@
  * stack down the page. Reuses the same ID card, impact rows and stack chips.
  */
 
+import Image from "next/image";
 import { motion, type Variants } from "motion/react";
 import type { ExperienceItem } from "@/data/portfolio";
 import { EASE, splitEmphasis } from "./constants";
@@ -51,7 +52,19 @@ export default function ExperienceStatic({
                 <IdCard item={item} />
               </div>
               <div className="exp-copy">
-                <h3 className="exp-company">{item.company}</h3>
+                <h3 className="exp-company">
+                  <span className="exp-company-logo" aria-hidden="true">
+                    <Image
+                      src={item.logo}
+                      alt=""
+                      width={56}
+                      height={56}
+                      draggable={false}
+                      className="exp-company-logo-img"
+                    />
+                  </span>
+                  {item.company}
+                </h3>
                 <p className="exp-role">{item.role}</p>
                 <p className="exp-summary">
                   {segments.map((seg, i) =>

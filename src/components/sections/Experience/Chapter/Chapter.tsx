@@ -7,6 +7,7 @@
  * cross-fade as the pinned stage scrolls.
  */
 
+import Image from "next/image";
 import { motion, useTransform, type MotionValue } from "motion/react";
 import type { ExperienceItem } from "@/data/portfolio";
 import { copyContainer, copyItem, splitEmphasis } from "../constants";
@@ -70,6 +71,16 @@ export default function Chapter({
           animate={inView ? "visible" : "hidden"}
         >
           <motion.h3 className="exp-company" variants={copyItem}>
+            <span className="exp-company-logo" aria-hidden="true">
+              <Image
+                src={item.logo}
+                alt=""
+                width={56}
+                height={56}
+                draggable={false}
+                className="exp-company-logo-img"
+              />
+            </span>
             {item.company}
           </motion.h3>
           <motion.p className="exp-role" variants={copyItem}>
