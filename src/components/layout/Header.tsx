@@ -4,6 +4,7 @@ import { useEffect, useState, type MouseEvent } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { portfolio } from "@/data/portfolio";
+import ProfileMenu from "./ProfileMenu/ProfileMenu";
 
 export function Header() {
   const [active, setActive] = useState("#home");
@@ -59,6 +60,7 @@ export function Header() {
           </a>
         ))}
       </motion.nav>
+      <ProfileMenu />
     </header>
   );
 }

@@ -1,0 +1,20 @@
+/* Circular identity mark — headshot on a dark ring. */
+.jbadge {
+  position: relative;
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #0c0c10;
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255, 255, 255, 0.16),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.45);
+  flex: none;
+}
+
+.jbadge-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  display: block;
+}
