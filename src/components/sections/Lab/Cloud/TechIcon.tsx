@@ -111,6 +111,48 @@ const ICONS: Record<string, Icon> = {
   rabbitmq: SiRabbitmq,
 };
 
+/**
+ * Brand color per logo. These are the Simple Icons canonical hex codes, with
+ * a few nudged darker/warmer for legibility on the warm cream canvas — pure
+ * yellow (`#F7DF1E`) and pure black would fight the palette otherwise. Only
+ * the `Si*` brand marks live here; lucide concept icons (Anchor, Palette,
+ * Code…) keep the category tint their label already carries.
+ */
+const BRAND_COLOR: Record<string, string> = {
+  // Frontend brands
+  react: "#149ECA",
+  nextjs: "#20242e",
+  typescript: "#3178C6",
+  javascript: "#C9A100",
+  vite: "#646CFF",
+  redux: "#764ABC",
+  "react-query": "#E5405C",
+  graphql: "#E10098",
+  prisma: "#2D3748",
+  tailwind: "#22A6BD",
+  styled: "#DB7093",
+  html: "#E34F26",
+  framer: "#0055FF",
+  jest: "#C21325",
+  "testing-library": "#E33332",
+  cypress: "#3C8567",
+  git: "#F05032",
+  // Backend brands
+  nodejs: "#5FA04E",
+  express: "#20242e",
+  nestjs: "#E0234E",
+  postgres: "#4169E1",
+  mongodb: "#47A248",
+  redis: "#DC382D",
+  swagger: "#5DAF11",
+  docker: "#2496ED",
+  kubernetes: "#326CE5",
+  nginx: "#009639",
+  jwt: "#20242e",
+  kafka: "#20242e",
+  rabbitmq: "#E86A00",
+};
+
 export default function TechIcon({
   id,
   size,
@@ -119,8 +161,10 @@ export default function TechIcon({
   id: string;
   /** Omit to let CSS size it (1em) — used on the canvas so it scales with zoom. */
   size?: number;
+  /** Fallback tint for lucide concept icons; ignored when a brand color exists. */
   color?: string;
 }) {
   const Icon = ICONS[id] ?? Puzzle;
-  return <Icon size={size} color={color} />;
+  const paint = BRAND_COLOR[id] ?? color;
+  return <Icon size={size} color={paint} />;
 }

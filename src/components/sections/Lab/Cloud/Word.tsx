@@ -34,18 +34,26 @@ export default function Word({
   onPick: (id: string) => void;
 }) {
   const cat = CAT_COLORS[word.cat];
-  const ink = word.focal ? FOCAL_INK : cat.ink;
+  // Label ink is mono — plain ink for every non-focal word, gold for the focal
+  // hub — so the colourful brand logos (and the category-tinted concept icons)
+  // carry the visual variety, while the labels stay calm and readable. The
+  // category signal lives in the dot beneath each word (see `--wc-dot`).
+  const labelInk = word.focal ? FOCAL_INK : "var(--ink)";
+  // Concept (lucide) icons still fall back to the category ink so they group
+  // visually with their peers — the brand `Si*` icons override in TechIcon.
+  const iconTint = word.focal ? FOCAL_INK : cat.ink;
   const opacity = !visible ? 0 : dim ? 0.28 : 1;
 
   const style: CSSProperties = {
     left: `${(x / 1000) * 100}%`,
     top: `${(y / 640) * 100}%`,
     fontSize: `${SIZE[word.w]}cqi`,
-    color: ink,
+    color: labelInk,
     opacity,
     pointerEvents: visible ? "auto" : "none",
   };
-  (style as Record<string, string>)["--wc-ink"] = ink;
+  (style as Record<string, string>)["--wc-ink"] = labelInk;
+  (style as Record<string, string>)["--wc-dot"] = cat.ink;
   (style as Record<string, string>)["--wc-soft"] = word.focal ? FOCAL_SOFT : cat.soft;
 
   return (
@@ -73,7 +81,7 @@ export default function Word({
       tabIndex={visible ? 0 : -1}
     >
       <span className="lab-word-ic">
-        <TechIcon id={word.id} color={ink} />
+        <TechIcon id={word.id} color={iconTint} />
       </span>
       <span className="lab-word-lb">{word.label}</span>
       {!word.focal && <span className="lab-word-dot" aria-hidden="true" />}

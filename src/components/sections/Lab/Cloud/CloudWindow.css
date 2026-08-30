@@ -9,6 +9,13 @@
   --lab-chrome: 80px;
 }
 
+/* Anchor the title bar so the search field (absolute, top-right) and its
+   drop-down stack above the canvas without shifting the dots or path title. */
+.lab-window .mac-bar {
+  position: relative;
+  z-index: 5;
+}
+
 /* Canvas wrapper — holds the cloud and overlays the zoom controls. */
 .lab-window-canvas {
   position: relative;

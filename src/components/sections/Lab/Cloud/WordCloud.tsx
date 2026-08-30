@@ -93,8 +93,13 @@ export default function WordCloud({
   const focusW = focusId ? byId[focusId] : null;
   const hiSet = focusW ? new Set([focusW.id, ...focusW.related]) : null;
 
+  // A word is on the canvas when the energy reveals it OR it's the pinned word
+  // (so a tech picked from search shows even if the current energy hides it —
+  // Lab packs it into the layout to match).
+  const isShown = (w: LabWord) => isVisible(w.reveal) || w.id === activeId;
+
   // Permanent hub spokes: focal → every visible tech.
-  const spokes = deck.words.filter((w) => !w.focal && isVisible(w.reveal));
+  const spokes = deck.words.filter((w) => !w.focal && isShown(w));
   const hubEls =
     focal &&
     spokes.map((w) => {
@@ -120,7 +125,9 @@ export default function WordCloud({
     focusW && !focusW.focal
       ? focusW.related
           .map((rid) => byId[rid])
-          .filter((r) => r && isVisible(r.reveal))
+          // Skip the focal word — the permanent hub spoke (focal → this word)
+          // already draws that connection, so a related link would double it.
+          .filter((r) => r && !r.focal && isVisible(r.reveal))
           .map((r) => {
             const a = anchor(focusW);
             const b = anchor(r);
@@ -142,7 +149,7 @@ export default function WordCloud({
       word={word}
       x={positions[word.id].x}
       y={positions[word.id].y}
-      visible={isVisible(word.reveal)}
+      visible={isShown(word)}
       pinned={activeId === word.id}
       highlight={hiSet ? hiSet.has(word.id) : false}
       dim={hiSet ? !hiSet.has(word.id) : false}

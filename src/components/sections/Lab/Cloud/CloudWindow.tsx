@@ -5,6 +5,7 @@ import { HelpCircle, Zap } from "lucide-react";
 import { CAT_COLORS, type LabCat, type LabDeck } from "../labData";
 import WordCloud from "./WordCloud";
 import ZoomControls from "./ZoomControls";
+import SearchBar from "./SearchBar";
 import EnergyPopover from "../Controls/EnergyPopover";
 import HelpPopover from "../Controls/HelpPopover";
 import "./CloudWindow.css";
@@ -25,14 +26,17 @@ export default function CloudWindow({
   hoveredId,
   intensity,
   zoom,
+  zoomPct,
   zoomMin,
   zoomMax,
   onZoomIn,
   onZoomOut,
+  onZoomReset,
   onIntensity,
   onHover,
   onLeave,
   onPick,
+  onSelect,
   onResetActive,
 }: {
   deck: LabDeck;
@@ -41,14 +45,17 @@ export default function CloudWindow({
   hoveredId: string | null;
   intensity: number;
   zoom: number;
+  zoomPct: number;
   zoomMin: number;
   zoomMax: number;
   onZoomIn: () => void;
   onZoomOut: () => void;
+  onZoomReset: () => void;
   onIntensity: (v: number) => void;
   onHover: (id: string) => void;
   onLeave: () => void;
   onPick: (id: string) => void;
+  onSelect: (id: string) => void;
   onResetActive: () => void;
 }) {
   const [openPanel, setOpenPanel] = useState<null | "help" | "energy">(null);
@@ -71,6 +78,7 @@ export default function CloudWindow({
           <i />
         </span>
         <span className="mac-title">~/jayesh/lab — {deck.id}</span>
+        <SearchBar deck={deck} onSelect={onSelect} onClear={onResetActive} />
       </div>
 
       <div className="lab-window-canvas">
@@ -90,10 +98,12 @@ export default function CloudWindow({
         {openPanel === null && (
           <ZoomControls
             zoom={zoom}
+            pct={zoomPct}
             min={zoomMin}
             max={zoomMax}
             onIn={onZoomIn}
             onOut={onZoomOut}
+            onReset={onZoomReset}
           />
         )}
       </div>

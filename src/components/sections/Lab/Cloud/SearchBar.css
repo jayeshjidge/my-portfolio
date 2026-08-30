@@ -1,0 +1,184 @@
+/* Sits in the title bar, absolutely positioned at the right so it never shifts
+   the mac dots or the path title. */
+.lab-search {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: min(240px, 44%);
+}
+
+.lab-search-field {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  padding: 0 7px 0 10px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid var(--ink-hair);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+.lab-search.is-open .lab-search-field {
+  border-color: rgba(184, 137, 15, 0.55);
+  box-shadow: 0 0 0 3px rgba(184, 137, 15, 0.14),
+    0 6px 16px -8px rgba(107, 80, 21, 0.4);
+}
+.lab-search-icon {
+  flex: none;
+  color: var(--ink-faint);
+  transition: color 0.15s var(--ease);
+}
+.lab-search.is-open .lab-search-icon {
+  color: #b98f1e;
+}
+.lab-search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: none;
+  outline: none;
+  padding: 0;
+  font-family: var(--font-typewriter);
+  font-size: 0.76rem;
+  color: var(--ink);
+}
+.lab-search-input::placeholder {
+  color: var(--ink-faint);
+}
+.lab-search-kbd {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  line-height: 1;
+  color: var(--ink-faint);
+  background: rgba(20, 24, 40, 0.05);
+  border: 1px solid var(--ink-hair);
+  border-radius: 5px;
+  padding: 2px 5px;
+}
+.lab-search-clear {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  line-height: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(20, 24, 40, 0.06);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 0.15s var(--ease), color 0.15s var(--ease);
+}
+.lab-search-clear svg {
+  display: block;
+}
+.lab-search-clear:hover {
+  background: rgba(184, 137, 15, 0.18);
+  color: #8a6a12;
+}
+
+/* ——— Dropdown (fade + slide 6px) ——— */
+.lab-search-drop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: min(300px, 78vw);
+  padding: 6px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--sticker-edge);
+  box-shadow: 0 14px 32px -12px rgba(20, 24, 40, 0.4);
+  animation: lab-search-in 0.16s var(--ease-out) both;
+}
+@keyframes lab-search-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.lab-search-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-search-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 9px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s var(--ease);
+}
+.lab-search-item.is-hi {
+  background: #fdf3cf;
+}
+.lab-search-item-ic {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+}
+.lab-search-item-ic svg {
+  display: block;
+}
+.lab-search-item-name {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lab-search-item-cat {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.lab-search-hint {
+  margin: 0;
+  padding: 9px 10px;
+  font-family: var(--font-typewriter);
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+}
+.lab-search-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 11px 10px;
+}
+.lab-search-empty b {
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  color: var(--ink);
+}
+.lab-search-empty span {
+  font-family: var(--font-typewriter);
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}

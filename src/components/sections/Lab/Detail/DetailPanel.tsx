@@ -4,23 +4,19 @@ import type { CSSProperties } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Check } from "lucide-react";
 import { CAT_COLORS, FOCAL_INK, FOCAL_SOFT, wordMap, type LabDeck } from "../labData";
+import TechIcon from "../Cloud/TechIcon";
 import "./DetailPanel.css";
 
-/** Monogram from a label, e.g. "React Query" → "RQ", "CSS" → "CS". */
-function monogram(label: string) {
-  const parts = label.replace(/[^a-zA-Z0-9 ]/g, "").split(/\s+/).filter(Boolean);
-  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-  return label.slice(0, 2).toUpperCase();
-}
-
-/** The tab's single gold accent, shared by both decks' default card. */
+/** The tab's single gold accent — used everywhere in the panel except the icon
+ *  marks themselves, so the whole card reads as one cohesive theme. */
 const DECK_ACCENT = { ink: "#8a6a12", soft: FOCAL_SOFT };
 
 /**
  * Right-rail detail — a persistent panel (fixed min-height so switching words
  * doesn't shift the layout). With no word pinned it shows the deck's "focused
- * stack" card; when a word is pinned it shows that word's detail with clickable
- * related-concept chips.
+ * stack" card; when a word is pinned it shows that word's detail: the tech's
+ * icon (in its brand colour) over a gold chip, then desc, related-concept
+ * chips (each with its own icon), and the "What I do" list.
  */
 export default function DetailPanel({
   deck,
@@ -38,8 +34,9 @@ export default function DetailPanel({
   // ——— Word detail ———
   if (word) {
     const cat = CAT_COLORS[word.cat];
-    const ink = word.focal ? FOCAL_INK : cat.ink;
-    const soft = word.focal ? FOCAL_SOFT : cat.soft;
+    // Icon fallback (for lucide concept icons): the focal hub is gold, everything
+    // else uses its category ink. Brand `Si*` icons override in TechIcon.
+    const iconTint = word.focal ? FOCAL_INK : cat.ink;
     const related = word.related.map((id) => byId[id]).filter(Boolean);
     return (
       <div className="lab-detail sticker">
@@ -50,12 +47,16 @@ export default function DetailPanel({
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="lab-detail-head">
-            <span className="lab-detail-mono" style={{ background: soft, color: ink }} aria-hidden="true">
-              {monogram(word.label)}
+            <span
+              className="lab-detail-mono"
+              style={{ background: DECK_ACCENT.soft }}
+              aria-hidden="true"
+            >
+              <TechIcon id={word.id} size={24} color={iconTint} />
             </span>
             <div>
               <h3 className="lab-detail-name">{word.label}</h3>
-              <span className="lab-detail-cat" style={{ color: ink }}>
+              <span className="lab-detail-cat" style={{ color: DECK_ACCENT.ink }}>
                 {deck.cats[word.cat].name}
               </span>
             </div>
@@ -67,11 +68,22 @@ export default function DetailPanel({
             <>
               <p className="lab-detail-sub">Related concepts</p>
               <div className="lab-detail-chips">
-                {related.map((r) => (
-                  <button key={r.id} type="button" className="lab-chip" onClick={() => onPick(r.id)}>
-                    {r.label}
-                  </button>
-                ))}
+                {related.map((r) => {
+                  const rTint = r.focal ? FOCAL_INK : CAT_COLORS[r.cat].ink;
+                  return (
+                    <button
+                      key={r.id}
+                      type="button"
+                      className="lab-chip"
+                      onClick={() => onPick(r.id)}
+                    >
+                      <span className="lab-chip-ic" aria-hidden="true">
+                        <TechIcon id={r.id} size={13} color={rTint} />
+                      </span>
+                      {r.label}
+                    </button>
+                  );
+                })}
               </div>
             </>
           )}
@@ -83,7 +95,7 @@ export default function DetailPanel({
               <ul className="lab-detail-does">
                 {word.does.map((d) => (
                   <li key={d}>
-                    <span className="lab-detail-check" style={{ color: ink }}>
+                    <span className="lab-detail-check" style={{ color: DECK_ACCENT.ink }}>
                       <Check size={13} strokeWidth={2.6} />
                     </span>
                     {d}
@@ -108,7 +120,7 @@ export default function DetailPanel({
       >
         <div className="lab-detail-head">
           <span
-            className="lab-detail-mono"
+            className="lab-detail-mono lab-detail-mono--text"
             style={{ background: DECK_ACCENT.soft, color: DECK_ACCENT.ink }}
             aria-hidden="true"
           >
@@ -127,7 +139,11 @@ export default function DetailPanel({
         <p className="lab-detail-sub">Related concepts</p>
         <div className="lab-detail-chips">
           {deck.related.map((c) => (
-            <span key={c} className="lab-chip is-static" style={{ "--chip-ink": DECK_ACCENT.ink } as CSSProperties}>
+            <span
+              key={c}
+              className="lab-chip is-static"
+              style={{ "--chip-ink": DECK_ACCENT.ink } as CSSProperties}
+            >
               {c}
             </span>
           ))}

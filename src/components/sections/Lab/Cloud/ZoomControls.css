@@ -37,3 +37,13 @@
   height: 16px;
   background: var(--ink-hair);
 }
+.lab-zoom-pct {
+  min-width: 40px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}

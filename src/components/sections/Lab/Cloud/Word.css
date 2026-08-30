@@ -44,7 +44,8 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--wc-ink);
+  /* Always the category colour — the dot is the label's category signal. */
+  background: var(--wc-dot);
   opacity: 0;
   transition: opacity 0.3s var(--ease);
 }
@@ -74,10 +75,12 @@
   filter: saturate(1.12);
 }
 
-/* Non-focal pinned → soft pill. */
+/* Non-focal pinned → a constant gold pill that matches the Lab theme (same
+   pale gold as the energy card / search highlight), not the word's category. */
 .lab-word.is-pinned:not(.is-focal) {
-  background: var(--wc-soft);
-  box-shadow: 0 1px 0 rgba(20, 24, 40, 0.05), 0 8px 18px -10px rgba(20, 24, 40, 0.3);
+  background: #fdf3cf;
+  box-shadow: inset 0 0 0 1px rgba(184, 137, 15, 0.3),
+    0 8px 18px -10px rgba(107, 80, 21, 0.35);
 }
 
 .lab-word.is-dim {

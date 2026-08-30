@@ -37,7 +37,12 @@ export default function Lab() {
 
   const deck = DECKS[stack];
 
-  const visibleIds = deck.words.filter((w) => intensity + 1e-6 >= w.reveal).map((w) => w.id);
+  // Words the energy reveals — plus the pinned word, so a tech picked from
+  // search is packed into the cloud and shows on the canvas even when the
+  // current energy would otherwise hide it.
+  const visibleIds = deck.words
+    .filter((w) => intensity + 1e-6 >= w.reveal || w.id === activeId)
+    .map((w) => w.id);
   const layoutKey = deck.id + "|" + visibleIds.join(",");
   const layout = useMemo(
     () => layoutCircle(deck.words, new Set(visibleIds)),
@@ -48,8 +53,10 @@ export default function Lab() {
   // +/- buttons apply a multiplier on top, snapped back to 1 whenever the
   // visible set changes (deck swap or energy re-pack — see those handlers).
   const zoom = clamp(layout.fit * zoomMul, ZOOM_MIN, ZOOM_MAX);
+  const zoomPct = Math.round(zoomMul * 100);
   const zoomIn = () => setZoomMul((m) => Math.min(3, m * 1.18));
   const zoomOut = () => setZoomMul((m) => Math.max(0.34, m / 1.18));
+  const zoomReset = () => setZoomMul(1);
 
   const pickWord = (id: string) => setActiveId((prev) => (prev === id ? null : id));
   const selectWord = (id: string) => setActiveId(id);
@@ -139,18 +146,21 @@ export default function Lab() {
               hoveredId={hoveredId}
               intensity={intensity}
               zoom={zoom}
+              zoomPct={zoomPct}
               zoomMin={ZOOM_MIN}
               zoomMax={ZOOM_MAX}
               onZoomIn={zoomIn}
               onZoomOut={zoomOut}
+              onZoomReset={zoomReset}
               onIntensity={onIntensity}
               onHover={setHoveredId}
               onLeave={() => setHoveredId(null)}
               onPick={pickWord}
+              onSelect={selectWord}
               onResetActive={clearActive}
             />
           </div>
-          <StatStrip />
+          {/* <StatStrip /> */}
         </div>
 
         <div className="lab-right">
