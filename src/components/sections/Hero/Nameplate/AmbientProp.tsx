@@ -1,14 +1,21 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 /**
  * Ambient decorative prop — a bobbing 3D plant near the bottom of the hero.
  * Purely decorative, hidden on <1180px reflow (see hero.css).
+ * Opacity-only entrance so CSS `.float` can keep owning translateY.
  */
 
+import { motion, useReducedMotion } from "motion/react";
 import { fluent } from "../constants";
+import { fadeOnly } from "../heroMotion";
 
 export default function AmbientProp() {
+  const reduce = Boolean(useReducedMotion());
+
   return (
-    <div
+    <motion.div
       className="prop float"
       style={{
         left: "50%",
@@ -20,6 +27,7 @@ export default function AmbientProp() {
         // of being clobbered by it.
         translate: "-50% 0",
       }}
+      variants={fadeOnly(0.9, reduce)}
     >
       <img
         src={fluent("Potted plant", "potted_plant")}
@@ -30,6 +38,6 @@ export default function AmbientProp() {
         decoding="async"
       />
       <span className="prop-lab">calm</span>
-    </div>
+    </motion.div>
   );
 }

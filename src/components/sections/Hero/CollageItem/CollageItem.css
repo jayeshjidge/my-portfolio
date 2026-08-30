@@ -1,0 +1,4 @@
+/* Hover lift raises the collage card above its neighbours. */
+.hero2 .hw.collage-item:hover {
+  z-index: 8;
+}

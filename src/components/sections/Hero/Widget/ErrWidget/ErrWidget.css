@@ -1,21 +1,23 @@
 /* --------------------- ERR-07 — error boundary --------------------- */
 /* white "safety card" with a distinctive folded top-right corner
-   (like a defensive shield-badge) — the coral triangle overlays the
-   corner so the card visually reads as a defended/protected zone. */
+   (like a defensive shield-badge). Reads as a small dashboard: a title +
+   ON/OFF pill, a shield status line, three status tiles, a recover bar and
+   a footer tip. The coral fold overlays the corner so the card visually
+   reads as a defended/protected zone. */
 
 .hero2 .hw--err {
-  right: 8%;
-  top: 52%;
-  width: 218px;
-  transform: rotate(3deg);
+  right: 6%;
+  top: 50%;
+  width: 252px;
+  rotate: 3deg;
 }
 
 .hero2 .eb {
   width: 100%;
   position: relative;
   background: #fff;
-  border-radius: 14px;
-  padding: 14px 14px 12px;
+  border-radius: 16px;
+  padding: 13px 13px 12px;
   box-shadow: 0 18px 38px -18px rgba(20, 24, 40, 0.35),
     0 2px 6px rgba(20, 24, 40, 0.06);
   overflow: hidden;
@@ -26,262 +28,363 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   background: #ff6a52;
   clip-path: polygon(100% 0, 0 0, 100% 100%);
   box-shadow: -2px 2px 4px -1px rgba(20, 24, 40, 0.14);
   pointer-events: none;
+  z-index: 6;
 }
-.hero2 .eb .ebhead {
+
+/* ------------------------------ header ------------------------------ */
+.hero2 .eb .eb-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 9px;
   padding-right: 22px; /* clear the folded corner */
 }
-.hero2 .eb .ebt {
+.hero2 .eb .eb-title {
   font-family: var(--h-font);
-  font-weight: 700;
-  font-size: 0.66rem;
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
-.hero2 .eb .ebctl {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.hero2 .eb .ebstate {
-  font-family: var(--h-mono);
-  font-size: 0.46rem;
-  font-weight: 700;
-  color: #8b93a1;
-  width: 18px;
-  text-align: right;
-}
-.hero2 .eb.on .ebstate {
-  color: #3b6d11;
-}
-.hero2 .eb .ebswitch {
-  width: 34px;
-  height: 18px;
-  border-radius: 18px;
-  background: #c9ccd3;
+.hero2 .eb .eb-toggle {
   position: relative;
+  width: 46px;
+  height: 22px;
+  border: none;
+  border-radius: 22px;
+  background: #c9ccd3;
   cursor: pointer;
-  transition: 0.25s;
+  padding: 0;
   flex-shrink: 0;
+  transition: background 0.25s;
 }
-.hero2 .eb .ebswitch .knob {
+.hero2 .eb .eb-toggle.on {
+  background: #28c840;
+}
+.hero2 .eb .eb-toggle .eb-knob {
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-  transition: left 0.25s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  display: block;
 }
-.hero2 .eb.on .ebswitch {
-  background: #28c840;
-}
-.hero2 .eb.on .ebswitch .knob {
-  left: 18px;
-}
-.hero2 .eb .ebstage {
-  position: relative;
-  padding: 8px 2px 2px;
-}
-.hero2 .eb .chart {
-  border: 1.5px dashed #38b676;
-  background: #eefaf3;
-  overflow: visible;
-}
-.hero2 .eb .chart::after {
-  content: "🛡 boundary";
+.hero2 .eb .eb-toggle .eb-toggle-label {
   position: absolute;
-  top: -7px;
+  top: 0;
+  height: 22px;
+  right: 7px;
+  display: flex;
+  align-items: center;
+  font-family: var(--h-mono);
+  font-weight: 800;
+  font-size: 0.44rem;
+  letter-spacing: 0.05em;
+  color: #79818e;
+}
+.hero2 .eb .eb-toggle.on .eb-toggle-label {
+  right: auto;
+  left: 9px;
+  color: #fff;
+}
+
+/* --------------------------- status row --------------------------- */
+.hero2 .eb .eb-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 11px;
+}
+.hero2 .eb .eb-status svg {
+  flex-shrink: 0;
+}
+.hero2 .eb .eb-status-main {
+  font-family: var(--h-font);
+  font-weight: 700;
+  font-size: 0.54rem;
+  color: #1f8a52;
+  white-space: nowrap;
+}
+.hero2 .eb.off .eb-status-main {
+  color: #c0392b;
+}
+.hero2 .eb .eb-div {
+  width: 1px;
+  height: 11px;
+  background: var(--hair);
+  margin: 0 1px;
+  flex-shrink: 0;
+}
+.hero2 .eb .eb-status-sub {
+  font-family: var(--h-font);
+  font-weight: 500;
+  font-size: 0.5rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ------------------------------ tiles ------------------------------ */
+.hero2 .eb .eb-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.hero2 .eb .eb-tile {
+  position: relative;
+  background: #fbfbfd;
+  border: 1px solid var(--hair);
+  border-radius: 12px;
+  padding: 10px 3px 9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 80px;
+  justify-content: center;
+}
+.hero2 .eb .eb-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero2 .eb .eb-badge.users {
+  background: #ede9fd;
+  color: #6b5fc7;
+}
+.hero2 .eb .eb-badge.sales {
+  background: #dcecfb;
+  color: #2f6fd0;
+}
+.hero2 .eb .eb-badge.sales.is-err {
+  background: #ffe1dc;
+  color: #e0503e;
+}
+.hero2 .eb .eb-badge.orders {
+  background: #fdeec0;
+  color: #c68a10;
+}
+.hero2 .eb .eb-tile-name {
+  font-family: var(--h-font);
+  font-weight: 700;
+  font-size: 0.54rem;
+  color: var(--ink);
+}
+.hero2 .eb .eb-mark {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero2 .eb .eb-mark.ok {
+  background: #d6f0e2;
+  color: #1f9a5a;
+}
+.hero2 .eb .eb-mark.err {
+  background: #ffdcd5;
+  color: #d63d2c;
+}
+.hero2 .eb .eb-mark.load {
+  background: #e6e9f2;
+}
+
+/* Sales tile, "error caught" boundary */
+.hero2 .eb .eb-tile--sales.caught {
+  border: 1.5px dashed #e46a56;
+  background: #fff5f3;
+}
+.hero2 .eb .eb-caught-label {
+  position: absolute;
+  top: -8px;
   left: 50%;
   transform: translateX(-50%);
   font-family: var(--h-mono);
-  font-size: 0.36rem;
-  letter-spacing: 0.02em;
-  color: #1f7a52;
+  font-weight: 700;
+  font-size: 0.4rem;
+  letter-spacing: 0.01em;
+  color: #d1442f;
   background: #fff;
   padding: 0 5px;
   white-space: nowrap;
-  border-radius: 3px;
 }
-.hero2 .eb .h-tiles {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  transition: opacity 0.3s, transform 0.3s;
-}
-.hero2 .eb .h-tile {
-  background: #f7f8fb;
-  border: 1px solid var(--hair);
-  border-radius: 10px;
-  padding: 8px 3px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  position: relative;
-  min-height: 60px;
-  justify-content: center;
-}
-.hero2 .eb .h-tile img {
-  width: 24px;
-  height: 24px;
-  display: block;
-  filter: drop-shadow(0 3px 4px rgba(20, 24, 40, 0.18));
-}
-.hero2 .eb .h-tile b {
-  font-family: var(--h-font);
-  font-weight: 600;
-  font-size: 0.48rem;
-}
-.hero2 .eb .h-tile .dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #28c840;
-  box-shadow: 0 0 0 2.5px rgba(40, 200, 64, 0.16);
-}
-.hero2 .eb .chart .healthy,
-.hero2 .eb .chart .broken,
-.hero2 .eb .chart .loading {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-.hero2 .eb .chart.is-healthy .healthy {
-  display: flex;
-}
-.hero2 .eb .chart.is-fallback .broken {
-  display: flex;
-}
-.hero2 .eb .chart.is-loading .loading {
-  display: flex;
-}
-.hero2 .eb .chart .broken .err {
-  font-size: 0.9rem;
-  line-height: 1;
-}
-.hero2 .eb .chart .broken .msg {
-  font-size: 0.4rem;
-  color: #8a5a12;
-  text-align: center;
-  line-height: 1.1;
-}
-.hero2 .eb .chart .broken .tryagain {
-  font: inherit;
-  font-family: var(--h-mono);
-  font-size: 0.42rem;
-  font-weight: 700;
-  background: #3a6ea5;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 2px 7px;
-  cursor: pointer;
-  margin-top: 1px;
-}
-.hero2 .eb .chart .loading .spin {
+.hero2 .eb .eb-spin {
   width: 16px;
   height: 16px;
   border-radius: 50%;
   border: 2.5px solid #e6e9f2;
-  border-top-color: #8f79df;
+  border-top-color: #2f6fd0;
   animation: h2spin 0.8s linear infinite;
 }
-.hero2 .eb .chart.is-fallback {
-  border-style: solid;
-  background: #fff6ea;
+
+/* ------------------------- bottom action --------------------------- */
+.hero2 .eb .eb-action {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
 }
-.hero2 .eb .chart.shake {
-  animation: h2ebshake 0.42s;
+.hero2 .eb .eb-break {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--h-font);
+  font-weight: 700;
+  font-size: 0.62rem;
+  color: #fff;
+  background: #f2543a;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 24px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px -6px rgba(224, 80, 62, 0.6);
+  transition: transform 0.16s, box-shadow 0.16s, filter 0.16s;
 }
-.hero2 .eb.shaking .h-tiles {
-  animation: h2ebshake 0.5s;
+.hero2 .eb .eb-break svg {
+  flex-shrink: 0;
 }
-.hero2 .eb .crash {
+.hero2 .eb .eb-break:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.04);
+  box-shadow: 0 12px 22px -8px rgba(224, 80, 62, 0.7);
+}
+.hero2 .eb .eb-break:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px -6px rgba(224, 80, 62, 0.6);
+}
+.hero2 .eb .eb-break:focus-visible {
+  outline: 2px solid #ff6a52;
+  outline-offset: 2px;
+}
+.hero2 .eb .eb-recover {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: #ffeae6;
+  border: 1px solid #f6c8bf;
+  border-radius: 11px;
+  padding: 8px 11px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.hero2 .eb .eb-recover:hover {
+  background: #ffe0da;
+}
+.hero2 .eb .eb-recover.is-loading {
+  cursor: default;
+}
+.hero2 .eb .eb-recover .eb-recover-ic {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: #ffdcd4;
+  color: #e0503e;
+  flex-shrink: 0;
+}
+.hero2 .eb .eb-recover .eb-recover-ic .spin {
+  animation: h2spin 0.8s linear infinite;
+}
+.hero2 .eb .eb-recover b {
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.58rem;
+  color: #d1442f;
+  flex-shrink: 0;
+}
+.hero2 .eb .eb-recover span {
+  font-family: var(--h-font);
+  font-weight: 500;
+  font-size: 0.46rem;
+  color: var(--ink-soft);
+  line-height: 1.2;
+}
+
+/* --------------------------- crash overlay ------------------------- */
+.hero2 .eb .eb-crash {
   position: absolute;
   inset: 0;
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  background: #fff2f2;
+  gap: 9px;
+  background: radial-gradient(
+    130% 100% at 50% 0%,
+    #fff6f4 0%,
+    #ffeae5 60%,
+    #ffe2db 100%
+  );
+  border-radius: 16px;
+  z-index: 7;
+  padding: 0 18px;
+  text-align: center;
 }
-.hero2 .eb .crash .boom {
-  font-size: 1.15rem;
+.hero2 .eb .eb-crash .eb-crash-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fff;
+  color: #e0503e;
+  box-shadow: 0 4px 12px -4px rgba(224, 80, 62, 0.45),
+    0 0 0 6px rgba(224, 80, 62, 0.1);
 }
-.hero2 .eb .crash b {
+.hero2 .eb .eb-crash b {
   font-family: var(--h-font);
   font-weight: 800;
-  color: #a32d2d;
-  font-size: 0.62rem;
+  color: #b03024;
+  font-size: 0.8rem;
+  letter-spacing: -0.01em;
 }
-.hero2 .eb .crash .reload {
-  font: inherit;
+.hero2 .eb .eb-crash p {
   font-family: var(--h-mono);
   font-size: 0.44rem;
+  color: #a4443a;
+  line-height: 1.3;
+  margin-top: -4px;
+}
+.hero2 .eb .eb-crash .eb-reload {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-family: var(--h-font);
   font-weight: 700;
+  font-size: 0.54rem;
   background: var(--ink);
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 3px 10px;
+  border-radius: 9px;
+  padding: 7px 15px;
   cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
-.hero2 .eb.crashed .h-tiles {
-  opacity: 0;
-  transform: scale(0.94);
-  pointer-events: none;
+.hero2 .eb .eb-crash .eb-reload:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px -8px rgba(20, 24, 40, 0.5);
 }
-.hero2 .eb.crashed .crash {
-  display: flex;
-}
-.hero2 .eb .breakbtn {
-  display: block;
-  margin: 9px auto 0;
-  font: inherit;
-  font-family: var(--h-mono);
-  font-size: 0.5rem;
-  font-weight: 700;
-  color: #a32d2d;
-  background: #fff2f2;
-  border: 1px solid #f0b3b3;
-  border-radius: 7px;
-  padding: 5px 13px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.hero2 .eb .breakbtn:hover {
-  background: #ffe6e6;
-}
-.hero2 .eb .breakbtn.hidden {
-  display: none;
-}
-.hero2 .eb .status {
-  margin-top: 8px;
-  text-align: center;
-  font-family: var(--h-mono);
-  font-size: 0.44rem;
-  color: var(--ink-soft);
-  min-height: 11px;
-  line-height: 1.3;
-  padding: 0 4px;
-}
-.hero2 .eb .status.ok {
-  color: #3b6d11;
-}
-.hero2 .eb .status.bad {
-  color: #a32d2d;
+.hero2 .eb .eb-crash .eb-reload:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 @keyframes h2spin {
@@ -289,30 +392,19 @@
     transform: rotate(360deg);
   }
 }
-@keyframes h2ebshake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  20% {
-    transform: translateX(-4px);
-  }
-  40% {
-    transform: translateX(4px);
-  }
-  60% {
-    transform: translateX(-3px);
-  }
-  80% {
-    transform: translateX(3px);
+
+@media (prefers-reduced-motion: reduce) {
+  .hero2 .eb .eb-spin,
+  .hero2 .eb .eb-recover .eb-recover-ic.spin {
+    animation: none;
   }
 }
 
 /* on shorter/narrower desktops tighten the arc so the fold still fits */
 @media (min-width: 1180px) and (max-width: 1400px) {
   .hero2 .hw--err {
-    right: 5%;
-    top: 52%;
+    right: 4%;
+    top: 51%;
   }
 }
 
@@ -320,5 +412,6 @@
 @media (max-width: 1179px) {
   .hero2 .hw--err {
     width: auto;
+    max-width: 268px;
   }
 }

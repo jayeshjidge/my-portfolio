@@ -10,94 +10,86 @@
  * The slide distance is measured from the live track width so it never
  * breaks when the widget reflows.
  *
- * Idle "drag me" nudge on the rocket pauses on hover / while dragging.
- * The rocket is an inline SVG (fixed viewBox) so it stays pixel-centred
- * in its tile — with padding so it never touches the tile borders.
+ * Idle "drag me" nudge lives on the rocket SVG so Motion can own the
+ * thumb's x without fighting the CSS hint.
  */
 
+import { useEffect, useRef, useState } from "react";
 import {
-  useRef,
-  useState,
-  type PointerEvent as ReactPointerEvent,
-} from "react";
+  AnimatePresence,
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from "motion/react";
+import { useCollageHoverLock } from "../../CollageItem/CollageItem";
 import "./PwaWidget.css";
 
-const START = 6; // thumb inset from the track edge (px) — clears the dotted border
-const THUMB = 32; // thumb width (px)
-const PINK = [255, 157, 177];
-const GREEN = [87, 192, 106];
-
-const lerp = (a: number, b: number, k: number) => Math.round(a + (b - a) * k);
-const mix = (k: number) =>
-  `rgb(${lerp(PINK[0], GREEN[0], k)},${lerp(PINK[1], GREEN[1], k)},${lerp(
-    PINK[2],
-    GREEN[2],
-    k,
-  )})`;
+const START = 6;
+const THUMB = 32;
+const PINK = "rgb(255, 157, 177)";
+const GREEN = "rgb(87, 192, 106)";
 
 export default function PwaWidget() {
-  const [x, setX] = useState(0);
   const [done, setDone] = useState(false);
   const [grabbing, setGrabbing] = useState(false);
   const [viewed, setViewed] = useState(false);
+  const [max, setMax] = useState(126);
+  const [progress, setProgress] = useState(0);
 
   const trackRef = useRef<HTMLDivElement>(null);
-  const dragging = useRef(false);
-  const startX = useRef(0);
-  const tv = useRef(126);
-  const xRef = useRef(0); // latest x, read on pointer-up (avoids stale closure)
+  const x = useMotionValue(0);
+  const reduce = useReducedMotion();
+  const lockHover = useCollageHoverLock();
 
-  const measure = () => {
-    const w = trackRef.current?.clientWidth ?? 168;
-    tv.current = Math.max(40, w - THUMB - START * 2);
-  };
-  const clamp = (v: number) => Math.max(0, Math.min(tv.current, v));
-  const applyX = (v: number) => {
-    const c = clamp(v);
-    xRef.current = c;
-    setX(c);
-  };
-  const k = tv.current ? Math.max(0, Math.min(1, x / tv.current)) : 0;
-  const active = grabbing || x > 0;
+  const fillWidth = useTransform(x, (v) => `${THUMB + v}px`);
+  const fillBg = useTransform(x, [0, Math.max(max, 1)], [PINK, GREEN]);
+  const fade = useTransform(x, (v) =>
+    max ? Math.max(0, 1 - (v / max) * 1.5) : 1,
+  );
+  const trailOpacity = useTransform(x, (v) =>
+    grabbing ? Math.min(1, (v / Math.max(max, 1)) * 2) : 0,
+  );
 
-  const onDown = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (done) return;
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const measure = () => {
+      setMax(Math.max(40, el.clientWidth - THUMB - START * 2));
+    };
     measure();
-    dragging.current = true;
-    setGrabbing(true);
-    startX.current = e.clientX;
-    applyX(0);
-    try {
-      e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
-    e.preventDefault();
-  };
-  const onMove = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (!dragging.current) return;
-    applyX(e.clientX - startX.current);
-  };
-  const onUp = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (!dragging.current) return;
-    dragging.current = false;
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const unsub = x.on("change", (v) => {
+      setProgress(max ? Math.round((v / max) * 100) : 0);
+    });
+    return unsub;
+  }, [x, max]);
+
+  const finish = () => {
+    setDone(true);
     setGrabbing(false);
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {}
-    if (xRef.current >= tv.current * 0.82) setDone(true);
-    else applyX(0);
+    lockHover(false);
+  };
+
+  const snapBack = () => {
+    animate(x, 0, reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 28 });
   };
 
   const close = () => {
     setDone(false);
     setViewed(false);
-    applyX(0);
+    animate(x, 0, { duration: reduce ? 0 : 0.2 });
   };
   const spotlight = () => {
     setViewed(false);
     requestAnimationFrame(() => setViewed(true));
   };
-
-  const fade = Math.max(0, 1 - k * 1.5);
 
   return (
     <div
@@ -114,38 +106,51 @@ export default function PwaWidget() {
       </div>
 
       <div className="track" ref={trackRef}>
-        <div className="fill" style={{ width: THUMB + x, background: mix(k) }} />
-        <div className="cta" style={{ opacity: fade }}>
+        <motion.div className="fill" style={{ width: fillWidth, background: fillBg }} />
+        <motion.div className="cta" style={{ opacity: fade }}>
           <span className="a">Slide to install</span>
-        </div>
-        <span className="chev" style={{ opacity: fade }}>
+        </motion.div>
+        <motion.span className="chev" style={{ opacity: fade }}>
           ›››
-        </span>
-        <div
+        </motion.span>
+        <motion.div
           className="thumb"
-          style={active ? { transform: `translateX(${x}px)` } : undefined}
-          onPointerDown={onDown}
-          onPointerMove={onMove}
-          onPointerUp={onUp}
-          onPointerCancel={onUp}
+          style={{ x }}
+          drag={done ? false : "x"}
+          dragConstraints={{ left: 0, right: max }}
+          dragElastic={0}
+          dragMomentum={false}
+          onDragStart={() => {
+            lockHover(true);
+            setGrabbing(true);
+          }}
+          onDragEnd={() => {
+            lockHover(false);
+            setGrabbing(false);
+            if (x.get() >= max * 0.82) finish();
+            else snapBack();
+          }}
           role="slider"
           aria-label="Slide to install the app"
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-valuenow={Math.round(k * 100)}
+          aria-valuenow={progress}
           tabIndex={0}
           onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") setDone(true);
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              animate(x, max, {
+                duration: reduce ? 0 : 0.25,
+                onComplete: finish,
+              });
+            }
           }}
         >
-          <span
-            className="trail"
-            style={{ opacity: grabbing ? Math.min(1, k * 2) : 0 }}
-          >
+          <motion.span className="trail" style={{ opacity: trailOpacity }}>
             <i />
             <i />
             <i />
-          </span>
+          </motion.span>
           <svg
             className="rk"
             viewBox="4 4.5 15 15"
@@ -190,7 +195,7 @@ export default function PwaWidget() {
               strokeWidth="1"
             />
           </svg>
-        </div>
+        </motion.div>
       </div>
 
       <div className="feats">
@@ -208,48 +213,86 @@ export default function PwaWidget() {
         </div>
       </div>
 
-      <div className="okview">
-        <div
-          className="okphonewrap"
-          onAnimationEnd={() => {
-            if (viewed) setViewed(false);
-          }}
-        >
-          <div className="okphone">
-            <div className="okgrid">
-              <i />
-              <div className="japp">J</div>
-              <i />
-              <i />
-              <i />
-              <i />
+      <AnimatePresence>
+        {done ? (
+          <motion.div
+            className="okview"
+            initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={reduce ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
+            transition={reduce ? { duration: 0 } : { duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <motion.div
+              className="okphonewrap"
+              initial={reduce ? false : { opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={
+                reduce
+                  ? { duration: 0 }
+                  : { duration: 0.55, ease: [0.2, 1.5, 0.4, 1] }
+              }
+              onAnimationEnd={() => {
+                if (viewed) setViewed(false);
+              }}
+            >
+              <div className="okphone">
+                <div className="okgrid">
+                  <i />
+                  <div className="japp">J</div>
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </div>
+              </div>
+              <motion.span
+                className="jspk a"
+                initial={reduce ? { opacity: 0.9 } : { opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 0.9, scale: 1 }}
+                transition={reduce ? { duration: 0 } : { delay: 0.22, duration: 0.5 }}
+              >
+                ✦
+              </motion.span>
+              <motion.span
+                className="jspk b"
+                initial={reduce ? { opacity: 0.9 } : { opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 0.9, scale: 1 }}
+                transition={reduce ? { duration: 0 } : { delay: 0.3, duration: 0.5 }}
+              >
+                ✦
+              </motion.span>
+              <motion.span
+                className="jspk c"
+                initial={reduce ? { opacity: 0.9 } : { opacity: 0, scale: 0.3 }}
+                animate={{ opacity: 0.9, scale: 1 }}
+                transition={reduce ? { duration: 0 } : { delay: 0.26, duration: 0.5 }}
+              >
+                ✦
+              </motion.span>
+            </motion.div>
+            <div className="oktxt">
+              <div className="okh">You&apos;re all set!</div>
+              <div className="oks">
+                Look for Jayesh App
+                <br />
+                on your home screen.
+              </div>
             </div>
-          </div>
-          <span className="jspk a">✦</span>
-          <span className="jspk b">✦</span>
-          <span className="jspk c">✦</span>
-        </div>
-        <div className="oktxt">
-          <div className="okh">You&apos;re all set!</div>
-          <div className="oks">
-            Look for Jayesh App
-            <br />
-            on your home screen.
-          </div>
-        </div>
-        <button className="okbtn" onClick={spotlight} type="button">
-          <span className="gi">
-            <i />
-            <i />
-            <i />
-            <i />
-          </span>
-          View on Home Screen
-        </button>
-        <button className="okclose" onClick={close} type="button">
-          Close
-        </button>
-      </div>
+            <button className="okbtn" onClick={spotlight} type="button">
+              <span className="gi">
+                <i />
+                <i />
+                <i />
+                <i />
+              </span>
+              View on Home Screen
+            </button>
+            <button className="okclose" onClick={close} type="button">
+              Close
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }

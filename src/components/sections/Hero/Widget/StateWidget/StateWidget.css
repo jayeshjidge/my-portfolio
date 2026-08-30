@@ -4,7 +4,7 @@
   right: 8%;
   top: 26%;
   width: 198px;
-  transform: rotate(3deg);
+  rotate: 3deg;
 }
 
 .hero2 .s6 {
@@ -33,7 +33,9 @@
 .hero2 .s6 .code .cv {
   color: #7ee787;
   font-weight: 600;
-  transition: color 0.2s;
+  display: inline-flex;
+  overflow: hidden;
+  vertical-align: bottom;
 }
 .hero2 .s6 .ctrl {
   display: flex;
@@ -77,11 +79,16 @@
 }
 .hero2 .s6 .step .val {
   min-width: 28px;
+  height: 26px;
   text-align: center;
   font-family: var(--h-font);
   font-weight: 800;
   font-size: 0.95rem;
   padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 .hero2 .s6 .update {
   font: inherit;
@@ -114,24 +121,7 @@
 .hero2 .s6 .rb {
   margin-left: 6px;
   color: #6a5acd;
-  opacity: 0;
-}
-.hero2 .s6.render .rb {
-  animation: h2rbpop 0.6s ease;
-}
-
-@keyframes h2rbpop {
-  0% {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  40% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-  100% {
-    opacity: 0;
-  }
+  display: inline-block;
 }
 
 /* on shorter/narrower desktops tighten the arc so the fold still fits */

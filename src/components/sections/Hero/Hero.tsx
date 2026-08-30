@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Hero — grid-sketch "story" hero.
  *
@@ -12,54 +14,67 @@
  *   - Widgets are arranged on a hex arc around the nameplate — none sits
  *     directly above or below it — with a slight tilt on each card.
  *   - Below 1180px, hero.css reflows the layout into a centered grid.
- *   - Ambient motion is disabled under prefers-reduced-motion (each
- *     component's own CSS file).
+ *   - Ambient CSS loops and Motion entrance both honor prefers-reduced-motion.
  */
 
+import { motion, useReducedMotion } from "motion/react";
 import SketchDefs from "./Decor/SketchDefs";
 import HeroDecor from "./Decor/HeroDecor";
 import StickyNotes from "./Decor/StickyNotes";
 import CenterSketch from "./Decor/CenterSketch";
 import Nameplate from "./Nameplate/Nameplate";
 import AmbientProp from "./Nameplate/AmbientProp";
+import CollageItem from "./CollageItem/CollageItem";
 import RespWidget from "./Widget/RespWidget/RespWidget";
 import PwaWidget from "./Widget/PwaWidget/PwaWidget";
 import PerfWidget from "./Widget/PerfWidget/PerfWidget";
 import StateWidget from "./Widget/StateWidget/StateWidget";
 import DeckWidget from "./Widget/DeckWidget/DeckWidget";
 import ErrWidget from "./Widget/ErrWidget/ErrWidget";
+import { stage, widgetGroup } from "./heroMotion";
 
 export default function Hero() {
+  const reduce = useReducedMotion();
+
   return (
     <section className="hero2" id="home" aria-label="Introduction">
       <SketchDefs />
-      <div className="hero2-stage">
-        {/* decorative layers under the interactive widgets */}
+      <motion.div
+        className="hero2-stage"
+        initial="hidden"
+        animate="visible"
+        variants={stage}
+      >
         <CenterSketch />
         <HeroDecor />
         <StickyNotes />
 
         <Nameplate />
-        <div className="hero2-widgets">
-          <div className="hw hw--resp">
+        <motion.div
+          className="hero2-widgets"
+          variants={widgetGroup(Boolean(reduce))}
+        >
+          <CollageItem className="hw hw--resp" from="left">
             <RespWidget />
-          </div>
-          <div className="hw hw--pwa">
+          </CollageItem>
+          <CollageItem className="hw hw--pwa" from="right">
             <PwaWidget />
-          </div>
-          <div className="hw hw--perf">
+          </CollageItem>
+          <CollageItem className="hw hw--perf" from="left">
             <PerfWidget />
-          </div>
-          <div className="hw hw--state">
+          </CollageItem>
+          <CollageItem className="hw hw--state" from="right">
             <StateWidget />
-          </div>
-          <DeckWidget />
-          <div className="hw hw--err">
+          </CollageItem>
+          <CollageItem className="hw hw--deck" from="down" hoverLift={false}>
+            <DeckWidget />
+          </CollageItem>
+          <CollageItem className="hw hw--err" from="right">
             <ErrWidget />
-          </div>
-        </div>
+          </CollageItem>
+        </motion.div>
         <AmbientProp />
-      </div>
+      </motion.div>
     </section>
   );
 }

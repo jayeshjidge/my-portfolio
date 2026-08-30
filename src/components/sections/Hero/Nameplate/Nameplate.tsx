@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable @next/next/no-img-element */
 /**
  * Nameplate — the centered wordmarks, tagline, blueprint brackets, and
@@ -5,41 +7,60 @@
  * story widgets are arranged around.
  */
 
+import { motion, useReducedMotion } from "motion/react";
 import { Dashes } from "../Decor/SketchDefs";
+import { fadeUp, highlighterWipe, wordmarkWipe } from "../heroMotion";
 
 export default function Nameplate() {
+  const reduce = Boolean(useReducedMotion());
+
   return (
     <>
       <div className="center">
-        <div className="eyebrow">Software Engineer</div>
+        <motion.div className="eyebrow" variants={fadeUp(0.1, reduce)}>
+          Software Engineer
+        </motion.div>
         <div className="name">
-          <img
-            className="wm"
-            src="/images/jayesh-wordmark.png"
-            alt="Jayesh"
-            width={1072}
-            height={217}
-            fetchPriority="high"
-            decoding="async"
-          />
-          <img
-            className="wm"
-            src="/images/jidge-wordmark.png"
-            alt="Jidge"
-            width={1282}
-            height={359}
-            fetchPriority="high"
-            decoding="async"
-          />
+          <motion.div className="wm-clip" variants={wordmarkWipe(0.18, reduce)}>
+            <img
+              className="wm"
+              src="/images/jayesh-wordmark.png"
+              alt="Jayesh"
+              width={1072}
+              height={217}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </motion.div>
+          <motion.div className="wm-clip" variants={wordmarkWipe(0.24, reduce)}>
+            <img
+              className="wm"
+              src="/images/jidge-wordmark.png"
+              alt="Jidge"
+              width={1282}
+              height={359}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </motion.div>
         </div>
-        <div className="tagline">
+        <motion.div className="tagline" variants={fadeUp(0.32, reduce)}>
           <span className="tag-text">
-            building for <span className="hl-y">web &amp; mobile</span>
+            building for{" "}
+            <span className="hl-y">
+              <motion.span
+                className="hl-mark"
+                aria-hidden="true"
+                style={{ originX: 0 }}
+                variants={highlighterWipe(0.42, reduce)}
+              />
+              web &amp; mobile
+            </span>
           </span>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="h-doodle">
+      <motion.div className="h-doodle" variants={fadeUp(0.4, reduce)}>
         <Dashes side="l" />
         <Dashes side="r" />
         <div className="l1">
@@ -47,7 +68,7 @@ export default function Nameplate() {
           now building
         </div>
         <div className="l2">micro-frontends</div>
-      </div>
+      </motion.div>
     </>
   );
 }

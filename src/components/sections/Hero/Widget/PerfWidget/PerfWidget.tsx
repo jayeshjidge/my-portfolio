@@ -1,6 +1,5 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element */
 /**
  * PERF-09 — "scroll inside → code-split chunk downloads → image lazy-loads".
  * The user scrolls the inner card themselves (mouse wheel / trackpad /
@@ -9,6 +8,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import "./PerfWidget.css";
 
 const PRIMARY_SRC =
@@ -21,6 +21,7 @@ export default function PerfWidget() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const imgwrapRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("idle");
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const root = scrollRef.current;
@@ -34,7 +35,7 @@ export default function PerfWidget() {
           if (e.isIntersecting && !done) {
             done = true;
             setPhase("dl");
-            timer = setTimeout(() => setPhase("ok"), 1000);
+            timer = setTimeout(() => setPhase("ok"), reduce ? 0 : 1000);
             io.disconnect();
           }
         });
@@ -46,12 +47,8 @@ export default function PerfWidget() {
       io.disconnect();
       clearTimeout(timer);
     };
-  }, []);
+  }, [reduce]);
 
-  /* Trap the wheel event: consume it inside the inner scroll unless the
-     user is already at the top/bottom edge and continuing to scroll past
-     it — then let the page take over. Attached natively so we can pass
-     `passive:false` and call preventDefault. */
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -61,7 +58,7 @@ export default function PerfWidget() {
       const atBot = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
       const scrollingUpAtTop = dy < 0 && atTop;
       const scrollingDownAtBot = dy > 0 && atBot;
-      if (scrollingUpAtTop || scrollingDownAtBot) return; // let page scroll
+      if (scrollingUpAtTop || scrollingDownAtBot) return;
       e.preventDefault();
       el.scrollTop += dy;
     };
@@ -99,21 +96,34 @@ export default function PerfWidget() {
             <div className="t w80" />
             <div className="t w60" />
           </div>
-          <div
-            className={`imgwrap${phase === "ok" ? " done" : ""}`}
-            ref={imgwrapRef}
-          >
-            <div className="loading">
-              <span className="spin" />
-              loading image…
-            </div>
-            <img
+          <div className="imgwrap" ref={imgwrapRef}>
+            <AnimatePresence>
+              {phase !== "ok" ? (
+                <motion.div
+                  className="loading"
+                  key="loading"
+                  initial={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: reduce ? 0 : 0.3 }}
+                >
+                  <span className="spin" />
+                  loading image…
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+            <motion.img
               src={PRIMARY_SRC}
               alt="Team collaborating around laptops"
               width={360}
               height={220}
               loading="lazy"
               decoding="async"
+              initial={false}
+              animate={{
+                opacity: phase === "ok" ? 1 : 0,
+                scale: phase === "ok" ? 1 : 1.06,
+              }}
+              transition={{ duration: reduce ? 0 : 0.5 }}
               onError={(e) => {
                 const img = e.currentTarget;
                 img.onerror = null;
@@ -135,7 +145,15 @@ export default function PerfWidget() {
         <div className="row">
           <span className="nm">gallery.chunk.js</span>
           <span className="bar">
-            <i />
+            <motion.i
+              initial={false}
+              style={{ originX: 0 }}
+              animate={{ scaleX: phase === "idle" ? 0 : 1 }}
+              transition={{
+                duration: reduce ? 0 : phase === "dl" ? 0.95 : 0.2,
+                ease: "easeOut",
+              }}
+            />
           </span>
           <span className="kb">64k</span>
         </div>

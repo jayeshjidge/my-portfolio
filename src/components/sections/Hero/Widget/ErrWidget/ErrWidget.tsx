@@ -1,42 +1,36 @@
 "use client";
 
-/* eslint-disable @next/next/no-img-element */
 /**
- * ERR-07 — error boundary demo.
- *   ON  → Break Sales → Sales tile falls back to a "failed / Try Again"
- *          state; Users & Orders keep working.
- *   OFF → Break Sales → whole widget shakes and swaps to a "💥 App crashed"
- *          fullscreen fallback.
- * Rendered inside a distinctive white "safety card" — see ErrWidget.css.
+ * ERR-07 — error boundary demo, styled as a polished "dashboard" card.
+ *   ON  → Break Sales → the Sales tile is wrapped in an "Error caught"
+ *          dashed boundary and swaps to a failed state; Users & Orders
+ *          keep working. A pink "Recover" bar re-renders the failed tile.
+ *   OFF → Break Sales → the whole card shakes and swaps to an
+ *          "App crashed" fallback (no boundary to contain it).
+ * Rendered inside a white "safety card" with a folded coral corner and a
+ * shield status row — see ErrWidget.css.
  */
 
 import { useEffect, useRef, useState } from "react";
-import { fluent } from "../../constants";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  ShieldCheck,
+  ShieldAlert,
+  Users,
+  BarChart3,
+  Package,
+  Check,
+  X,
+  RefreshCw,
+  Zap,
+  ServerCrash,
+  RotateCcw,
+} from "lucide-react";
 import "./ErrWidget.css";
 
 type Chart = "healthy" | "fallback" | "loading";
-type Status = { text: string; cls: string };
 
-const OFF_MSG: Status = {
-  text: "⚠ Boundary OFF — one break crashes everything",
-  cls: "bad",
-};
-const STATUS: Record<string, Status> = {
-  bootOn: { text: "🛡 Boundary ON — break to see it contained", cls: "ok" },
-  toggleOn: {
-    text: "🛡 Boundary ON — break the chart to see it contained",
-    cls: "ok",
-  },
-  toggleOff: OFF_MSG,
-  contained: {
-    text: "🛡 Error Boundary caught it — rest of the app is still running",
-    cls: "ok",
-  },
-  crashed: { text: "💥 No boundary — the whole app went down", cls: "bad" },
-  rebuilding: { text: "rebuilding component…", cls: "" },
-  recovered: { text: "✓ Component recovered — good as new", cls: "ok" },
-  reload: OFF_MSG,
-};
+const SHAKE = [0, -4, 4, -3, 3, 0];
 
 export default function ErrWidget() {
   const [on, setOn] = useState(true);
@@ -45,7 +39,7 @@ export default function ErrWidget() {
   const [broke, setBroke] = useState(false);
   const [shakeChart, setShakeChart] = useState(false);
   const [shakeAll, setShakeAll] = useState(false);
-  const [status, setStatus] = useState<Status>(STATUS.bootOn);
+  const reduce = useReducedMotion();
 
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const after = (ms: number, fn: () => void) => {
@@ -59,35 +53,30 @@ export default function ErrWidget() {
     setChart("healthy");
     setCrashed(false);
     setBroke(false);
-    setStatus(next ? STATUS.toggleOn : STATUS.toggleOff);
   };
 
   const breakIt = () => {
     setBroke(true);
     if (on) {
       setShakeChart(true);
-      after(430, () => {
+      after(reduce ? 0 : 430, () => {
         setShakeChart(false);
         setChart("fallback");
-        setStatus(STATUS.contained);
       });
     } else {
       setShakeAll(true);
-      after(520, () => {
+      after(reduce ? 0 : 520, () => {
         setShakeAll(false);
         setCrashed(true);
-        setStatus(STATUS.crashed);
       });
     }
   };
 
-  const tryAgain = () => {
+  const recover = () => {
     setChart("loading");
-    setStatus(STATUS.rebuilding);
-    after(850, () => {
+    after(reduce ? 0 : 850, () => {
       setChart("healthy");
       setBroke(false);
-      setStatus(STATUS.recovered);
     });
   };
 
@@ -95,113 +84,193 @@ export default function ErrWidget() {
     setCrashed(false);
     setChart("healthy");
     setBroke(false);
-    setStatus(STATUS.reload);
   };
 
-  const rootCls = [
-    "eb",
-    on && "on",
-    crashed && "crashed",
-    shakeAll && "shaking",
-  ]
+  const rootCls = ["eb", on ? "on" : "off", crashed && "crashed"]
+    .filter(Boolean)
+    .join(" ");
+  const knobSpring = reduce
+    ? { duration: 0 }
+    : { type: "spring" as const, stiffness: 500, damping: 32 };
+  const fade = { duration: reduce ? 0 : 0.22 };
+
+  // ---- Sales tile inner content (the boundary-guarded component) ----
+  const salesCaught = chart === "fallback";
+  const salesTileCls = ["eb-tile", "eb-tile--sales", salesCaught && "caught"]
+    .filter(Boolean)
+    .join(" ");
+  const salesBadgeCls = ["eb-badge", "sales", salesCaught && "is-err"]
     .filter(Boolean)
     .join(" ");
 
-  const chartCls = ["h-tile", "chart", `is-${chart}`, shakeChart && "shake"]
-    .filter(Boolean)
-    .join(" ");
+  const salesIcon =
+    chart === "loading" ? (
+      <span className="eb-spin" />
+    ) : (
+      <BarChart3 size={18} strokeWidth={2.4} />
+    );
+
+  const salesMark =
+    chart === "fallback" ? (
+      <span className="eb-mark err">
+        <X size={11} strokeWidth={3.4} />
+      </span>
+    ) : chart === "loading" ? (
+      <span className="eb-mark load" />
+    ) : (
+      <span className="eb-mark ok">
+        <Check size={11} strokeWidth={3.4} />
+      </span>
+    );
+
+  // ---- bottom action bar (varies with state) ----
+  let action: React.ReactNode = null;
+  if (!crashed) {
+    if (chart === "fallback") {
+      action = (
+        <button className="eb-recover" onClick={recover}>
+          <span className="eb-recover-ic">
+            <RefreshCw size={13} strokeWidth={2.6} />
+          </span>
+          <b>Recover</b>
+          <span>Re-render the failed UI</span>
+        </button>
+      );
+    } else if (chart === "loading") {
+      action = (
+        <div className="eb-recover is-loading">
+          <span className="eb-recover-ic">
+            <RefreshCw size={13} strokeWidth={2.6} className="spin" />
+          </span>
+          <b>Recovering…</b>
+          <span>Rebuilding the component</span>
+        </div>
+      );
+    } else {
+      action = (
+        <button className="eb-break" onClick={breakIt}>
+          <Zap size={13} strokeWidth={2.8} fill="currentColor" />
+          <span>Break Sales</span>
+        </button>
+      );
+    }
+  }
 
   return (
     <div className={rootCls}>
-      <div className="ebhead">
-        <span className="ebt">Error Boundary</span>
-        <span className="ebctl">
-          <span className="ebstate">{on ? "ON" : "OFF"}</span>
-          <span
-            className="ebswitch"
-            onClick={toggle}
-            role="switch"
-            aria-checked={on}
-            aria-label="Toggle error boundary"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                toggle();
-              }
-            }}
-          >
-            <span className="knob" />
-          </span>
+      <div className="eb-head">
+        <span className="eb-title">Error Boundary</span>
+        <button
+          className={`eb-toggle${on ? " on" : ""}`}
+          onClick={toggle}
+          role="switch"
+          aria-checked={on}
+          aria-label="Toggle error boundary"
+        >
+          <span className="eb-toggle-label">{on ? "ON" : "OFF"}</span>
+          <motion.span
+            className="eb-knob"
+            animate={{ x: on ? 24 : 0 }}
+            transition={knobSpring}
+          />
+        </button>
+      </div>
+
+      <div className="eb-status">
+        {on ? (
+          <ShieldCheck size={14} strokeWidth={2.4} color="#22a15c" />
+        ) : (
+          <ShieldAlert size={14} strokeWidth={2.4} color="#d1442f" />
+        )}
+        <span className="eb-status-main">
+          {on ? "Boundary active" : "Boundary off"}
+        </span>
+        <span className="eb-div" />
+        <span className="eb-status-sub">
+          {on ? "Catches runtime errors" : "One break crashes all"}
         </span>
       </div>
-      <div className="ebstage">
-        <div className="h-tiles">
-          <div className="h-tile">
-            <img
-              src={fluent("Busts in silhouette", "busts_in_silhouette")}
-              alt=""
-              width={24}
-              height={24}
-              loading="lazy"
-              decoding="async"
-            />
-            <b>Users</b>
-            <span className="dot" />
-          </div>
-          <div className={chartCls}>
-            <div className="shield" />
-            <div className="healthy">
-              <img
-                src={fluent("Bar chart", "bar_chart")}
-                alt=""
-                width={24}
-                height={24}
-                loading="lazy"
-                decoding="async"
-              />
-              <b>Sales</b>
-              <span className="dot" />
-            </div>
-            <div className="broken">
-              <span className="err">⚠️</span>
-              <span className="msg">failed</span>
-              <button className="tryagain" onClick={tryAgain}>
-                Try Again
-              </button>
-            </div>
-            <div className="loading">
-              <span className="spin" />
-            </div>
-          </div>
-          <div className="h-tile">
-            <img
-              src={fluent("Package", "package")}
-              alt=""
-              width={24}
-              height={24}
-              loading="lazy"
-              decoding="async"
-            />
-            <b>Orders</b>
-            <span className="dot" />
-          </div>
-        </div>
-        <div className="crash">
-          <div className="boom">💥</div>
-          <b>App crashed</b>
-          <button className="reload" onClick={reload}>
-            Reload
-          </button>
-        </div>
-      </div>
-      <button
-        className={`breakbtn${broke ? " hidden" : ""}`}
-        onClick={breakIt}
+
+      <motion.div
+        className="eb-tiles"
+        animate={
+          shakeAll && !reduce
+            ? { x: SHAKE, opacity: 1 }
+            : crashed
+              ? { opacity: 0 }
+              : { opacity: 1, x: 0 }
+        }
+        transition={
+          shakeAll && !reduce ? { duration: 0.5 } : { duration: reduce ? 0 : 0.3 }
+        }
+        style={{ pointerEvents: crashed ? "none" : undefined }}
       >
-        💥 Break Sales
-      </button>
-      <div className={`status ${status.cls}`}>{status.text}</div>
+        <div className="eb-tile">
+          <div className="eb-badge users">
+            <Users size={18} strokeWidth={2.4} />
+          </div>
+          <span className="eb-tile-name">Users</span>
+          <span className="eb-mark ok">
+            <Check size={11} strokeWidth={3.4} />
+          </span>
+        </div>
+
+        <motion.div
+          className={salesTileCls}
+          animate={shakeChart && !reduce ? { x: SHAKE } : { x: 0 }}
+          transition={{ duration: reduce ? 0 : 0.42 }}
+        >
+          <AnimatePresence>
+            {salesCaught ? (
+              <motion.span
+                className="eb-caught-label"
+                initial={reduce ? false : { opacity: 0, y: 2 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={fade}
+              >
+                Error caught
+              </motion.span>
+            ) : null}
+          </AnimatePresence>
+          <div className={salesBadgeCls}>{salesIcon}</div>
+          <span className="eb-tile-name">Sales</span>
+          {salesMark}
+        </motion.div>
+
+        <div className="eb-tile">
+          <div className="eb-badge orders">
+            <Package size={18} strokeWidth={2.4} />
+          </div>
+          <span className="eb-tile-name">Orders</span>
+          <span className="eb-mark ok">
+            <Check size={11} strokeWidth={3.4} />
+          </span>
+        </div>
+      </motion.div>
+
+      <div className="eb-action">{action}</div>
+
+      <AnimatePresence>
+        {crashed ? (
+          <motion.div
+            className="eb-crash"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={fade}
+          >
+            <span className="eb-crash-badge">
+              <ServerCrash size={22} strokeWidth={2} />
+            </span>
+            <b>App crashed</b>
+            <p>No boundary — the whole app went down</p>
+            <button className="eb-reload" onClick={reload}>
+              <RotateCcw size={13} strokeWidth={2.6} /> Reload app
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }

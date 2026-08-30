@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * HeroDecor — hand-drawn sketch decorations scattered around the hero,
  * matching the reference collage: a fluffy cloud, a paper airplane, a big
@@ -10,6 +12,8 @@
  * `#hero-sketch` filter that SketchDefs already renders in this section.
  */
 
+import { motion, useReducedMotion } from "motion/react";
+import { fadeOnly } from "../heroMotion";
 import "./HeroDecor.css";
 
 /* Little 4-point sparkle burst. */
@@ -166,8 +170,14 @@ function Heart({ className, color = "#a78bfa" }: { className?: string; color?: s
 }
 
 export default function HeroDecor() {
+  const reduce = Boolean(useReducedMotion());
+
   return (
-    <div className="hero-decor" aria-hidden="true">
+    <motion.div
+      className="hero-decor"
+      aria-hidden="true"
+      variants={fadeOnly(0.78, reduce)}
+    >
       {/* top-left fluffy cloud */}
       <Cloud className="d-cloud" />
 
@@ -209,6 +219,6 @@ export default function HeroDecor() {
       <Sparkle className="d-sp d-sp-3" />
       <Sparkle className="d-sp d-sp-4" />
       <Sparkle className="d-sp d-sp-5" />
-    </div>
+    </motion.div>
   );
 }

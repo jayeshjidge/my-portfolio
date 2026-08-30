@@ -1,13 +1,17 @@
 /* ------------- Site-mockup deck (design → shipped) ------------- */
 
-.hero2 .deck {
-  position: absolute;
+.hero2 .hw--deck {
   left: 8%;
   top: 52%;
-  z-index: 6;
   width: 216px;
   height: 200px;
-  transform: rotate(-3deg);
+  z-index: 6;
+}
+.hero2 .deck {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  rotate: -3deg;
   cursor: pointer;
 }
 .hero2 .dcard {
@@ -19,7 +23,6 @@
   border-radius: 14px;
   box-shadow: 0 22px 44px -22px rgba(20, 24, 40, 0.42),
     0 3px 8px rgba(20, 24, 40, 0.06);
-  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s;
   transform-origin: 18% 94%;
   overflow: hidden;
 }
@@ -30,38 +33,6 @@
 .hero2 .dcard.front {
   height: 272px;
   z-index: 5;
-}
-.hero2 .deck .b1 {
-  transform: rotate(5deg) translate(20px, 7px);
-  z-index: 4;
-}
-.hero2 .deck .b2 {
-  transform: rotate(10deg) translate(38px, 15px);
-  z-index: 3;
-}
-.hero2 .deck .b3 {
-  transform: rotate(15deg) translate(55px, 25px);
-  z-index: 2;
-}
-.hero2 .deck .front {
-  transform: rotate(-1.5deg);
-}
-.hero2 .deck:hover .front,
-.hero2 .deck.open .front {
-  transform: rotate(-3deg) translateY(-10px);
-  box-shadow: 0 32px 56px -22px rgba(20, 24, 40, 0.5);
-}
-.hero2 .deck:hover .b1,
-.hero2 .deck.open .b1 {
-  transform: rotate(9deg) translate(60px, 0);
-}
-.hero2 .deck:hover .b2,
-.hero2 .deck.open .b2 {
-  transform: rotate(17deg) translate(112px, 8px);
-}
-.hero2 .deck:hover .b3,
-.hero2 .deck.open .b3 {
-  transform: rotate(25deg) translate(160px, 20px);
 }
 .hero2 .dcard .mini {
   padding: 16px 15px 0;
@@ -222,7 +193,7 @@
 
 /* on shorter/narrower desktops tighten the arc so the fold still fits */
 @media (min-width: 1180px) and (max-width: 1400px) {
-  .hero2 .deck {
+  .hero2 .hw--deck {
     left: 5%;
     top: 52%;
   }
@@ -232,22 +203,19 @@
    The deck fans to the right, so it gets its own full row + room
    rather than the plain static reset the other widgets get. */
 @media (max-width: 1179px) {
-  .hero2 .deck {
-    position: relative;
-    left: auto;
-    right: auto;
-    top: auto;
-    transform: none;
-    z-index: 1;
+  .hero2 .hw--deck {
     width: 260px;
     height: 260px;
     grid-column: 1 / -1;
     justify-self: center;
   }
+  .hero2 .deck {
+    rotate: none;
+  }
 }
 
 @media (max-width: 600px) {
-  .hero2 .deck {
+  .hero2 .hw--deck {
     width: 220px;
     height: 210px;
   }
@@ -301,27 +269,7 @@
   .hero2 .dcard.front .meta span {
     font-size: 0.52rem;
   }
-  .hero2 .deck .b1 {
-    transform: rotate(5deg) translate(18px, 6px);
-  }
-  .hero2 .deck .b2 {
-    transform: rotate(10deg) translate(34px, 13px);
-  }
-  .hero2 .deck:hover .front,
-  .hero2 .deck.open .front {
-    transform: rotate(-3deg) translateY(-8px);
-  }
-  .hero2 .deck:hover .b1,
-  .hero2 .deck.open .b1 {
-    transform: rotate(9deg) translate(54px, 0);
-  }
-  .hero2 .deck:hover .b2,
-  .hero2 .deck.open .b2 {
-    transform: rotate(17deg) translate(100px, 6px);
-  }
-  .hero2 .deck .b3,
-  .hero2 .deck:hover .b3,
-  .hero2 .deck.open .b3 {
+  .hero2 .deck .b3 {
     display: none;
   }
 }

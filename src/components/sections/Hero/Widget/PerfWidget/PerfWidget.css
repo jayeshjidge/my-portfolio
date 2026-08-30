@@ -4,7 +4,7 @@
   left: 8%;
   top: 26%;
   width: 190px;
-  transform: rotate(-3deg);
+  rotate: -3deg;
 }
 
 .hero2 .scrollcard,
@@ -112,7 +112,6 @@
   color: #5a76c9;
   font-family: var(--h-mono);
   font-size: 0.5rem;
-  transition: opacity 0.3s;
 }
 .hero2 .p9 .imgwrap .spin {
   width: 20px;
@@ -128,16 +127,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transform: scale(1.06);
-  transition: opacity 0.5s, transform 0.5s;
-}
-.hero2 .p9 .imgwrap.done img {
-  opacity: 1;
-  transform: none;
-}
-.hero2 .p9 .imgwrap.done .loading {
-  opacity: 0;
 }
 .hero2 .p9 .net {
   width: 190px;
@@ -184,11 +173,9 @@
 .hero2 .p9 .net .bar i {
   display: block;
   height: 100%;
-  width: 0;
+  width: 100%;
+  transform-origin: left center;
   background: #7c9dff;
-}
-.hero2 .p9 .net.dl .bar i {
-  animation: h2fillbar 0.95s ease forwards;
 }
 .hero2 .p9 .net .kb {
   font-family: var(--h-mono);
@@ -201,11 +188,6 @@
 @keyframes h2spin {
   to {
     transform: rotate(360deg);
-  }
-}
-@keyframes h2fillbar {
-  to {
-    width: 100%;
   }
 }
 

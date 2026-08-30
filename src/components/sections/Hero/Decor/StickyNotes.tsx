@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * StickyNotes — two taped-paper doodle cards that fill the empty
  * spaces around the widget collage. Content only; layout & tilt come
@@ -6,7 +8,9 @@
 
 /* eslint-disable @next/next/no-img-element */
 
+import { motion, useReducedMotion } from "motion/react";
 import { fluent } from "../constants";
+import { fadeUp, NOTE_HOVER } from "../heroMotion";
 import "./StickyNotes.css";
 
 function Tape() {
@@ -14,10 +18,16 @@ function Tape() {
 }
 
 export default function StickyNotes() {
+  const reduce = Boolean(useReducedMotion());
+  const hover = reduce ? undefined : NOTE_HOVER;
+
   return (
     <div className="hero-stickies" aria-hidden="true">
-      {/* pink "What I focus on" checklist */}
-      <div className="snote snote-2">
+      <motion.div
+        className="snote snote-2"
+        variants={fadeUp(0.72, reduce)}
+        whileHover={hover}
+      >
         <Tape />
         <div className="snote-title">What I focus on</div>
         <ul className="snote-checks">
@@ -36,10 +46,13 @@ export default function StickyNotes() {
             <path d="M8 14 Q12 18 16 14" fill="none" stroke="#1b1e26" strokeWidth="1.4" strokeLinecap="round" filter="url(#hero-sketch)" />
           </svg>
         </span>
-      </div>
+      </motion.div>
 
-      {/* 3 — yellow "Always Learning" bullets */}
-      <div className="snote snote-3">
+      <motion.div
+        className="snote snote-3"
+        variants={fadeUp(0.8, reduce)}
+        whileHover={hover}
+      >
         <Tape />
         <div className="snote-title">Always Learning</div>
         <ul className="snote-bullets">
@@ -58,7 +71,7 @@ export default function StickyNotes() {
             decoding="async"
           />
         </span>
-      </div>
+      </motion.div>
     </div>
   );
 }

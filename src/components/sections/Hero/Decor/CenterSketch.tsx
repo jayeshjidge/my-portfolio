@@ -1,17 +1,24 @@
+"use client";
+
 /**
  * CenterSketch — the big hand-drawn browser wireframe that sits above
  * the nameplate. All strokes wobble via the shared `#hero-sketch`
  * filter. Positioned & sized in CenterSketch.css.
  */
 
+import { motion, useReducedMotion } from "motion/react";
+import { fadeOnly } from "../heroMotion";
 import "./CenterSketch.css";
 
 export default function CenterSketch() {
+  const reduce = Boolean(useReducedMotion());
+
   return (
-    <svg
+    <motion.svg
       className="center-sketch"
       viewBox="0 0 360 240"
       aria-hidden="true"
+      variants={fadeOnly(0, reduce, 0.92)}
     >
       <g
         fill="none"
@@ -53,6 +60,6 @@ export default function CenterSketch() {
         <circle cx="34" cy="23" r="2.6" fill="#febc2e" />
         <circle cx="44" cy="23" r="2.6" fill="#28c840" />
       </g>
-    </svg>
+    </motion.svg>
   );
 }

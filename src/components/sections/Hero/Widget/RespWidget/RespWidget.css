@@ -5,7 +5,7 @@
   top: 0%;
   width: 250px;
   height: 220px;
-  transform: rotate(-4deg);
+  rotate: -4deg;
 }
 
 .hero2 .r6 {

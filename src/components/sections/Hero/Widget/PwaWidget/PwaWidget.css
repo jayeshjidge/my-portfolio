@@ -4,7 +4,7 @@
   right: 7%;
   top: 0.5%;
   width: 200px;
-  transform: rotate(3deg);
+  rotate: 3deg;
 }
 
 /* ONE fixed box shared by both states → the flip to success causes zero CLS */
@@ -118,22 +118,21 @@
   z-index: 4;
   cursor: grab;
   touch-action: none;
-  animation: pwsnudge 2.6s ease-in-out infinite;
-}
-/* idle "drag me" hint — pauses on hover / while dragging / once installed */
-.pwaslide .thumb:hover,
-.pwaslide.grabbing .thumb,
-.pwaslide.done .thumb {
-  animation: none;
 }
 .pwaslide.grabbing .thumb {
   cursor: grabbing;
 }
-/* inline SVG rocket, sized with padding so it never touches the tile edges */
+/* idle "drag me" hint on the rocket — Motion owns the thumb's x */
 .pwaslide .thumb .rk {
   display: block;
   width: 20px;
   height: 20px;
+  animation: pwsnudge 2.6s ease-in-out infinite;
+}
+.pwaslide .thumb:hover .rk,
+.pwaslide.grabbing .thumb .rk,
+.pwaslide.done .thumb .rk {
+  animation: none;
 }
 .pwaslide .thumb .trail {
   position: absolute;
@@ -252,17 +251,6 @@
   gap: 8px;
   padding: 12px;
   text-align: center;
-  opacity: 0;
-  transform: scale(0.96);
-  pointer-events: none;
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-.pwaslide.done .okview {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
 }
 .pwaslide .okphonewrap {
   position: relative;
@@ -327,7 +315,6 @@
 .pwaslide .jspk {
   position: absolute;
   line-height: 1;
-  opacity: 0;
 }
 .pwaslide .jspk.a {
   top: -3px;
@@ -410,46 +397,6 @@
 .pwaslide .okclose:hover {
   color: var(--ink);
 }
-.pwaslide.done .okphonewrap {
-  animation: pwspop 0.55s cubic-bezier(0.2, 1.5, 0.4, 1) both;
-}
-.pwaslide.done .jspk {
-  animation: pwsjsp 0.5s 0.22s ease both;
-}
-.pwaslide.done .jspk.b {
-  animation-delay: 0.3s;
-}
-.pwaslide.done .jspk.c {
-  animation-delay: 0.26s;
-}
-@keyframes pwspop {
-  0% {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.08);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-@keyframes pwsjsp {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-  100% {
-    opacity: 0.9;
-    transform: scale(1);
-  }
-}
-
 /* "View on Home Screen" → spotlight the freshly-installed app */
 .pwaslide.viewed .okphone {
   animation: pwsfoc 0.7s ease;
@@ -507,19 +454,13 @@
 /* responsive reflow — widgets flow into a centered grid below 1180px */
 @media (max-width: 1179px) {
   .hero2 .hw--pwa {
-    transform: none;
+    rotate: none;
     width: auto;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pwaslide .thumb {
+  .pwaslide .thumb .rk {
     animation: none;
-  }
-  .pwaslide.done .okphonewrap,
-  .pwaslide.done .jspk {
-    animation: none;
-    opacity: 1;
-    transform: none;
   }
 }

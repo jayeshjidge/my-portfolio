@@ -13,7 +13,7 @@
   font-family: var(--h-marker);
   color: #20242e;
   line-height: 1.2;
-  transform: rotate(-3deg);
+  pointer-events: auto;
 }
 .hero2 .snote-tape {
   position: absolute;
@@ -87,14 +87,14 @@
   top: 61%;
   left: 32%;
   width: 174px;
-  transform: rotate(2deg);
+  rotate: 2deg;
 }
 .hero2 .snote-3 {
   background: #fdf1b7;
   top: 62%;
   right: 26%;
   width: 178px;
-  transform: rotate(-2deg);
+  rotate: -2deg;
 }
 
 .hero2 .snote-smile {

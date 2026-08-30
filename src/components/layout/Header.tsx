@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState, type MouseEvent } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { portfolio } from "@/data/portfolio";
 
 export function Header() {
   const [active, setActive] = useState("#home");
   const lenis = useLenis();
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => {
@@ -39,7 +41,13 @@ export function Header() {
 
   return (
     <header className="topbar is-paper" id="top">
-      <nav className="nav-pill" aria-label="Primary">
+      <motion.nav
+        className="nav-pill"
+        aria-label="Primary"
+        initial={reduce ? false : { y: -12, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: reduce ? 0 : 0.6, ease: [0.16, 1, 0.3, 1], delay: reduce ? 0 : 0.05 }}
+      >
         {portfolio.nav.map((item) => (
           <a
             key={item.href}
@@ -50,7 +58,7 @@ export function Header() {
             {item.label}
           </a>
         ))}
-      </nav>
+      </motion.nav>
     </header>
   );
 }

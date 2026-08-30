@@ -58,7 +58,7 @@
   position: absolute;
   left: 50%;
   top: 35%;
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
   text-align: center;
   z-index: 5;
   width: min(780px, 92vw);
@@ -125,9 +125,8 @@
   color: var(--ink);
   font-weight: 700;
 }
-/* hand-painted highlighter swipe behind the marker word */
-.hero2 .hl-y::before {
-  content: "";
+/* hand-painted highlighter swipe — real span so Motion can scaleX it */
+.hero2 .hl-mark {
   position: absolute;
   z-index: -1;
   left: -7px;
@@ -140,8 +139,14 @@
     rgba(255, 225, 77, 0.5) 2.6px 3.6px
   );
   border-radius: 4px;
-  transform: rotate(-0.5deg);
+  rotate: -0.5deg;
+  transform-origin: left center;
   filter: url(#hero-rough);
+}
+.hero2 .wm-clip {
+  display: block;
+  overflow: hidden;
+  line-height: 0;
 }
 
 /* --------------------------- now-building --------------------------- */
@@ -149,7 +154,7 @@
   position: absolute;
   left: 50%;
   top: calc(35% + 118px);
-  transform: translateX(-50%);
+  translate: -50% 0;
   z-index: 6;
   text-align: center;
   pointer-events: none;
@@ -267,13 +272,13 @@
   }
   .hero2 .center {
     position: static;
-    transform: none;
+    translate: none;
     width: auto;
     max-width: 640px;
   }
   .hero2 .h-doodle {
     position: static;
-    transform: none;
+    translate: none;
     margin: 24px auto 0;
   }
   .hero2 .hero2-widgets {
@@ -292,6 +297,7 @@
     right: auto;
     top: auto;
     transform: none;
+    rotate: none;
     z-index: 1;
   }
   /* ambient prop is desktop-only flourish */

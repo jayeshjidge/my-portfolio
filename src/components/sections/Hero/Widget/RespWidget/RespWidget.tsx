@@ -9,13 +9,12 @@
  */
 
 import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { useCollageHoverLock } from "../../CollageItem/CollageItem";
 import "./RespWidget.css";
 
 const MIN = 120;
 const MAX = 220;
-// Breakpoints split the [MIN, MAX] drag so the tablet occupies the widest band
-// (it used to flip desktop → mobile too fast to see the tablet view):
-//   mobile 120–148 · tablet 148–198 · desktop 198–220
 const MOBILE_BP = 148;
 const TABLET_BP = 198;
 
@@ -31,12 +30,15 @@ export default function RespWidget() {
   const [dragged, setDragged] = useState(false);
   const dragging = useRef(false);
   const start = useRef({ sx: 0, sw: 216 });
+  const reduce = useReducedMotion();
+  const lockHover = useCollageHoverLock();
 
   const clamp = (v: number) => Math.max(MIN, Math.min(MAX, v));
 
   const onDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     dragging.current = true;
     setDragged(true);
+    lockHover(true);
     e.currentTarget.setPointerCapture(e.pointerId);
     start.current = { sx: e.clientX, sw: w };
     e.preventDefault();
@@ -47,19 +49,27 @@ export default function RespWidget() {
   };
   const onUp = (e: ReactPointerEvent<HTMLDivElement>) => {
     dragging.current = false;
+    lockHover(false);
     try {
       e.currentTarget.releasePointerCapture(e.pointerId);
     } catch {}
   };
 
+  const frameCls = `frame${
+    w < MOBILE_BP ? " is-mobile" : w < TABLET_BP ? " is-tablet" : ""
+  }`;
+
   return (
     <div className={`r6${dragged ? " dragged" : ""}`}>
       <span className="wlabel">{labelFor(w)}</span>
-      <div
-        className={`frame${
-          w < MOBILE_BP ? " is-mobile" : w < TABLET_BP ? " is-tablet" : ""
-        }`}
-        style={{ width: w }}
+      <motion.div
+        className={frameCls}
+        animate={{ width: w }}
+        transition={
+          reduce
+            ? { duration: 0 }
+            : { type: "spring", stiffness: 420, damping: 32 }
+        }
       >
         <div className="top">
           <div className="dots">
@@ -106,7 +116,7 @@ export default function RespWidget() {
             if (e.key === "ArrowRight") setW((v) => clamp(v + 12));
           }}
         />
-      </div>
+      </motion.div>
       <span className="hint">drag →</span>
     </div>
   );
