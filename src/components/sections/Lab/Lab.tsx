@@ -2,10 +2,10 @@
 
 /**
  * Experiment Lab — an interactive technology mind-map with two decks
- * (Frontend / Backend). Progressive disclosure: the canvas is the hero; help,
- * energy and technology details are revealed only on demand (a `?` popover, a
- * floating energy control, and a floating inspector beside the clicked word).
- * This file is the composition shell: shared state + layout + auto-fit zoom.
+ * (Frontend / Backend), laid out side by side: a helper rail (how-to + cloud
+ * energy) on the left, the macOS-style cloud window in the centre, and the deck
+ * switch + a persistent detail panel on the right. This file is the composition
+ * shell: shared state + layout + auto-fit zoom.
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -14,10 +14,10 @@ import { useLenis } from "lenis/react";
 import { DECKS, type StackId } from "./labData";
 import { layoutCircle } from "./layoutCircle";
 import LabHeading from "./Intro/LabIntro";
-import HelpButton from "./Controls/HelpButton";
 import CloudWindow from "./Cloud/CloudWindow";
-import InspectorCard from "./Detail/InspectorCard";
 import StatStrip from "./Stats/StatStrip";
+import StackSwitch from "./Detail/StackSwitch";
+import DetailPanel from "./Detail/DetailPanel";
 import "./Lab.css";
 
 const ZOOM_MIN = 0.6;
@@ -28,7 +28,6 @@ export default function Lab() {
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const sectionRef = useRef<HTMLElement | null>(null);
-  const stageRef = useRef<HTMLDivElement | null>(null);
 
   const [stack, setStack] = useState<StackId>("frontend");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -58,8 +57,8 @@ export default function Lab() {
     setActiveId(null);
     setHoveredId(null);
   };
-  // Changing energy re-packs the cloud (words glide), so drop any selection so
-  // the floating inspector doesn't chase a moving word.
+  // Changing energy re-packs the cloud (words glide and some appear/vanish), so
+  // drop any selection and reset the manual zoom.
   const onIntensity = (v: number) => {
     setIntensity(v);
     setActiveId(null);
@@ -128,43 +127,37 @@ export default function Lab() {
       data-nav-offset="0"
       aria-label="Experiment Lab — technology map"
     >
-      <div className="lab-topbar">
-        <LabHeading />
-        <div className="lab-help-wrap">
-          <HelpButton />
+      <LabHeading />
+
+      <div className="lab-body">
+        <div className="lab-center">
+          <div className="lab-winwrap">
+            <CloudWindow
+              deck={deck}
+              positions={layout.positions}
+              activeId={activeId}
+              hoveredId={hoveredId}
+              intensity={intensity}
+              zoom={zoom}
+              zoomMin={ZOOM_MIN}
+              zoomMax={ZOOM_MAX}
+              onZoomIn={zoomIn}
+              onZoomOut={zoomOut}
+              onIntensity={onIntensity}
+              onHover={setHoveredId}
+              onLeave={() => setHoveredId(null)}
+              onPick={pickWord}
+              onResetActive={clearActive}
+            />
+          </div>
+          <StatStrip />
+        </div>
+
+        <div className="lab-right">
+          <StackSwitch value={stack} onChange={onStackChange} />
+          <DetailPanel deck={deck} wordId={activeId} onPick={selectWord} />
         </div>
       </div>
-
-      <div className="lab-stage" ref={stageRef}>
-        <CloudWindow
-          deck={deck}
-          stack={stack}
-          positions={layout.positions}
-          activeId={activeId}
-          hoveredId={hoveredId}
-          intensity={intensity}
-          zoom={zoom}
-          zoomMin={ZOOM_MIN}
-          zoomMax={ZOOM_MAX}
-          onStackChange={onStackChange}
-          onZoomIn={zoomIn}
-          onZoomOut={zoomOut}
-          onIntensity={onIntensity}
-          onHover={setHoveredId}
-          onLeave={() => setHoveredId(null)}
-          onPick={pickWord}
-          onResetActive={clearActive}
-        />
-        <InspectorCard
-          deck={deck}
-          wordId={activeId}
-          stageRef={stageRef}
-          recomputeKey={`${layoutKey}|${zoom}`}
-          onPick={selectWord}
-        />
-      </div>
-
-      <StatStrip />
     </section>
   );
 }

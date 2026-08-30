@@ -1,6 +1,6 @@
 import "./LabIntro.css";
 
-/** Section heading — top-left, Courier Prime, with a purple "Lab" accent. */
+/** Section heading — top-left, Courier Prime, all-black with a curvy underline. */
 export default function LabHeading() {
   return (
     <div className="lab-heading">

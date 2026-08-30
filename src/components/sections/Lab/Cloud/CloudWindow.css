@@ -4,19 +4,9 @@
   min-height: 0;
   border-radius: 16px;
   box-shadow: var(--sticker-shadow);
-  /* mac-bar (46) + footer (46) — the non-canvas height. Used by the desktop
+  /* mac-bar (34) + footer (46) — the non-canvas height. Used by the desktop
      one-viewport sizing in Lab.css. */
-  --lab-chrome: 92px;
-}
-
-/* Taller title bar so the Frontend / Backend switch sits comfortably at its
-   right, macOS-toolbar style. Scoped to the lab window only. */
-.lab-window .mac-bar {
-  height: 46px;
-  padding: 0 10px 0 14px;
-}
-.lab-window .mac-bar .lab-switch {
-  margin-left: auto;
+  --lab-chrome: 80px;
 }
 
 /* Canvas wrapper — holds the cloud and overlays the zoom controls. */
@@ -27,7 +17,7 @@
   display: flex;
 }
 
-/* Footer: category legend (left) + energy/reset controls (right). */
+/* Footer: category legend (left) + energy control (right). */
 .lab-window-foot {
   flex: none;
   display: flex;
@@ -61,11 +51,12 @@
   background: rgba(20, 24, 40, 0.06);
   color: var(--ink);
 }
-.lab-foot-btn.is-energy.is-on {
+.lab-foot-btn.is-on {
   background: #fdf3cf;
   color: #b98f1e;
 }
-.lab-foot-btn.is-energy:hover {
+.lab-foot-btn.is-energy:hover,
+.lab-foot-btn.is-help:hover {
   color: #b98f1e;
 }
 .lab-legend {

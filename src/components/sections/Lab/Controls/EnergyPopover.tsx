@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import EnergyControl from "../Rail/EnergyControl";
 import "./EnergyPopover.css";
 
-/** Compact floating "Cloud intensity" control, opened from the ⚡ button. */
+/** Compact floating "Cloud intensity" control, opened from the ⚡ footer button. */
 export default function EnergyPopover({
   value,
   onChange,

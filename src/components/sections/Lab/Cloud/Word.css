@@ -86,7 +86,7 @@
 
 /* ——— Focal word → same shape as every other node, just larger ——— */
 .lab-word.is-focal {
-  color: #0fa6bb;
+  color: #b8890f;
 }
 .lab-word.is-focal .lab-word-lb {
   letter-spacing: -0.03em;

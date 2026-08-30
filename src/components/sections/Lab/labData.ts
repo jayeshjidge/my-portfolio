@@ -55,12 +55,12 @@ export const CAT_COLORS: Record<LabCat, { ink: string; soft: string; dot: string
 };
 
 /**
- * The focal hub word + tab chrome accent — a fresh vibrant teal, distinct from
- * every category hue (no violet). `FOCAL_INK` colours the centre word, section
- * heading, help pill and stack switch; `FOCAL_SOFT` is its pastel fill.
+ * The focal hub word + tab chrome accent — a subtle golden, matching the
+ * "Cloud energy" card. `FOCAL_INK` colours the centre word, stack switch and
+ * detail panel; `FOCAL_SOFT` is its pale-yellow fill.
  */
-export const FOCAL_INK = "#0fa6bb";
-export const FOCAL_SOFT = "#d9f2f6";
+export const FOCAL_INK = "#b8890f";
+export const FOCAL_SOFT = "#faeec2";
 
 /** Weight tier → font size in `cqi` (1% of the canvas width). */
 export const SIZE: Record<number, number> = {
