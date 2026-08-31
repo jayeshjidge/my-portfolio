@@ -1,0 +1,71 @@
+/* ---- "Built for performance." — check badge + score tiles ---- */
+.hero2 .dcard .pf-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.hero2 .dcard .pf-check {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #3b82e0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 5px #e3eefc;
+}
+.hero2 .dcard .pf-check .pf-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+.hero2 .dcard .pf-check .pf-dot.c1 {
+  top: -3px;
+  right: -10px;
+  background: #f5c33b;
+}
+.hero2 .dcard .pf-check .pf-dot.c2 {
+  bottom: 1px;
+  left: -12px;
+  background: #ef7d9b;
+}
+.hero2 .dcard .pf-check .pf-dot.c3 {
+  top: 6px;
+  right: -14px;
+  background: #7c6cf2;
+}
+.hero2 .dcard .pf-scores {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+.hero2 .dcard .pf-score {
+  flex: 1;
+  background: #eaf2fd;
+  border-radius: 9px;
+  padding: 7px 2px 6px;
+  text-align: center;
+}
+.hero2 .dcard .pf-score b {
+  display: block;
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.78rem;
+  color: #2f6fd0;
+  line-height: 1;
+}
+.hero2 .dcard .pf-score span {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--h-font);
+  font-weight: 600;
+  font-size: 0.4rem;
+  color: #8098b6;
+  line-height: 1;
+}

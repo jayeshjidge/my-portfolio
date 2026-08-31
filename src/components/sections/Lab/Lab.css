@@ -11,7 +11,14 @@
   box-sizing: border-box;
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  padding: clamp(74px, 10vh, 96px) clamp(18px, 5vw, 30px) clamp(40px, 7vh, 64px);
+  /* Full-bleed background, but the inner content is capped to the shared
+     content column: the side gutters grow to center a max --content-max area. */
+  padding-top: clamp(74px, 10vh, 96px);
+  padding-bottom: clamp(40px, 7vh, 64px);
+  padding-inline: max(
+    clamp(18px, 5vw, 30px),
+    calc((100vw - var(--content-max)) / 2)
+  );
   font-family: var(--font-typewriter);
 }
 
@@ -49,15 +56,18 @@
   gap: clamp(16px, 3vh, 22px);
 }
 
-/* Mobile order: cloud first, then detail. */
+/* Mobile order: cloud first, then the deck switch, then the detail card. */
 .lab-center {
   order: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.lab-right {
+.lab-switchwrap {
   order: 2;
+}
+.lab-right {
+  order: 3;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -76,14 +86,35 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    padding: clamp(82px, 10vh, 112px) clamp(26px, 3.2vw, 52px)
+    /* Side gutters grow past the base clamp to keep content within the shared
+       content column (centered), while the section itself stays full-bleed.
+       Top padding clears the absolutely-positioned corner header so the canvas
+       + info columns start just beneath it (no overlap). */
+    padding: clamp(120px, 15vh, 140px)
+      max(clamp(26px, 3.2vw, 52px), calc((100vw - var(--content-max)) / 2))
       clamp(18px, 2.6vh, 30px);
   }
 
+  /* Header anchored in the top-left corner of the full-bleed section — same
+     placement as the Experience section's "EXPERIENCE" label
+     (.exp-stage-label): absolute, matching top/left offsets + z-index, and
+     pointer-events off so it floats over the canvas without blocking it. */
+  .lab-head-anim {
+    position: absolute;
+    top: clamp(20px, 4vh, 40px);
+    left: clamp(20px, 4vw, 56px);
+    z-index: 5;
+    margin: 0;
+    pointer-events: none;
+  }
   .lab-heading {
-    margin-bottom: clamp(10px, 1.8vh, 20px);
+    margin-bottom: 0;
   }
 
+  /* Two columns (canvas | rail) × two rows: the deck switch takes the top-right
+     cell on its own, and the canvas + detail card share the bottom "content"
+     row. Because both live in that one row, they get an identical top edge and
+     an identical height — the card is flush with the canvas window. */
   .lab-body {
     flex: 1;
     min-height: 0;
@@ -91,36 +122,41 @@
     grid-template-columns:
       minmax(0, 1fr)
       clamp(300px, 22vw, 340px);
-    gap: clamp(18px, 2vw, 34px);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      ".      switch"
+      "canvas card";
+    column-gap: clamp(18px, 2vw, 34px);
+    row-gap: clamp(10px, 1.4vh, 16px);
     align-items: stretch;
   }
 
-  .lab-center,
+  .lab-center {
+    grid-area: canvas;
+    order: 0;
+    min-height: 0;
+  }
+  .lab-switchwrap {
+    grid-area: switch;
+    order: 0;
+    align-self: start;
+  }
   .lab-right {
+    grid-area: card;
     order: 0;
     min-height: 0;
   }
 
-  /* Centre — cloud window fills height, stats sit beneath it. */
-  .lab-center {
-    display: grid;
-    grid-template-rows: minmax(0, 1fr) auto;
-    gap: clamp(10px, 1.4vh, 16px);
-  }
-
-  /* Container for the height-aware window sizing. */
+  /* Canvas — the window fills its cell, so its height (and top/bottom edges)
+     match the detail card in the same row. */
   .lab-winwrap {
+    flex: 1;
     min-height: 0;
-    container-type: size;
-    display: grid;
-    place-items: center;
+    min-width: 0;
   }
-
-  /* Fit a 16:11 window inside the wrapper by width OR height, whichever binds,
-     so the whole section stays within one viewport. */
   .lab-window {
-    width: min(100cqw, calc((100cqh - var(--lab-chrome, 80px)) * 16 / 11));
-    height: min(100cqh, calc(100cqw * 11 / 16 + var(--lab-chrome, 80px)));
+    width: 100%;
+    height: 100%;
   }
 
   /* Canvas fills the window minus its fixed chrome. */
@@ -130,12 +166,13 @@
     min-height: 0;
   }
 
-  /* Switch + detail panel — anchored to the top so the panel's top edge never
-     moves when its content changes (low CLS); the panel fills downward. */
-  .lab-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: clamp(10px, 1.4vh, 16px);
+  /* Detail card — fills the content row, so its top lines up with the canvas
+     window and its bottom lands on the same line. Driven by the row height
+     (not its content), so switching words or decks can't resize it (low CLS);
+     any overflow scrolls inside the card instead of growing it. */
+  .lab-right .lab-detail {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
   }
 }

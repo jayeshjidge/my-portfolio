@@ -6,6 +6,11 @@
   --radius: 26px;
   --radius-sm: 16px;
   --radius-pill: 999px;
+  /* Shared content column — every section aligns its inner content to this
+     width (headings / full-bleed backgrounds may still break out). Matches
+     the .app shell so sections line up down the page. */
+  --content-max: 1220px;
+  --content-pad: clamp(20px, 4vw, 40px);
   --nav-h: 66px;
   --blur: 20px;
   --blur-strong: 30px;

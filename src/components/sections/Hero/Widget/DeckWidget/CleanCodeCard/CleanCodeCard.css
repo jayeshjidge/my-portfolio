@@ -1,0 +1,39 @@
+/* ---- "Clean code. Better outcomes." — purple code panel ---- */
+.hero2 .dcard .cc-panel {
+  flex: 1;
+  background: linear-gradient(160deg, #efeafe, #e3dafb);
+  border-radius: 10px;
+  padding: 13px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  justify-content: center;
+}
+.hero2 .dcard .cc-glyph {
+  font-family: var(--h-mono);
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: #7c6cf2;
+  margin-bottom: 1px;
+}
+.hero2 .dcard .cc-ln {
+  height: 7px;
+  border-radius: 4px;
+  background: #cbbcf7;
+}
+.hero2 .dcard .cc-ln.w1 {
+  width: 66%;
+  background: #8b78ee;
+}
+.hero2 .dcard .cc-ln.w2 {
+  width: 84%;
+}
+.hero2 .dcard .cc-ln.w3 {
+  width: 74%;
+}
+.hero2 .dcard .cc-ln.w4 {
+  width: 40%;
+}
+.hero2 .dcard .cc-ln.accent {
+  background: #f6b58f;
+}

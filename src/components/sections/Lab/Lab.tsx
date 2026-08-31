@@ -30,24 +30,27 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 // kept gentle; transforms/opacity only.
 const LAB_EASE = [0.16, 1, 0.3, 1] as const;
 const headingV: Variants = {
-  hidden: { opacity: 0, y: -8 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: LAB_EASE } },
+  hidden: { opacity: 0, y: -12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: LAB_EASE } },
 };
 const canvasV: Variants = {
-  hidden: { opacity: 0, y: 22, scale: 0.985 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.65, ease: LAB_EASE, delay: 0.12 } },
+  hidden: { opacity: 0, y: 34, scale: 0.965 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.75, ease: LAB_EASE, delay: 0.14 } },
 };
 const panelV: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: LAB_EASE, delay: 0.26 } },
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: LAB_EASE, delay: 0.3 } },
 };
 
 export default function Lab() {
   const reduce = useReducedMotion();
   const lenis = useLenis();
   const sectionRef = useRef<HTMLElement | null>(null);
-  // Drives the doodle draw-in / float + the region reveals once in view.
-  const inView = useInView(sectionRef, { once: true, amount: 0.3 });
+  // Drives the doodle draw-in / float + the region reveals. Fires once, when the
+  // section reaches the upper ~40% of the viewport (it intersects a top band) —
+  // i.e. as it scrolls up / snaps into frame — not when it first peeks in at the
+  // bottom, so the entrance plays where the user is actually looking.
+  const inView = useInView(sectionRef, { once: true, margin: "0px 0px -60% 0px" });
   // Reduced motion → render regions normally (no hidden state, no transition).
   const reveal = (variants: Variants) =>
     reduce
@@ -158,7 +161,7 @@ export default function Lab() {
       id="lab"
       data-nav-offset="0"
       data-in={inView ? "true" : "false"}
-      aria-label="Experiment Lab — technology map"
+      aria-label="My Tech stack — technology map"
     >
       <LabDoodles />
       <motion.div className="lab-head-anim" {...reveal(headingV)}>
@@ -192,8 +195,14 @@ export default function Lab() {
           {/* <StatStrip /> */}
         </motion.div>
 
-        <motion.div className="lab-right" {...reveal(panelV)}>
+        {/* The deck switch sits in its own top row (above the detail card) so the
+            card below can share the canvas's content row — equal height, tops and
+            bottoms flush with the canvas window. */}
+        <motion.div className="lab-switchwrap" {...reveal(panelV)}>
           <StackSwitch value={stack} onChange={onStackChange} />
+        </motion.div>
+
+        <motion.div className="lab-right" {...reveal(panelV)}>
           <DetailPanel deck={deck} wordId={activeId} onPick={selectWord} />
         </motion.div>
       </div>

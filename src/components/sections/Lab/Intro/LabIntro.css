@@ -8,7 +8,6 @@
   font-weight: 700;
   font-size: clamp(1.5rem, 2.3vw, 2.1rem);
   letter-spacing: 0.02em;
-  text-transform: uppercase;
   color: var(--ink);
   line-height: 1;
   /* Hand-drawn curvy underline (matches the Experience heading), in black. */
@@ -18,8 +17,16 @@
   background-position: left bottom;
   background-size: 48px 7px;
 }
-.lab-heading-title span {
-  color: var(--ink);
+/* "stack" accent — Whiteboard-style coral script (matches .wb-title em).
+   The extra .lab beats the Lab's global `.lab em { font-family: Courier }`. */
+.lab .lab-heading-title em {
+  font-family: var(--font-hand);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: normal;
+  color: var(--coral, #ff6a52);
+  font-size: 1.32em;
+  padding: 0 0.06em;
 }
 .lab-heading-sub {
   margin: 10px 0 0;

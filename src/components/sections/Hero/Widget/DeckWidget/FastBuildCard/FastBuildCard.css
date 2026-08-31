@@ -1,0 +1,21 @@
+/* ---- "Fast build. Smooth experience." — amber gauge ---- */
+.hero2 .dcard .fb-panel {
+  flex: 1;
+  background: linear-gradient(160deg, #fdf1d6, #fbe6b9);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+}
+.hero2 .dcard .fb-gauge {
+  display: block;
+}
+.hero2 .dcard .fb-ln {
+  width: 78%;
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(192, 127, 18, 0.26);
+}

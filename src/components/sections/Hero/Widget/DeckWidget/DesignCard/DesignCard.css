@@ -1,0 +1,60 @@
+/* ---- "Design with purpose." — pink image + tool tiles ---- */
+.hero2 .dcard .dz-hero {
+  height: 64px;
+  border-radius: 9px;
+  background: linear-gradient(150deg, #fbe2e8, #f6c9d5);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.hero2 .dcard .dz-hero .dz-sun {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ec6f92;
+}
+.hero2 .dcard .dz-hero .dz-mtn {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34px;
+  background: #ee97ac;
+  clip-path: polygon(0 100%, 26% 42%, 46% 78%, 70% 26%, 100% 100%);
+}
+.hero2 .dcard .dz-tools {
+  display: flex;
+  gap: 7px;
+  margin-top: 9px;
+}
+.hero2 .dcard .dz-tool {
+  flex: 1;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--h-serif);
+  font-weight: 700;
+}
+.hero2 .dcard .dz-tool.a {
+  background: #fce1e6;
+  color: #e6738c;
+}
+.hero2 .dcard .dz-tool.a .dz-ring {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px dashed currentColor;
+}
+.hero2 .dcard .dz-tool.b {
+  background: #fff0d8;
+  color: #e0a02a;
+}
+.hero2 .dcard .dz-tool.c {
+  background: #e2f3ea;
+  color: #4fae7e;
+}

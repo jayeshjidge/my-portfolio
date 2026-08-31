@@ -21,7 +21,7 @@ import {
   useReducedMotion,
   type Variants,
 } from "motion/react";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaLinkedinIn, FaGithub } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
 import JBadge from "./JBadge";
 import "./ProfileMenu.css";
@@ -32,25 +32,55 @@ type ProfileLink = {
   label: string;
   href: string;
   icon: ReactNode;
+  /** Rounded-tile background; when omitted the glyph sits bare (e.g. Gmail). */
+  tile?: string;
   download?: boolean;
 };
+
+/** Full-colour Gmail mark (Google's multi-colour envelope), left bare. */
+const GmailGlyph = (
+  <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path fill="#4caf50" d="M45,16.2l-5,2.75l-5,4.75L35,40h7c1.657,0,3-1.343,3-3V16.2z" />
+    <path fill="#1e88e5" d="M3,16.2l3.614,1.71L13,23.7V40H6c-1.657,0-3-1.343-3-3V16.2z" />
+    <polygon
+      fill="#e53935"
+      points="35,11.2 24,19.45 13,11.2 12,17 13,23.7 24,31.95 35,23.7 36,17"
+    />
+    <path
+      fill="#c62828"
+      d="M3,12.298V16.2l10,7.5V11.2L9.876,8.859C9.132,8.301,8.228,8,7.298,8h0C4.924,8,3,9.924,3,12.298z"
+    />
+    <path
+      fill="#fbc02d"
+      d="M45,12.298V16.2l-10,7.5V11.2l3.124-2.341C38.868,8.301,39.772,8,40.702,8h0C43.076,8,45,9.924,45,12.298z"
+    />
+  </svg>
+);
 
 const LINKS: ProfileLink[] = [
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/jayesh-jidge/",
-    icon: <FaLinkedin color="#0A66C2" />,
+    icon: <FaLinkedinIn color="#ffffff" />,
+    tile: "#0A66C2",
   },
   {
     label: "GitHub",
     href: "https://github.com/jayeshjidge",
-    icon: <FaGithub color="#181717" />,
+    icon: <FaGithub color="#ffffff" />,
+    tile: "#181717",
+  },
+  {
+    label: "jayeshjidge@gmail.com",
+    href: "mailto:jayeshjidge@gmail.com",
+    icon: GmailGlyph,
   },
   {
     label: "Download Resume",
     href: "/resume/jayesh_jidge_resume.pdf",
     download: true,
-    icon: <FiDownload color="#7c3aed" />,
+    icon: <FiDownload color="#ffffff" />,
+    tile: "#7c3aed",
   },
 ];
 
@@ -109,24 +139,51 @@ export default function ProfileMenu() {
     : {
         hidden: { opacity: 0, y: 6 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: EASE } },
+        hover: {
+          x: 6,
+          transition: { type: "spring", stiffness: 420, damping: 26 },
+        },
       };
 
-  const linkItems = LINKS.map((link) => (
-    <motion.a
-      key={link.label}
-      className="pm-item"
-      href={link.href}
-      role="menuitem"
-      variants={itemVar}
-      {...(link.download
-        ? { download: true }
-        : { target: "_blank", rel: "noreferrer" })}
-      onClick={() => setOpen(false)}
-    >
-      <span className="pm-item-ico">{link.icon}</span>
-      <span className="pm-item-label">{link.label}</span>
-    </motion.a>
-  ));
+  // Icon reacts to the item's hover via gesture-variant propagation.
+  const iconVar: Variants = reduce
+    ? {}
+    : {
+        hover: {
+          scale: 1.16,
+          transition: { type: "spring", stiffness: 440, damping: 16 },
+        },
+      };
+
+  const linkItems = LINKS.map((link) => {
+    const anchorProps = link.download
+      ? { download: true }
+      : link.href.startsWith("mailto:")
+        ? {}
+        : { target: "_blank", rel: "noreferrer" };
+    return (
+      <motion.a
+        key={link.label}
+        className="pm-item"
+        href={link.href}
+        role="menuitem"
+        variants={itemVar}
+        whileHover={reduce ? undefined : "hover"}
+        whileTap={reduce ? undefined : { scale: 0.98 }}
+        {...anchorProps}
+        onClick={() => setOpen(false)}
+      >
+        <motion.span
+          className={`pm-item-ico${link.tile ? " pm-item-ico--tile" : " pm-item-ico--bare"}`}
+          style={link.tile ? { backgroundColor: link.tile } : undefined}
+          variants={iconVar}
+        >
+          {link.icon}
+        </motion.span>
+        <span className="pm-item-label">{link.label}</span>
+      </motion.a>
+    );
+  });
 
   return (
     <div className="profile-menu" ref={rootRef}>

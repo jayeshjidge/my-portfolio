@@ -6,35 +6,88 @@
    reads as a defended/protected zone. */
 
 .hero2 .hw--err {
-  right: 6%;
+  right: 7.5%;
   top: 50%;
   width: 252px;
   rotate: 3deg;
 }
 
+/* scene = the card + its hand-drawn doodle layer. The doodles live in the
+   margins around the card, so the scene never clips them. */
+.hero2 .eb-scene {
+  position: relative;
+  width: 100%;
+}
+
 .hero2 .eb {
   width: 100%;
   position: relative;
-  background: #fff;
-  border-radius: 16px;
-  padding: 13px 13px 12px;
-  box-shadow: 0 18px 38px -18px rgba(20, 24, 40, 0.35),
-    0 2px 6px rgba(20, 24, 40, 0.06);
+  background: #fdfdff;
+  border-radius: 18px;
+  padding: 11px 13px 13px;
+  box-shadow: 0 18px 40px -18px rgba(58, 52, 104, 0.34),
+    0 2px 6px rgba(20, 24, 40, 0.05);
   overflow: hidden;
+  transition: box-shadow 0.3s ease;
 }
-/* folded coral corner in the top-right */
+/* Only the card itself lifts on hover — the lift is a Motion whileHover on the
+   .eb card (see ErrWidget.tsx), so the surrounding doodles (siblings of .eb
+   inside .eb-scene) stay put. The wrapper's Motion hover-lift is disabled in
+   Hero.tsx (hoverLift={false}) so it can't drag the whole scene up. This rule
+   just deepens the shadow to sell the lift. */
+.hero2 .eb:hover {
+  box-shadow: 0 26px 50px -20px rgba(58, 52, 104, 0.42),
+    0 3px 8px rgba(20, 24, 40, 0.06);
+}
+/* folded lavender corner in the top-right ("stay resilient" badge) */
 .hero2 .eb::before {
   content: "";
   position: absolute;
   top: 0;
   right: 0;
-  width: 28px;
-  height: 28px;
-  background: #ff6a52;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, #b3a6f2 0%, #9c8cec 100%);
   clip-path: polygon(100% 0, 0 0, 100% 100%);
-  box-shadow: -2px 2px 4px -1px rgba(20, 24, 40, 0.14);
+  box-shadow: -2px 2px 4px -1px rgba(58, 52, 104, 0.18);
   pointer-events: none;
   z-index: 6;
+}
+
+/* ---------------------- window chrome (top row) --------------------- */
+.hero2 .eb .eb-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+  padding-right: 26px; /* clear the folded corner */
+}
+.hero2 .eb .eb-dots {
+  display: flex;
+  gap: 5px;
+}
+.hero2 .eb .eb-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: block;
+}
+.hero2 .eb .eb-dots i:nth-child(1) {
+  background: #ff6159;
+}
+.hero2 .eb .eb-dots i:nth-child(2) {
+  background: #ffbd2e;
+}
+.hero2 .eb .eb-dots i:nth-child(3) {
+  background: #29c840;
+}
+.hero2 .eb .eb-resilient {
+  font-family: var(--h-marker);
+  font-style: italic;
+  font-size: 0.66rem;
+  line-height: 1;
+  color: #9a90c4;
+  white-space: nowrap;
 }
 
 /* ------------------------------ header ------------------------------ */
@@ -42,14 +95,22 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 9px;
-  padding-right: 22px; /* clear the folded corner */
+  margin-bottom: 10px;
+}
+.hero2 .eb .eb-head-right {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.hero2 .eb .eb-toggle-spark {
+  flex-shrink: 0;
+  margin-right: -3px;
 }
 .hero2 .eb .eb-title {
   font-family: var(--h-font);
   font-weight: 800;
-  font-size: 0.82rem;
-  letter-spacing: -0.01em;
+  font-size: 0.92rem;
+  letter-spacing: -0.015em;
   color: var(--ink);
 }
 .hero2 .eb .eb-toggle {
@@ -110,8 +171,8 @@
 .hero2 .eb .eb-status-main {
   font-family: var(--h-font);
   font-weight: 700;
-  font-size: 0.54rem;
-  color: #1f8a52;
+  font-size: 0.56rem;
+  color: #22a15c;
   white-space: nowrap;
 }
 .hero2 .eb.off .eb-status-main {
@@ -140,58 +201,58 @@
 }
 .hero2 .eb .eb-tile {
   position: relative;
-  background: #fbfbfd;
-  border: 1px solid var(--hair);
-  border-radius: 12px;
-  padding: 10px 3px 9px;
+  background: #fbfbfe;
+  border: 1px solid #eceaf4;
+  border-radius: 14px;
+  padding: 11px 3px 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  min-height: 80px;
+  gap: 7px;
+  min-height: 86px;
   justify-content: center;
 }
 .hero2 .eb .eb-badge {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .hero2 .eb .eb-badge.users {
-  background: #ede9fd;
-  color: #6b5fc7;
+  background: #ebe6fd;
+  color: #7b6cf0;
 }
 .hero2 .eb .eb-badge.sales {
   background: #dcecfb;
-  color: #2f6fd0;
+  color: #3b82e0;
 }
 .hero2 .eb .eb-badge.sales.is-err {
   background: #ffe1dc;
   color: #e0503e;
 }
 .hero2 .eb .eb-badge.orders {
-  background: #fdeec0;
-  color: #c68a10;
+  background: #fdeec4;
+  color: #dca019;
 }
 .hero2 .eb .eb-tile-name {
   font-family: var(--h-font);
   font-weight: 700;
-  font-size: 0.54rem;
+  font-size: 0.56rem;
   color: var(--ink);
 }
 .hero2 .eb .eb-mark {
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .hero2 .eb .eb-mark.ok {
-  background: #d6f0e2;
-  color: #1f9a5a;
+  background: #d8f2e3;
+  color: #22a15c;
 }
 .hero2 .eb .eb-mark.err {
   background: #ffdcd5;
@@ -239,17 +300,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 7px;
   font-family: var(--h-font);
   font-weight: 700;
-  font-size: 0.62rem;
+  font-size: 0.66rem;
   color: #fff;
-  background: #f2543a;
+  background: linear-gradient(180deg, #f97159 0%, #f0503a 100%);
   border: none;
   border-radius: 999px;
-  padding: 9px 24px;
+  padding: 10px 30px;
   cursor: pointer;
-  box-shadow: 0 6px 15px -6px rgba(224, 80, 62, 0.6);
+  box-shadow: 0 8px 18px -6px rgba(240, 80, 58, 0.55);
   transition: transform 0.16s, box-shadow 0.16s, filter 0.16s;
 }
 .hero2 .eb .eb-break svg {
@@ -387,6 +448,254 @@
   box-shadow: none;
 }
 
+/* --------------------- hand-drawn doodle layer --------------------- */
+/* Sits in the margins around the card (like the reference sketch): a code
+   glyph, two handwritten asides with arrows, sparkles and a paper plane.
+   Purely decorative — pointer-events off, desktop-only, animation loops. */
+.hero2 .eb-doodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.hero2 .ebd {
+  position: absolute;
+}
+
+/* code glyph </> — sits well above the window so it never overlaps the card,
+   even while the card lifts on hover */
+.hero2 .ebd--code {
+  top: -46px;
+  left: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--h-mono);
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #2b2f3a;
+  animation: ebd-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both,
+    ebd-bob 4.5s ease-in-out 0.75s infinite;
+}
+.hero2 .ebd--code .ebd-dash {
+  width: 11px;
+  height: 2.5px;
+  border-radius: 2px;
+  background: #b3a6f2;
+  transform: rotate(-40deg);
+}
+.hero2 .ebd--code .ebd-dash.r {
+  transform: rotate(40deg);
+}
+
+/* handwritten asides */
+.hero2 .ebd--note {
+  font-family: var(--h-marker);
+  font-weight: 600;
+  font-size: 0.98rem;
+  line-height: 1.04;
+  color: #4b5160;
+  white-space: nowrap;
+}
+.hero2 .ebd--note em {
+  font-style: italic;
+  position: relative;
+}
+.hero2 .ebd--note em::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -3px;
+  bottom: -3px;
+  height: 4px;
+  border-radius: 3px;
+  transform: rotate(-1.5deg);
+}
+
+.hero2 .ebd--note-top {
+  top: -70px;
+  right: -14px;
+  text-align: right;
+  animation: ebd-write 0.7s ease 0.3s both,
+    ebd-float-a 5.2s ease-in-out 1.05s infinite;
+}
+.hero2 .ebd--note-top em::after {
+  background: #cfc4fb;
+}
+
+.hero2 .ebd--note-left {
+  top: 74px;
+  left: -128px;
+  text-align: right;
+  animation: ebd-write 0.7s ease 0.5s both,
+    ebd-float-b 6s ease-in-out 1.25s infinite;
+}
+.hero2 .ebd--note-left em::after {
+  background: #bfe8cf;
+}
+
+/* pointing arrows */
+.hero2 .ebd--arrow {
+  color: #454b58;
+}
+/* each arrow's stroke draws itself toward the card */
+.hero2 .ebd--arrow path {
+  stroke-dasharray: 64;
+  animation: ebd-draw 0.6s ease both;
+}
+.hero2 .ebd--arrow-top {
+  top: -22px;
+  right: 44px;
+  animation: ebd-fade-in 0.4s ease 0.65s both,
+    ebd-float-a 5.2s ease-in-out 1.05s infinite;
+}
+.hero2 .ebd--arrow-top path {
+  animation-delay: 0.65s;
+}
+.hero2 .ebd--arrow-left {
+  top: 108px;
+  left: -40px;
+  animation: ebd-fade-in 0.4s ease 0.95s both,
+    ebd-float-b 6s ease-in-out 1.25s infinite;
+}
+.hero2 .ebd--arrow-left path {
+  animation-delay: 0.95s;
+}
+
+/* sparkles */
+.hero2 .ebd--spark {
+  font-size: 0.72rem;
+  color: #ffcf3f;
+  line-height: 1;
+}
+.hero2 .ebd--spark.s1 {
+  top: -24px;
+  left: 128px;
+  color: #b3a6f2;
+  animation: ebd-spark-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both,
+    ebd-tw 2.8s ease-in-out 1s infinite;
+}
+.hero2 .ebd--spark.s2 {
+  top: 40px;
+  left: -20px;
+  animation: ebd-spark-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s both,
+    ebd-tw 3.4s ease-in-out 1.2s infinite;
+}
+.hero2 .ebd--spark.s3 {
+  bottom: 30px;
+  right: -12px;
+  color: #b3a6f2;
+  animation: ebd-spark-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both,
+    ebd-tw 3s ease-in-out 1.4s infinite;
+}
+
+/* paper plane + dashed loop trail */
+.hero2 .ebd--plane {
+  bottom: -8px;
+  left: -54px;
+  color: #9a90c4;
+  animation: ebd-plane-in 0.75s ease 0.95s both,
+    ebd-fly 5.5s ease-in-out 1.7s infinite;
+}
+.hero2 .ebd-plane-trail {
+  animation: ebd-fade-in 0.7s ease 1.15s both;
+}
+
+@keyframes ebd-bob {
+  50% {
+    transform: translateY(-5px);
+  }
+}
+@keyframes ebd-float-a {
+  50% {
+    transform: translate(0, -6px) rotate(-1.5deg);
+  }
+}
+@keyframes ebd-float-b {
+  50% {
+    transform: translate(0, -7px) rotate(1.5deg);
+  }
+}
+@keyframes ebd-tw {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+@keyframes ebd-fly {
+  50% {
+    transform: translate(6px, -8px) rotate(-4deg);
+  }
+}
+
+/* ---- one-time draw-in / write-on entrances (play, then hand off to idle) ---- */
+@keyframes ebd-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes ebd-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ebd-write {
+  from {
+    opacity: 0;
+    transform: translateY(8px) rotate(-2deg);
+    clip-path: inset(0 100% 0 0);
+  }
+  55% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes ebd-spark-in {
+  from {
+    opacity: 0;
+    transform: scale(0) rotate(-90deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes ebd-plane-in {
+  from {
+    opacity: 0;
+    transform: translate(-18px, 10px) rotate(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ebd-draw {
+  from {
+    stroke-dashoffset: 64;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 @keyframes h2spin {
   to {
     transform: rotate(360deg);
@@ -395,7 +704,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero2 .eb .eb-spin,
-  .hero2 .eb .eb-recover .eb-recover-ic.spin {
+  .hero2 .eb .eb-recover .eb-recover-ic.spin,
+  .hero2 .ebd,
+  .hero2 .ebd--arrow path,
+  .hero2 .ebd-plane-trail {
     animation: none;
   }
 }
@@ -408,10 +720,15 @@
   }
 }
 
-/* responsive reflow — widgets flow into a centered grid below 1180px */
+/* responsive reflow — widgets flow into a centered grid below 1180px.
+   The doodle layer is a desktop-only flourish (like the ambient prop);
+   hidden here so it can't overlap neighbouring grid cells. */
 @media (max-width: 1179px) {
   .hero2 .hw--err {
     width: auto;
     max-width: 268px;
+  }
+  .hero2 .eb-doodles {
+    display: none;
   }
 }

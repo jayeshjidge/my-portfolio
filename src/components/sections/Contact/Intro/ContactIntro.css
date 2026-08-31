@@ -1,0 +1,68 @@
+/* ——— Contact lede ——— */
+.ci-intro {
+  max-width: 34ch;
+}
+
+.ci-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-marker);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #e0468f; /* playful pink marker */
+  transform: rotate(-1.5deg);
+}
+.ci-eyebrow-mark {
+  color: #e0468f;
+  font-size: 1.15em;
+  opacity: 0.8;
+}
+
+.ci-title {
+  margin: 16px 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 4vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+/* Highlighter word — the fill wipes in behind the text. */
+.ci-mark-word {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  padding: 0 0.08em;
+}
+.ci-mark-fill {
+  position: absolute;
+  left: -0.04em;
+  right: -0.04em;
+  top: 12%;
+  bottom: 6%;
+  z-index: 0;
+  transform-origin: left center;
+  border-radius: 4px;
+  background: var(--butter, #fdec9a);
+  transform: rotate(-1deg);
+}
+.ci-mark-text {
+  position: relative;
+  z-index: 1;
+}
+
+.ci-lead {
+  margin: 22px 0 0;
+  max-width: 40ch;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 640px) {
+  .ci-title {
+    font-size: clamp(1.9rem, 8vw, 2.6rem);
+  }
+}

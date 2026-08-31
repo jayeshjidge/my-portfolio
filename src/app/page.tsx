@@ -3,6 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import Experience from "@/components/sections/Experience/Experience";
 import Hero from "@/components/sections/Hero/Hero";
 import Lab from "@/components/sections/Lab/Lab";
+import Contact from "@/components/sections/Contact/Contact";
 import Whiteboard from "@/components/sections/Whiteboard/Whiteboard";
 
 export default function HomePage() {
@@ -21,6 +22,7 @@ export default function HomePage() {
           <Hero />
           <Experience />
           <Lab />
+          <Contact />
           {/* <Whiteboard /> */}
           {/* <Footer /> */}
         </main>

@@ -1,0 +1,101 @@
+/* ——— Right column stack (pointer-parallax) ——— */
+.cr-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1px;
+  padding: 8px 12px;
+  width: 100%;
+}
+
+/* hand-drawn connector arrows — right-aligned, inset to sit under the cards */
+.cr-conn {
+  display: block;
+  color: var(--ink-soft);
+}
+.cr-conn svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.cr-conn--1 {
+  width: 56px;
+  margin-right: 46px;
+}
+.cr-conn--2 {
+  width: 74px;
+  margin-right: 30px;
+  color: var(--ink);
+}
+
+/* loose decorative crosses — absolute, drift the most */
+.cr-item.cr-cross {
+  position: absolute;
+  width: auto;
+  z-index: 0;
+}
+.cr-cross .cr-par {
+  justify-content: flex-start;
+}
+.cr-cross-mark {
+  display: block;
+  font-family: var(--font-marker);
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+}
+.cr-cross--a {
+  top: 5%;
+  left: 7%;
+}
+.cr-cross--a .cr-cross-mark {
+  font-size: 1.7rem;
+  color: #f4c430;
+  rotate: 6deg;
+}
+.cr-cross--b {
+  top: 55%;
+  left: 1%;
+}
+.cr-cross--b .cr-cross-mark {
+  font-size: 1.4rem;
+  color: #b9a7f0;
+  rotate: -8deg;
+}
+
+/* the "Building fast…" figma card — scattered into the lower-left of the group */
+.cr-item.cr-build {
+  position: absolute;
+  left: 2%;
+  bottom: 18px;
+  width: auto;
+  z-index: 1;
+}
+.cr-build .cr-par {
+  justify-content: flex-start;
+}
+
+/* Reflow — center the stack under the copy on narrow screens. */
+@media (max-width: 980px) {
+  .cr-stage {
+    align-items: center;
+  }
+  .cr-par {
+    justify-content: center;
+  }
+  .cr-conn--1,
+  .cr-conn--2 {
+    margin-right: 0;
+  }
+  .cr-item.cr-cross {
+    display: none;
+  }
+  .cr-item.cr-build {
+    position: static;
+    margin-top: 8px;
+  }
+  .cr-build .cr-par {
+    justify-content: center;
+  }
+}
