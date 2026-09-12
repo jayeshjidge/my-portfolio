@@ -1,9 +1,9 @@
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import Experience from "@/components/sections/Experience/Experience";
+import Header from "@/components/sections/Layout/Header";
+import Footer from "@/components/sections/Layout/Footer";
+import Experience from "@/components/sections/Experience";
 import Hero from "@/components/sections/Hero/Hero";
-import Lab from "@/components/sections/Lab/Lab";
-import Contact from "@/components/sections/Contact/Contact";
+import Lab from "@/components/sections/Lab";
+import Contact from "@/components/sections/Contact";
 import Whiteboard from "@/components/sections/Whiteboard/Whiteboard";
 
 export default function HomePage() {

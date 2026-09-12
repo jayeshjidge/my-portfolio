@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import { SmoothScroll } from "@/components/layout/SmoothScroll";
-import CursorTrail from "@/components/ui/CursorTrail";
-import "@/styles/tokens.css";
-import "@/styles/base.css";
-import "@/styles/glass.css";
-import "@/styles/paper.css";
-import "@/styles/hero.css";
+import ThemeProvider from "@/components/sections/Layout/ThemeProvider";
+import SmoothScroll from "@/components/sections/Layout/SmoothScroll";
+import CursorTrail from "@/components/CursorTrail";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -27,7 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light" suppressHydrationWarning>
-      <head>
+      {/* suppressHydrationWarning: browser extensions inject attributes into
+          <head> after SSR but before hydration (e.g. yqmysmbdsnwwiso), which
+          React would otherwise flag as a mismatch. */}
+      <head suppressHydrationWarning>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
