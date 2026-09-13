@@ -1,0 +1,130 @@
+/* ---------- CardShell — shared chrome for every deck card ---------- */
+/* The animated .dcard frame (size, shadow, position) lives in DeckWidget.css;
+   this file only styles what's *inside* a card. */
+
+/* front card is a vertical stack: dots · heading · body · footer */
+.hero2 .dcard.front {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ------------------------------- top row ------------------------------- */
+.hero2 .dcard .dc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 13px 0;
+}
+.hero2 .dcard .dc-dots {
+  display: flex;
+  gap: 4px;
+}
+.hero2 .dcard .dc-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.hero2 .dcard .dc-top-right {
+  display: flex;
+  align-items: center;
+}
+
+/* ------------------------------- heading ------------------------------- */
+.hero2 .dcard .dc-head {
+  font-family: var(--h-serif);
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: #20242e;
+  padding: 9px 13px 8px;
+}
+
+/* --------------------------- unique visual --------------------------- */
+.hero2 .dcard .dc-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0 13px;
+  min-height: 0;
+}
+
+/* ------------------------------- footer ------------------------------- */
+.hero2 .dcard .dc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 13px 12px;
+}
+.hero2 .dcard .dc-meta b {
+  display: block;
+  font-family: var(--h-font);
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: #20242e;
+  line-height: 1;
+}
+.hero2 .dcard .dc-meta span {
+  display: block;
+  margin-top: 3px;
+  font-family: var(--h-font);
+  font-size: 0.54rem;
+  color: #8a91a0;
+  line-height: 1.15;
+}
+.hero2 .dcard .dc-arrow {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --------------------- back card (peeking sliver) --------------------- */
+.hero2 .dcard .dc-mini {
+  padding: 16px 15px 0;
+  height: 100%;
+}
+.hero2 .dcard .dc-mini-hero {
+  height: 56px;
+  border-radius: 9px;
+}
+.hero2 .dcard .dc-mini-ln {
+  height: 8px;
+  border-radius: 4px;
+  background: #e9ebf2;
+  margin-top: 10px;
+  width: 78%;
+}
+.hero2 .dcard .dc-mini-ln.s {
+  width: 54%;
+  margin-top: 7px;
+}
+
+/* --------------------------- small screens --------------------------- */
+@media (max-width: 600px) {
+  .hero2 .dcard .dc-head {
+    font-size: 0.8rem;
+    padding: 8px 11px 6px;
+  }
+  .hero2 .dcard .dc-body {
+    padding: 0 11px;
+  }
+  .hero2 .dcard .dc-top {
+    padding: 10px 11px 0;
+  }
+  .hero2 .dcard .dc-foot {
+    padding: 9px 11px 10px;
+  }
+  .hero2 .dcard .dc-arrow {
+    width: 26px;
+    height: 26px;
+  }
+  .hero2 .dcard .dc-meta b {
+    font-size: 0.76rem;
+  }
+}

@@ -1,0 +1,140 @@
+/* ---------------- Experience — reduced-motion static fallback ---------------- */
+
+.exp-static {
+  max-width: 1180px;
+  margin: clamp(60px, 8vw, 120px) auto clamp(60px, 8vw, 100px);
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+.exp-static-head {
+  margin-bottom: clamp(36px, 6vw, 64px);
+}
+
+.exp-static-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: clamp(48px, 7vw, 88px);
+}
+
+.exp-static-row {
+  display: grid;
+  grid-template-columns: 292px minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 72px);
+  align-items: start;
+  padding-bottom: clamp(28px, 4vw, 48px);
+  border-bottom: 1px solid var(--ink-hair);
+}
+.exp-static-row:last-child {
+  border-bottom: none;
+}
+
+.exp-static-side {
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 720px) {
+  .exp-static-row {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    justify-items: start;
+  }
+}
+
+/* ---- copy-block + title styles (mirrors Chapter/index.module.css and the
+   Experience stage title) so the reduced-motion fallback matches the animated
+   chapters. Kept as this component's own module per the CSS-Modules convention. ---- */
+.exp-stage-title {
+  display: inline-block;
+  font-family: var(--font-typewriter, "Courier Prime", monospace);
+  font-weight: 700;
+  font-size: clamp(1.85rem, 2.8vw, 2.5rem);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+  padding-bottom: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='7' viewBox='0 0 48 7'%3E%3Cpath d='M0 4 Q12 1 24 4 T48 4' stroke='%237b6cf0' fill='none' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: 48px 7px;
+}
+
+.exp-copy {
+  min-width: 0;
+  padding-top: 4px;
+}
+.exp-company {
+  display: flex;
+  align-items: center;
+  gap: 0.42em;
+  font-family: var(--font-typewriter, "Courier Prime", monospace);
+  font-weight: 700;
+  font-size: clamp(2.1rem, 4vw, 3.5rem);
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0;
+}
+.exp-company-logo {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.02em;
+  height: 1.02em;
+  border-radius: 0.24em;
+  background: #fff;
+  box-shadow: 0 2px 9px rgba(15, 23, 42, 0.14), inset 0 0 0 1px rgba(20, 24, 40, 0.06);
+  overflow: hidden;
+}
+.exp-company-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.15em;
+}
+.exp-role {
+  font-family: var(--font-typewriter);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: var(--ink-soft);
+  margin: 10px 0 0;
+}
+.exp-summary {
+  font-family: var(--font-typewriter);
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 52ch;
+  margin: 14px 0 0;
+  font-weight: 500;
+}
+.exp-summary-em {
+  font-weight: 700;
+}
+.exp-block {
+  margin-top: clamp(22px, 3vh, 34px);
+}
+.exp-label {
+  display: inline-block;
+  font-family: var(--font-typewriter);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #46437a;
+  margin-bottom: 16px;
+  padding-bottom: 7px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='6' viewBox='0 0 40 6'%3E%3Cpath d='M0 3 Q10 0 20 3 T40 3' stroke='%237b6cf0' fill='none' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  background-size: 40px 6px;
+}
+
+@media (max-width: 900px) {
+  .exp-copy {
+    max-width: 92vw;
+  }
+}

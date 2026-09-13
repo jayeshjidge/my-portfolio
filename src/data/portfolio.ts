@@ -239,7 +239,7 @@ export const portfolio = {
   nav: [
     { label: "Home", href: "#home" },
     { label: "Experience", href: "#experience" },
-    { label: "Lab", href: "#lab" },
+    { label: "Tech Stack", href: "#lab" },
     { label: "Contact", href: "#contact" },
   ],
 } as const;

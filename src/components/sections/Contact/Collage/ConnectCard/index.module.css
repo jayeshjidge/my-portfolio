@@ -1,0 +1,82 @@
+/* ——— "Connect with me" card ——— */
+.cc-card {
+  position: relative;
+  width: 262px;
+  max-width: 100%;
+  padding: 22px 24px 24px;
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  border-radius: 18px;
+  box-shadow: var(--sticker-shadow);
+  /* separate `rotate` property so Motion's transform (y) keeps the tilt */
+  rotate: 1.5deg;
+}
+
+/* little hand-drawn arrow curling into the title */
+.cc-arrow {
+  position: absolute;
+  left: 14px;
+  top: -18px;
+  width: 42px;
+  height: 34px;
+  color: var(--ink-soft);
+}
+.cc-arrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cc-title {
+  margin: 0 0 16px;
+  font-family: var(--font-marker);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.cc-tiles {
+  display: flex;
+  gap: 12px;
+}
+.cc-tile {
+  --tile-bg: #eef0f4;
+  --tile-ink: #20242e;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--tile-bg);
+  color: var(--tile-ink);
+  transition: transform 0.26s var(--ease-out), box-shadow 0.26s var(--ease-out);
+}
+.cc-tile svg {
+  width: 24px;
+  height: 24px;
+}
+.cc-tile--gh {
+  --tile-bg: #ecebf6;
+  --tile-ink: #24243a;
+}
+.cc-tile--li {
+  --tile-bg: #d9f0e4;
+  --tile-ink: #1f5133;
+}
+.cc-tile--tw {
+  --tile-bg: #dcecfb;
+  --tile-ink: #22344c;
+}
+
+.cc-tile:hover {
+  transform: translateY(-4px) scale(1.06);
+  box-shadow: 0 12px 20px -10px rgba(20, 24, 40, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-tile {
+    transition: none;
+  }
+  .cc-tile:hover {
+    transform: none;
+  }
+}

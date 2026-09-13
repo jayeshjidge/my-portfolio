@@ -1,0 +1,89 @@
+/* ——— "Let's work together" pink checklist note ——— */
+.wnote {
+  position: relative;
+  width: 288px;
+  max-width: 100%;
+  padding: 26px 22px 20px;
+  background: #ffdbe9;
+  border-radius: 6px;
+  box-shadow: 0 1px 1px rgba(20, 24, 40, 0.05),
+    0 20px 34px -20px rgba(122, 43, 82, 0.5);
+  /* separate `rotate` property so Motion's transform (y) keeps the tilt */
+  rotate: 2deg;
+  color: #7a2b52;
+}
+
+/* washi tape at the top */
+.wnote-tape {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2.5deg);
+  width: 88px;
+  height: 24px;
+  background: rgba(236, 72, 153, 0.28);
+  box-shadow: 0 1px 2px rgba(20, 24, 40, 0.1);
+}
+.wnote-tape::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.32) 0 7px,
+    transparent 7px 14px
+  );
+}
+
+.wnote-title {
+  margin: 0 0 12px;
+  font-family: var(--font-marker);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #b6296e;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(182, 41, 110, 0.45);
+}
+
+.wnote-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.wnote-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-marker);
+  font-size: 1.16rem;
+  line-height: 1.1;
+  color: #6d2a4e;
+}
+.wnote-check {
+  flex: none;
+  width: 19px;
+  height: 19px;
+  color: #c23b7e;
+}
+.wnote-check svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wnote-face {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  width: 22px;
+  height: 22px;
+  color: #c23b7e;
+}
+.wnote-face svg {
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,114 @@
+/* ——— Contact channel card ——— */
+.contact-row {
+  --row-fill: var(--lavender, #e7e3fb);
+  --row-ink: #3a3468;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 460px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--sticker);
+  border: 1px solid var(--sticker-edge);
+  box-shadow: var(--sticker-shadow);
+  color: var(--ink);
+  transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out),
+    border-color 0.28s var(--ease-out);
+}
+
+.row--lavender {
+  --row-fill: #e7e3fb;
+  --row-ink: #3a3468;
+}
+.row--mint {
+  --row-fill: #d9f0e4;
+  --row-ink: #1f5133;
+}
+.row--peach {
+  --row-fill: #ffe6d9;
+  --row-ink: #7a3b2b;
+}
+
+.row-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: var(--row-fill);
+  color: var(--row-ink);
+  transition: transform 0.28s var(--ease-out);
+}
+.row-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.row-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.row-value {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-arrow {
+  flex: none;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: var(--ink-faint);
+  transition: transform 0.28s var(--ease-out), color 0.28s var(--ease-out),
+    background 0.28s var(--ease-out);
+}
+.row-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Hover — lift, coral edge, icon nudges, arrow shoots out. */
+.contact-row:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 106, 82, 0.55);
+  box-shadow: var(--sticker-shadow-lift),
+    0 14px 30px -18px rgba(255, 106, 82, 0.6);
+}
+.contact-row:hover .row-icon {
+  transform: scale(1.06) rotate(-3deg);
+}
+.contact-row:hover .row-arrow {
+  transform: translate(2px, -2px);
+  color: #7a2f2a;
+  background: rgba(255, 106, 82, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-row,
+  .row-icon,
+  .row-arrow {
+    transition: none;
+  }
+  .contact-row:hover {
+    transform: none;
+  }
+}

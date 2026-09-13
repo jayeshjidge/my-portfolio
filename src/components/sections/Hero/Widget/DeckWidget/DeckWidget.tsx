@@ -1,57 +1,36 @@
 "use client";
 
 /**
- * Site-mockup deck (design → shipped).
+ * Site-mockup deck ("figstack").
  * Fanned deck of project cards. Hover fans them wider; click rotates the
  * front card to the back so a different project surfaces each tap.
+ *
+ * This file is the deck *shell* only — it owns the fan/cycle animation and
+ * nothing about how a card looks. Each card is its own module (CleanCodeCard,
+ * DesignCard, …) built on the shared CardShell, so you can restyle or reword
+ * any single card without touching the deck or its siblings. To add/remove or
+ * reorder cards, edit the CARDS registry below.
  */
 
 import { useCallback, useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import CleanCodeCard from "./CleanCodeCard/CleanCodeCard";
+import DesignCard from "./DesignCard/DesignCard";
+import FastBuildCard from "./FastBuildCard/FastBuildCard";
+import PerfCard from "./PerfCard/PerfCard";
 import "./DeckWidget.css";
 
-type Project = {
+type DeckCard = {
   id: number;
-  name: string;
-  head: [string, string];
-  sub: string;
-  panel: string;
-  mini: string;
+  Card: React.ComponentType<{ isFront: boolean }>;
 };
 
-const PROJECTS: Project[] = [
-  {
-    id: 0,
-    name: "Kindred",
-    head: ["Better sites.", "Shipped fast."],
-    sub: "Minimal studio site, bold type.",
-    panel: "linear-gradient(140deg,#20493a,#2f6b50)",
-    mini: "linear-gradient(135deg,#cdeeda,#9ddcb6)",
-  },
-  {
-    id: 1,
-    name: "Northwind",
-    head: ["Dashboards,", "done right."],
-    sub: "SaaS analytics, dark mode.",
-    panel: "linear-gradient(140deg,#28518f,#3f74c9)",
-    mini: "linear-gradient(135deg,#cfe0ff,#9ec2ff)",
-  },
-  {
-    id: 2,
-    name: "Bloom",
-    head: ["Checkout,", "three taps."],
-    sub: "Commerce, mobile-first.",
-    panel: "linear-gradient(140deg,#4b3a9e,#6a54c9)",
-    mini: "linear-gradient(135deg,#ece1ff,#c4adff)",
-  },
-  {
-    id: 3,
-    name: "Sage",
-    head: ["Motion that", "guides you."],
-    sub: "Portfolio, framer-motion.",
-    panel: "linear-gradient(140deg,#1f7d5c,#39a97e)",
-    mini: "linear-gradient(135deg,#d3f2e1,#a5e4c2)",
-  },
+/** The deck, front-to-back. Add, remove or reorder cards here. */
+const CARDS: DeckCard[] = [
+  { id: 0, Card: CleanCodeCard },
+  { id: 1, Card: DesignCard },
+  { id: 2, Card: FastBuildCard },
+  { id: 3, Card: PerfCard },
 ];
 
 const REST_SHADOW =
@@ -96,74 +75,29 @@ function poseFor(pos: number, hover: boolean, compact: boolean) {
 }
 
 export default function DeckWidget() {
-  const [order, setOrder] = useState([0, 1, 2, 3]);
+  const [order, setOrder] = useState(CARDS.map((c) => c.id));
   const [hovered, setHovered] = useState(false);
   const compact = useCompactDeck();
   const reduce = useReducedMotion();
-  const cycle = useCallback(
-    () => setOrder((o) => [...o.slice(1), o[0]]),
-    [],
-  );
+  const cycle = useCallback(() => setOrder((o) => [...o.slice(1), o[0]]), []);
   const posOf = (id: number) => order.indexOf(id);
   const fanned = hovered && !reduce;
   const spring = reduce
     ? { duration: 0 }
     : { type: "spring" as const, stiffness: 260, damping: 22 };
 
-  const cards = PROJECTS.map((p) => {
-    const pos = posOf(p.id);
+  const cards = CARDS.map(({ id, Card }) => {
+    const pos = posOf(id);
     const pose = poseFor(pos, fanned, compact);
     const isFront = pos === 0;
     return (
       <motion.div
         className={`dcard ${isFront ? "front" : `back b${pos}`}`}
-        key={p.id}
+        key={id}
         animate={pose}
         transition={spring}
       >
-        {isFront ? (
-          <>
-            <div className="topbar">
-              <span className="tb-dots">
-                <i />
-                <i />
-                <i />
-              </span>
-              <span className="tb-url" />
-            </div>
-            <div className="hd">
-              {p.head[0]}
-              <br />
-              {p.head[1]}
-            </div>
-            <div className="h-panel" style={{ background: p.panel }}>
-              <div className="pimg" />
-              <div className="pln" />
-              <div className="pln s" />
-            </div>
-            <div className="thumbs">
-              <div />
-              <div />
-              <div />
-            </div>
-            <div className="meta">
-              <div className="mdots">
-                <i className="d1" />
-                <i className="d2" />
-                <i className="d3" />
-                <i className="d4" />
-              </div>
-              <b>{p.name}</b>
-              <span>{p.sub}</span>
-            </div>
-          </>
-        ) : (
-          <div className="mini">
-            <div className="mhero" style={{ background: p.mini }} />
-            <div className="mln" />
-            <div className="mln s" />
-          </div>
-        )}
+        <Card isFront={isFront} />
       </motion.div>
     );
   });

@@ -9,7 +9,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { motion, useReducedMotion } from "motion/react";
-import { fluent } from "../constants";
+// import { fluent } from "../constants"; // only used by the commented-out "Always Learning" note
 import { fadeUp, NOTE_HOVER } from "../heroMotion";
 import "./StickyNotes.css";
 
@@ -48,6 +48,8 @@ export default function StickyNotes() {
         </span>
       </motion.div>
 
+      {/* "Always Learning" sticky note — commented out; this content now lives
+          on the Contact page's right column (see Contact/Collage/LearningNote).
       <motion.div
         className="snote snote-3"
         variants={fadeUp(0.8, reduce)}
@@ -72,6 +74,7 @@ export default function StickyNotes() {
           />
         </span>
       </motion.div>
+      */}
     </div>
   );
 }

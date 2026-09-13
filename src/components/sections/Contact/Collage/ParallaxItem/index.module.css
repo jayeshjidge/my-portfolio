@@ -1,0 +1,10 @@
+/* ——— Parallax object wrapper ——— */
+.cr-item {
+  width: 100%;
+}
+/* inner layer carries the pointer drift; right-aligns its object in the column */
+.cr-par {
+  display: flex;
+  justify-content: flex-end;
+  will-change: transform;
+}

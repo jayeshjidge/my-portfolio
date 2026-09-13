@@ -69,7 +69,7 @@ export default function Hero() {
           <CollageItem className="hw hw--deck" from="down" hoverLift={false}>
             <DeckWidget />
           </CollageItem>
-          <CollageItem className="hw hw--err" from="right">
+          <CollageItem className="hw hw--err" from="right" hoverLift={false}>
             <ErrWidget />
           </CollageItem>
         </motion.div>

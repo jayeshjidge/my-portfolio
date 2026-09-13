@@ -1,4 +1,6 @@
-/* ------------- Site-mockup deck (design → shipped) ------------- */
+/* ------------- Site-mockup deck ("figstack") ------------- */
+/* Deck geometry + the animated card frame only. Everything *inside* a card is
+   owned by CardShell.css and the per-card modules (CleanCodeCard.css, …). */
 
 .hero2 .hw--deck {
   left: 8%;
@@ -34,164 +36,8 @@
   height: 272px;
   z-index: 5;
 }
-.hero2 .dcard .mini {
-  padding: 16px 15px 0;
-  height: 100%;
-}
-.hero2 .dcard .mini .mhero {
-  height: 56px;
-  border-radius: 9px;
-}
-.hero2 .dcard .mini .mln {
-  height: 8px;
-  border-radius: 4px;
-  background: #e9ebf2;
-  margin-top: 10px;
-  width: 78%;
-}
-.hero2 .dcard .mini .mln.s {
-  width: 54%;
-  margin-top: 7px;
-}
-.hero2 .deck .b1 .mhero {
-  background: linear-gradient(135deg, #cfe0ff, #9ec2ff);
-}
-.hero2 .deck .b2 .mhero {
-  background: linear-gradient(135deg, #ece1ff, #c4adff);
-}
-.hero2 .deck .b3 .mhero {
-  background: linear-gradient(135deg, #d3f2e1, #a5e4c2);
-}
-.hero2 .dcard.front .topbar {
-  /* neutralize the unscoped global .topbar (site nav bar, glass.css) —
-     its min-height/margin/position/z-index were leaking in here since
-     this rule only overrode height/display/padding before. */
-  min-height: 0;
-  margin: 0;
-  position: static;
-  z-index: auto;
-  grid-template-columns: none;
-  top: auto;
 
-  height: 23px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 11px;
-  background: #faf9f6;
-  border-bottom: 1px solid rgba(24, 28, 38, 0.06);
-}
-.hero2 .dcard.front .tb-dots {
-  display: flex;
-  gap: 3px;
-}
-.hero2 .dcard.front .tb-dots i {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #dcdee5;
-}
-.hero2 .dcard.front .tb-url {
-  flex: 1;
-  height: 8px;
-  border-radius: 4px;
-  background: #eceef3;
-}
-.hero2 .dcard.front .hd {
-  font-family: var(--h-serif);
-  font-weight: 700;
-  font-size: 0.92rem;
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  color: #20242e;
-  padding: 12px 13px 9px;
-}
-.hero2 .dcard.front .h-panel {
-  margin: 0 13px;
-  background: linear-gradient(140deg, #20493a, #2f6b50);
-  border-radius: 10px;
-  padding: 11px;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-.hero2 .dcard.front .h-panel .pimg {
-  height: 42px;
-  border-radius: 7px;
-  background: linear-gradient(135deg, #ecdcc6, #cdb597);
-}
-.hero2 .dcard.front .h-panel .pln {
-  height: 6px;
-  width: 72%;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.55);
-}
-.hero2 .dcard.front .h-panel .pln.s {
-  width: 46%;
-  background: rgba(255, 255, 255, 0.3);
-}
-.hero2 .dcard.front .thumbs {
-  display: flex;
-  gap: 6px;
-  padding: 9px 13px 0;
-}
-.hero2 .dcard.front .thumbs div {
-  flex: 1;
-  height: 24px;
-  border-radius: 6px;
-}
-.hero2 .dcard.front .thumbs div:nth-child(1) {
-  background: #ffe3d3;
-}
-.hero2 .dcard.front .thumbs div:nth-child(2) {
-  background: #e0ecff;
-}
-.hero2 .dcard.front .thumbs div:nth-child(3) {
-  background: #e6f7ea;
-}
-.hero2 .dcard.front .meta {
-  padding: 11px 13px 13px;
-}
-.hero2 .dcard.front .mdots {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 8px;
-}
-.hero2 .dcard.front .mdots i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-}
-.hero2 .dcard.front .mdots .d1 {
-  background: #5b9cff;
-}
-.hero2 .dcard.front .mdots .d2 {
-  background: #ff8fb1;
-}
-.hero2 .dcard.front .mdots .d3 {
-  background: #63d29a;
-}
-.hero2 .dcard.front .mdots .d4 {
-  background: #ffcf5a;
-}
-.hero2 .dcard.front .meta b {
-  display: block;
-  font-family: var(--h-font);
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: #20242e;
-  line-height: 1;
-}
-.hero2 .dcard.front .meta span {
-  display: block;
-  margin-top: 3px;
-  font-family: var(--h-font);
-  font-size: 0.56rem;
-  color: #8a91a0;
-  line-height: 1.15;
-}
-
-/* on shorter/narrower desktops tighten the arc so the fold still fits */
+/* on shorter/narrower desktops tighten the arc so the deck still fits */
 @media (min-width: 1180px) and (max-width: 1400px) {
   .hero2 .hw--deck {
     left: 5%;
@@ -227,47 +73,6 @@
   }
   .hero2 .dcard.front {
     height: 234px;
-  }
-  /* keep the mobile card at its compact proportions — the desktop-only
-     restore of hero-mockup-2's larger card UI shouldn't affect this. */
-  .hero2 .dcard.front .hd {
-    font-size: 0.82rem;
-    padding: 10px 11px 7px;
-  }
-  .hero2 .dcard.front .h-panel {
-    margin: 0 11px;
-    padding: 9px;
-    gap: 6px;
-    border-radius: 9px;
-  }
-  .hero2 .dcard.front .h-panel .pimg {
-    height: 34px;
-    border-radius: 6px;
-  }
-  .hero2 .dcard.front .thumbs {
-    gap: 5px;
-    padding: 7px 11px 0;
-  }
-  .hero2 .dcard.front .thumbs div {
-    height: 20px;
-    border-radius: 5px;
-  }
-  .hero2 .dcard.front .meta {
-    padding: 8px 11px 10px;
-  }
-  .hero2 .dcard.front .mdots {
-    gap: 4px;
-    margin-bottom: 6px;
-  }
-  .hero2 .dcard.front .mdots i {
-    width: 7px;
-    height: 7px;
-  }
-  .hero2 .dcard.front .meta b {
-    font-size: 0.78rem;
-  }
-  .hero2 .dcard.front .meta span {
-    font-size: 0.52rem;
   }
   .hero2 .deck .b3 {
     display: none;

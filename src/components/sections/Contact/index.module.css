@@ -1,0 +1,77 @@
+/* ============================================================
+   CONTACT — "let's build something amazing together"
+   Full-bleed, on the paper grid. Left copy + right collage.
+   ============================================================ */
+.contact {
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: clamp(90px, 12vh, 140px) 0 clamp(60px, 9vh, 110px);
+  overflow-x: clip;
+}
+
+.contact-inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--content-pad);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 460px) 1fr;
+  gap: clamp(28px, 4vw, 72px);
+  align-items: center;
+}
+
+/* ——— Left column ——— */
+.contact-left {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.contact-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-signoff {
+  margin: 4px 0 0;
+  font-family: var(--font-body);
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.contact-signoff span {
+  font-size: 1.05rem;
+}
+
+/* ——— Right column ——— */
+.contact-right {
+  position: relative;
+  min-width: 0;
+}
+
+/* ——— Reflow ——— */
+@media (max-width: 980px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .contact-left {
+    align-items: center;
+    text-align: center;
+  }
+  .contact-left .ci-intro {
+    max-width: 44ch;
+  }
+  .contact-rows {
+    width: 100%;
+    align-items: center;
+  }
+}

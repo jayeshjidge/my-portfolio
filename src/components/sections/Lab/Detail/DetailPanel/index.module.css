@@ -1,0 +1,159 @@
+.lab-detail {
+  padding: 18px;
+  /* Reserve a stable box so switching words (or clearing to the deck default)
+     doesn't resize the panel — keeps cumulative layout shift low. */
+  min-height: 384px;
+}
+.lab-detail-head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.lab-detail-mono {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  box-shadow: inset 0 0 0 1px rgba(20, 24, 40, 0.06);
+}
+/* Text monogram variant (deck default) — inherits typography. */
+.lab-detail-mono--text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+.lab-detail-mono svg {
+  display: block;
+}
+.lab-detail-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.28rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.lab-detail-cat {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.lab-detail-desc {
+  margin: 13px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.lab-detail-sub {
+  margin: 16px 0 9px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.lab-detail-sub--hand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--ink);
+}
+.lab-detail-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.lab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px 5px 8px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(184, 137, 15, 0.28);
+  background: color-mix(in srgb, #faeec2 55%, var(--sticker));
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease), box-shadow 0.15s var(--ease),
+    border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+.lab-chip:hover {
+  transform: translateY(-2px);
+  border-color: rgba(184, 137, 15, 0.5);
+  background: #fdf3cf;
+  box-shadow: 0 6px 14px -9px rgba(107, 80, 21, 0.5);
+}
+.lab-chip-ic {
+  display: grid;
+  place-items: center;
+  line-height: 0;
+}
+.lab-chip-ic svg {
+  display: block;
+}
+/* Deck concept chips — informational, not clickable. */
+.lab-chip.is-static {
+  cursor: default;
+  color: var(--chip-ink, var(--ink-soft));
+  border-color: color-mix(in srgb, var(--chip-ink, #8a6a12) 26%, transparent);
+  background: color-mix(in srgb, var(--chip-ink, #8a6a12) 8%, var(--sticker));
+}
+.lab-chip.is-static:hover {
+  transform: none;
+  color: var(--chip-ink, var(--ink-soft));
+  box-shadow: none;
+  border-color: color-mix(in srgb, var(--chip-ink, #8a6a12) 26%, transparent);
+}
+.lab-detail-rule {
+  height: 1px;
+  margin: 16px 0 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ink-hair) 0 6px,
+    transparent 6px 12px
+  );
+}
+.lab-detail-does {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lab-detail-does li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.85rem;
+  line-height: 1.38;
+  color: var(--ink-soft);
+}
+.lab-detail-check {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  margin-top: 1px;
+  border-radius: 6px;
+  background: rgba(20, 24, 40, 0.05);
+}
+
+/* Desktop — detail card fills the content row (its parent .lab-right in the
+   shell); overflow scrolls inside rather than growing the card. */
+@media (min-width: 900px) {
+  .lab-detail {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+  }
+}
